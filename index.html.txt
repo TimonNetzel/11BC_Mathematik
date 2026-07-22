@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>Unterrichtsmaterialien</title>
+
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px;
+      background: #f5f5f5;
+    }
+
+    .woche {
+      background: white;
+      padding: 20px;
+      margin-bottom: 16px;
+      border-radius: 12px;
+    }
+
+    a {
+      display: inline-block;
+      padding: 12px 18px;
+      margin: 5px;
+      background: #1f5fa8;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Unterrichtsmaterialien</h1>
+  <p>Wähle die gewünschte Woche aus.</p>
+
+  <section class="woche">
+    <h2>Woche 1</h2>
+    <a href="woche-01/lernen.html">Lernmaterial</a>
+    <a href="woche-01/ueben.html">Übungen</a>
+  </section>
+
+  <section class="woche">
+    <h2>Woche 2</h2>
+    <a href="woche-02/lernen.html">Lernmaterial</a>
+    <a href="woche-02/ueben.html">Übungen</a>
+  </section>
+
+  <section class="woche">
+    <h2>Woche 3</h2>
+    <a href="woche-03/lernen.html">Lernmaterial</a>
+    <a href="woche-03/ueben.html">Übungen</a>
+  </section>
+</body>
+</html>
