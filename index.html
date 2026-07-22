@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#1d4ed8">
+
+  <title>Unterrichtsmaterialien – Schuljahr</title>
+
+  <style>
+    :root {
+      --background: #f4f7fb;
+      --surface: #ffffff;
+      --surface-soft: #eef4ff;
+      --text: #172033;
+      --text-muted: #5c667a;
+      --primary: #1d4ed8;
+      --primary-dark: #163ca6;
+      --secondary: #0f766e;
+      --secondary-dark: #0b5d57;
+      --border: #d9e1ee;
+      --focus: #f59e0b;
+      --shadow: 0 8px 24px rgba(23, 32, 51, 0.08);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding:
+        max(20px, env(safe-area-inset-top))
+        max(18px, env(safe-area-inset-right))
+        max(28px, env(safe-area-inset-bottom))
+        max(18px, env(safe-area-inset-left));
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.5;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(29, 78, 216, 0.10), transparent 32rem),
+        var(--background);
+    }
+
+    .page {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: clamp(24px, 5vw, 48px);
+      margin-bottom: 24px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 55%, #0f766e 100%);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.9;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 6vw, 3.6rem);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+    }
+
+    .intro {
+      max-width: 760px;
+      margin: 16px 0 0;
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      opacity: 0.95;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: end;
+      padding: 18px;
+      margin-bottom: 22px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .search-wrap {
+      min-width: 0;
+    }
+
+    label {
+      display: block;
+      margin: 0 0 7px;
+      font-weight: 700;
+    }
+
+    input[type="search"] {
+      width: 100%;
+      min-height: 50px;
+      padding: 12px 15px;
+      font: inherit;
+      font-size: 1rem;
+      color: var(--text);
+      background: #ffffff;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    input[type="search"]:focus {
+      outline: 4px solid rgba(245, 158, 11, 0.28);
+      border-color: var(--focus);
+    }
+
+    .clear-button {
+      min-height: 50px;
+      padding: 12px 18px;
+      font: inherit;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--surface-soft);
+      border: 2px solid transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .clear-button:focus-visible,
+    .clear-button:hover {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .section-heading {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      align-items: baseline;
+      justify-content: space-between;
+      margin: 0 2px 16px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+    }
+
+    #result-count {
+      margin: 0;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .weeks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+
+    .week-card {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      padding: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 14px rgba(23, 32, 51, 0.05);
+    }
+
+    .week-card[hidden] {
+      display: none;
+    }
+
+    .week-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      margin-bottom: 12px;
+      color: var(--primary);
+      font-size: 1rem;
+      font-weight: 800;
+      background: var(--surface-soft);
+      border-radius: 50%;
+    }
+
+    .week-card h3 {
+      margin: 0 0 6px;
+      font-size: 1.28rem;
+    }
+
+    .week-card p {
+      margin: 0 0 18px;
+      color: var(--text-muted);
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      padding: 12px 14px;
+      font-weight: 800;
+      text-align: center;
+      text-decoration: none;
+      color: #ffffff;
+      background: var(--primary);
+      border: 2px solid transparent;
+      border-radius: 12px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .button.exercise {
+      background: var(--secondary);
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      background: var(--primary-dark);
+      outline: 4px solid rgba(245, 158, 11, 0.32);
+      outline-offset: 2px;
+    }
+
+    .button.exercise:hover,
+    .button.exercise:focus-visible {
+      background: var(--secondary-dark);
+    }
+
+    .empty-state {
+      padding: 28px;
+      text-align: center;
+      color: var(--text-muted);
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+    }
+
+    footer {
+      margin-top: 28px;
+      padding: 18px 4px 4px;
+      color: var(--text-muted);
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 620px) {
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .clear-button {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .actions {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      .hero {
+        color: #000000;
+        background: #ffffff;
+        border: 2px solid #000000;
+        box-shadow: none;
+      }
+
+      .toolbar,
+      .button {
+        display: none;
+      }
+
+      .weeks-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <header class="hero">
+      <!-- Titel und Schuljahr hier anpassen -->
+      <p class="eyebrow">Digitale Unterrichtsmaterialien</p>
+      <h1>Mathematik</h1>
+      <p class="intro">
+        Wähle eine Unterrichtswoche aus. Zu jeder Woche findest du ein Lernmaterial
+        und eine passende Übung.
+      </p>
+    </header>
+
+    <section class="toolbar" aria-label="Wochen durchsuchen">
+      <div class="search-wrap">
+        <label for="week-search">Woche suchen</label>
+        <input
+          id="week-search"
+          type="search"
+          inputmode="numeric"
+          placeholder="Zum Beispiel: 7 oder Woche 7"
+          autocomplete="off"
+          aria-describedby="search-help"
+        >
+        <span id="search-help" hidden>Gib eine Wochennummer zwischen 1 und 40 ein.</span>
+      </div>
+      <button class="clear-button" id="clear-search" type="button">Suche löschen</button>
+    </section>
+
+    <section aria-labelledby="weeks-heading">
+      <div class="section-heading">
+        <h2 id="weeks-heading">Wochenübersicht</h2>
+        <p id="result-count" aria-live="polite">40 Wochen</p>
+      </div>
+
+      <div class="weeks-grid" id="weeks-grid">
+        <!--
+          Die Links erwarten folgende Ordnerstruktur:
+
+          woche-01/lernen.html
+          woche-01/ueben.html
+          woche-02/lernen.html
+          woche-02/ueben.html
+          usw.
+        -->
+
+        <article class="week-card" data-week="1"><span class="week-number">01</span><h3>Woche 1</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-01/lernen.html">Lernen</a><a class="button exercise" href="woche-01/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="2"><span class="week-number">02</span><h3>Woche 2</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-02/lernen.html">Lernen</a><a class="button exercise" href="woche-02/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="3"><span class="week-number">03</span><h3>Woche 3</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-03/lernen.html">Lernen</a><a class="button exercise" href="woche-03/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="4"><span class="week-number">04</span><h3>Woche 4</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-04/lernen.html">Lernen</a><a class="button exercise" href="woche-04/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="5"><span class="week-number">05</span><h3>Woche 5</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-05/lernen.html">Lernen</a><a class="button exercise" href="woche-05/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="6"><span class="week-number">06</span><h3>Woche 6</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-06/lernen.html">Lernen</a><a class="button exercise" href="woche-06/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="7"><span class="week-number">07</span><h3>Woche 7</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-07/lernen.html">Lernen</a><a class="button exercise" href="woche-07/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="8"><span class="week-number">08</span><h3>Woche 8</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-08/lernen.html">Lernen</a><a class="button exercise" href="woche-08/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="9"><span class="week-number">09</span><h3>Woche 9</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-09/lernen.html">Lernen</a><a class="button exercise" href="woche-09/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="10"><span class="week-number">10</span><h3>Woche 10</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-10/lernen.html">Lernen</a><a class="button exercise" href="woche-10/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="11"><span class="week-number">11</span><h3>Woche 11</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-11/lernen.html">Lernen</a><a class="button exercise" href="woche-11/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="12"><span class="week-number">12</span><h3>Woche 12</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-12/lernen.html">Lernen</a><a class="button exercise" href="woche-12/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="13"><span class="week-number">13</span><h3>Woche 13</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-13/lernen.html">Lernen</a><a class="button exercise" href="woche-13/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="14"><span class="week-number">14</span><h3>Woche 14</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-14/lernen.html">Lernen</a><a class="button exercise" href="woche-14/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="15"><span class="week-number">15</span><h3>Woche 15</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-15/lernen.html">Lernen</a><a class="button exercise" href="woche-15/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="16"><span class="week-number">16</span><h3>Woche 16</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-16/lernen.html">Lernen</a><a class="button exercise" href="woche-16/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="17"><span class="week-number">17</span><h3>Woche 17</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-17/lernen.html">Lernen</a><a class="button exercise" href="woche-17/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="18"><span class="week-number">18</span><h3>Woche 18</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-18/lernen.html">Lernen</a><a class="button exercise" href="woche-18/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="19"><span class="week-number">19</span><h3>Woche 19</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-19/lernen.html">Lernen</a><a class="button exercise" href="woche-19/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="20"><span class="week-number">20</span><h3>Woche 20</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-20/lernen.html">Lernen</a><a class="button exercise" href="woche-20/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="21"><span class="week-number">21</span><h3>Woche 21</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-21/lernen.html">Lernen</a><a class="button exercise" href="woche-21/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="22"><span class="week-number">22</span><h3>Woche 22</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-22/lernen.html">Lernen</a><a class="button exercise" href="woche-22/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="23"><span class="week-number">23</span><h3>Woche 23</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-23/lernen.html">Lernen</a><a class="button exercise" href="woche-23/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="24"><span class="week-number">24</span><h3>Woche 24</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-24/lernen.html">Lernen</a><a class="button exercise" href="woche-24/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="25"><span class="week-number">25</span><h3>Woche 25</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-25/lernen.html">Lernen</a><a class="button exercise" href="woche-25/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="26"><span class="week-number">26</span><h3>Woche 26</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-26/lernen.html">Lernen</a><a class="button exercise" href="woche-26/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="27"><span class="week-number">27</span><h3>Woche 27</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-27/lernen.html">Lernen</a><a class="button exercise" href="woche-27/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="28"><span class="week-number">28</span><h3>Woche 28</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-28/lernen.html">Lernen</a><a class="button exercise" href="woche-28/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="29"><span class="week-number">29</span><h3>Woche 29</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-29/lernen.html">Lernen</a><a class="button exercise" href="woche-29/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="30"><span class="week-number">30</span><h3>Woche 30</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-30/lernen.html">Lernen</a><a class="button exercise" href="woche-30/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="31"><span class="week-number">31</span><h3>Woche 31</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-31/lernen.html">Lernen</a><a class="button exercise" href="woche-31/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="32"><span class="week-number">32</span><h3>Woche 32</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-32/lernen.html">Lernen</a><a class="button exercise" href="woche-32/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="33"><span class="week-number">33</span><h3>Woche 33</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-33/lernen.html">Lernen</a><a class="button exercise" href="woche-33/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="34"><span class="week-number">34</span><h3>Woche 34</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-34/lernen.html">Lernen</a><a class="button exercise" href="woche-34/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="35"><span class="week-number">35</span><h3>Woche 35</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-35/lernen.html">Lernen</a><a class="button exercise" href="woche-35/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="36"><span class="week-number">36</span><h3>Woche 36</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-36/lernen.html">Lernen</a><a class="button exercise" href="woche-36/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="37"><span class="week-number">37</span><h3>Woche 37</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-37/lernen.html">Lernen</a><a class="button exercise" href="woche-37/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="38"><span class="week-number">38</span><h3>Woche 38</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-38/lernen.html">Lernen</a><a class="button exercise" href="woche-38/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="39"><span class="week-number">39</span><h3>Woche 39</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-39/lernen.html">Lernen</a><a class="button exercise" href="woche-39/ueben.html">Üben</a></div></article>
+        <article class="week-card" data-week="40"><span class="week-number">40</span><h3>Woche 40</h3><p>Lernmaterial und Übung</p><div class="actions"><a class="button" href="woche-40/lernen.html">Lernen</a><a class="button exercise" href="woche-40/ueben.html">Üben</a></div></article>
+      </div>
+
+      <p class="empty-state" id="empty-state" hidden>
+        Keine passende Woche gefunden. Bitte gib eine Zahl zwischen 1 und 40 ein.
+      </p>
+    </section>
+
+    <footer>
+      <!-- Diese Zeile kannst du frei anpassen oder entfernen. -->
+      <p>Unterrichtsmaterialien · Schuljahr 2026/27</p>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const searchInput = document.getElementById("week-search");
+      const clearButton = document.getElementById("clear-search");
+      const cards = Array.from(document.querySelectorAll(".week-card"));
+      const resultCount = document.getElementById("result-count");
+      const emptyState = document.getElementById("empty-state");
+
+      function normalizeSearch(value) {
+        const match = String(value).match(/\d+/);
+        return match ? String(Number(match[0])) : "";
+      }
+
+      function updateView() {
+        const query = normalizeSearch(searchInput.value.trim());
+        let visibleCount = 0;
+
+        cards.forEach(function (card) {
+          const week = card.dataset.week;
+          const isVisible = query === "" || week === query;
+          card.hidden = !isVisible;
+
+          if (isVisible) {
+            visibleCount += 1;
+          }
+        });
+
+        resultCount.textContent = visibleCount === 1
+          ? "1 Woche"
+          : visibleCount + " Wochen";
+
+        emptyState.hidden = visibleCount !== 0;
+      }
+
+      searchInput.addEventListener("input", updateView);
+
+      clearButton.addEventListener("click", function () {
+        searchInput.value = "";
+        updateView();
+        searchInput.focus();
+      });
+
+      updateView();
+    }());
+  </script>
+</body>
+</html>
