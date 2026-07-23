@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta content="default-src 'none'; script-src 'unsafe-inline'; script-src-attr 'none'; style-src 'unsafe-inline'; img-src data:; font-src 'none'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; child-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'" http-equiv="Content-Security-Policy"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>11BC · Mathematik · Woche 5 · Trendgerade und lineare Regression · Offline-Simulationen</title>
+<style>
+:root{--ink:#172033;--muted:#526079;--paper:#fff;--soft:#eef5f8;--soft2:#f8fafc;--accent:#0b6b8a;--accent2:#8b4a1f;--line:#bcc9d4;--good:#e8f6ee;--warn:#fff5d9;--teacher:#f3effb;--solution:#eef8f3;--danger:#b3263e;--radius:14px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#e9eef3;color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.48;font-size:16px}
+button{font:inherit}
+.appbar{position:sticky;top:0;z-index:20;background:#162434;color:#fff;border-bottom:4px solid var(--accent);box-shadow:0 2px 12px #0003}
+.appbar .inner{max-width:1180px;margin:auto;padding:.7rem 1rem;display:flex;align-items:center;gap:.55rem;flex-wrap:wrap}
+.brand{font-weight:800;margin-right:auto}
+.viewbtn,.printbtn,.hintprintbtn{border:1px solid #ffffff66;background:#ffffff12;color:#fff;border-radius:999px;padding:.48rem .75rem;cursor:pointer}
+.viewbtn.active,.hintprintbtn.active{background:#fff;color:#162434}
+.control-label{font-size:.82rem;color:#dce8ee;margin-left:.35rem}
+main{max-width:1180px;margin:1.3rem auto 3rem;background:var(--paper);box-shadow:0 12px 35px #1f293733;border-radius:18px;overflow:hidden}
+.hero{padding:2rem 2.2rem;background:linear-gradient(135deg,#0b6b8a,#193a53);color:#fff}
+.hero h1{margin:.15rem 0 .55rem;font-size:clamp(1.8rem,4vw,3rem);line-height:1.08}
+.hero p{max-width:930px;margin:.4rem 0}
+.meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7rem;margin-top:1.2rem}
+.meta div{background:#ffffff18;border:1px solid #ffffff33;border-radius:12px;padding:.65rem}
+.meta b{display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:#d9edf4}
+section{padding:1.55rem 2.2rem;border-bottom:1px solid #dde5ec}
+h2{font-size:1.55rem;margin:.1rem 0 1rem;color:#183b52}
+h3{font-size:1.18rem;margin:1rem 0 .55rem}
+h4{margin:.8rem 0 .35rem}
+p{margin:.45rem 0}
+ul,ol{margin:.45rem 0 .8rem;padding-left:1.3rem}
+li{margin:.22rem 0}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.card{border:1px solid var(--line);border-radius:var(--radius);padding:1rem;background:#fff;page-break-inside:avoid}
+.card.soft{background:var(--soft2)}
+.card.problem{border-left:7px solid var(--accent);background:#f4fbfd}
+.card.teacher{background:var(--teacher);border-color:#cabde5}
+.card.solution{background:var(--solution);border-color:#a9d4bd}
+.note{padding:.75rem .9rem;border-radius:10px;background:var(--warn);border-left:5px solid #d69a00}
+.good{padding:.75rem .9rem;border-radius:10px;background:var(--good);border-left:5px solid #2f8b56}
+.tag{display:inline-block;padding:.17rem .5rem;border-radius:999px;background:#e3eef3;color:#173e52;font-size:.78rem;font-weight:700;margin:.1rem .12rem .1rem 0}
+.formula{display:inline-block;font-family:"Times New Roman",serif;font-size:1.06em;white-space:nowrap}
+table{width:100%;border-collapse:collapse;margin:.7rem 0 1rem;page-break-inside:auto}
+th,td{border:1px solid #aebbc7;padding:.48rem .55rem;vertical-align:top}
+th{background:#e7f0f4;text-align:left}
+tr{page-break-inside:avoid}
+.timeline th:nth-child(1){width:7%}.timeline th:nth-child(2){width:12%}.timeline th:nth-child(5){width:10%}.timeline th:nth-child(6){width:12%}
+.compact th,.compact td{padding:.34rem .42rem;font-size:.93rem}
+.material{border:2px solid #29475d;border-radius:12px;padding:1rem;background:#fff;page-break-inside:avoid}
+.ticket-head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;border-bottom:2px solid #29475d;padding-bottom:.55rem;margin-bottom:.7rem}
+.status{display:inline-block;border:2px solid #b56a00;color:#7c4b00;background:#fff8e8;border-radius:8px;padding:.28rem .55rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.task-with-hints{border:1px solid var(--line);border-left:5px solid var(--accent2);border-radius:12px;padding:.85rem 1rem;margin:1rem 0;background:#fffaf6;page-break-inside:auto}
+.task-head{display:flex;gap:.7rem;justify-content:space-between;align-items:flex-start}
+.task-head h3{margin:.05rem 0 .45rem}
+.afb{font-size:.76rem;font-weight:700;background:#efe8df;color:#6d3b19;border-radius:999px;padding:.15rem .42rem;white-space:nowrap}
+.answerline{border-bottom:1px solid #5f6b76;height:1.25rem;margin:.25rem 0}
+.answerbox{border:1px dashed #73808c;min-height:3.5rem;margin:.45rem 0;background:#fff}
+.answerbox.tall{min-height:6.3rem}
+.inline-hints{margin:.55rem 0 .2rem;padding:.25rem .55rem .35rem;border-left:3px solid #d69a00;background:#fffdf5;border-radius:0 10px 10px 0}
+details{border:1px solid var(--line);border-radius:10px;margin:.45rem 0;background:#fff;page-break-inside:avoid}
+summary{cursor:pointer;font-weight:700;padding:.62rem .78rem}
+details>div{padding:0 .78rem .75rem}
+.inline-hints details{background:#fff9e8;border-color:#d2b977}
+.inline-hints summary{color:#5f4512}
+.teacher-inline-note{margin:.55rem 0 0;padding:.62rem .75rem;background:var(--teacher);border:1px solid #cabde5;border-radius:9px;font-size:.9rem}
+.small{font-size:.9rem;color:var(--muted)}
+.kicker{font-size:.82rem;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:#c7e7f1}
+.callout{display:grid;grid-template-columns:auto 1fr;gap:.65rem;align-items:start;background:#eef6fa;border-radius:12px;padding:.8rem}
+.callout .icon{font-size:1.4rem}
+.board{background:#1c2c2b;color:#f5fff9;border:9px solid #8b6a45;border-radius:8px;padding:1rem 1.2rem;box-shadow:inset 0 0 0 2px #5d4530;page-break-inside:avoid}
+.board h3{color:#fff;margin-top:0}
+.pagebreak{break-before:page;page-break-before:always}
+.source-list li{margin:.45rem 0}
+.assumptions{font-size:.92rem}
+.worksheet-page{background:#fff}
+.worksheet-title{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;border-bottom:2px solid #29475d;padding-bottom:.5rem;margin-bottom:.75rem}
+.worksheet-title h2{margin:0;color:#183b52}
+.worksheet-title p{margin:.15rem 0}
+.scatter-graph{width:100%;height:auto;border:1px solid #c2ccd5;background:#fff;margin:.55rem 0;page-break-inside:avoid}
+.legend{display:flex;gap:1rem;flex-wrap:wrap;font-size:.9rem;color:var(--muted)}
+.line-key{display:inline-block;width:2.2rem;border-top:4px solid #0b6b8a;vertical-align:middle;margin-right:.3rem}
+.line-key.dashed{border-top-color:#9a5b20;border-top-style:dashed}
+.point-key{display:inline-block;width:.72rem;height:.72rem;border-radius:50%;background:var(--danger);vertical-align:middle;margin-right:.3rem}
+.interim-product{border:2px solid #0b6b8a;background:#eef8fb;border-radius:12px;padding:.72rem .85rem;margin:.8rem 0;page-break-inside:avoid}
+.release-card{border:3px double #29475d;border-radius:12px;padding:.85rem;background:#fff;page-break-inside:avoid}
+.release-card th{width:34%}.release-card td{width:66%}
+.release-head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;border-bottom:2px solid #29475d;padding-bottom:.55rem;margin-bottom:.65rem}
+.criteria li{margin:.3rem 0}
+.decision-stamp{display:inline-block;border:2px solid #2f8b56;color:#1e6f43;background:#effaf3;border-radius:8px;padding:.3rem .55rem;font-weight:800;text-transform:uppercase;letter-spacing:.03em}
+.tool-strip{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin:.7rem 0}
+.tool-strip>div{border:1px solid #aebbc7;border-radius:10px;padding:.65rem;background:#f8fbfd}
+.sentence-starters{background:#eef6fa;border-left:5px solid var(--accent);padding:.72rem;border-radius:10px}
+.risk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem;margin:.6rem 0}
+.risk-card{border:1px solid #aebbc7;border-radius:10px;padding:.58rem;background:#fff}
+[data-view="student"] .teacher-only,[data-view="student"] .solution-only{display:none!important}
+[data-view="teacher"] .solution-only{display:none!important}
+[data-view="solution"] .teacher-only,[data-view="solution"] .student-material{display:none!important}
+.view-note{font-size:.84rem;color:#dce8ee}
+@media(max-width:850px){.meta,.grid2,.grid3,.tool-strip,.risk-grid{grid-template-columns:1fr}.appbar .inner{align-items:flex-start}main{margin:0;border-radius:0}section,.hero{padding:1.2rem}.timeline{font-size:.88rem;display:block;overflow-x:auto}.release-head,.worksheet-title{display:block}}
+@page{size:A4;margin:14mm}
+@media print{
+  body{background:#fff;font-size:9.6pt}
+  .appbar{display:none!important}
+  main{max-width:none;margin:0;box-shadow:none;border-radius:0}
+  .hero{background:#fff;color:#111;padding:0 0 5mm;border-bottom:2px solid #111}
+  .hero .kicker,.hero .view-note{color:#333}
+  .meta div{background:#fff;border:1px solid #999}
+  .meta b{color:#333}
+  section{padding:5mm 0;border-bottom:0}
+  h2{color:#111}
+  .card,.material,.task-with-hints,details{box-shadow:none}
+  .no-print{display:none!important}
+  .scatter-graph{max-height:88mm}
+  .worksheet-page{break-after:page;page-break-after:always;padding:0}
+  .worksheet-page:last-of-type{break-after:auto;page-break-after:auto}
+  body[data-view="student"] .hero{display:none!important}
+  body[data-view="student"] .worksheet-page{display:block}
+  body[data-view="student"][data-print-hints="hide"] .inline-hints{display:none!important}
+  body[data-view="student"][data-print-hints="show"] .inline-hints{display:block!important}
+  body[data-view="student"][data-print-hints="show"] .inline-hints details{break-inside:auto}
+  body[data-view="student"] .teacher-only,body[data-view="student"] .solution-only{display:none!important}
+  body[data-view="teacher"] .solution-only{display:none!important}
+  body[data-view="solution"] .teacher-only,body[data-view="solution"] .student-material{display:none!important}
+  .answerbox{min-height:14mm}
+  .answerbox.tall{min-height:25mm}
+  .compact th,.compact td{font-size:8.8pt;padding:1.7mm 2mm}
+}
+
+@media print{
+  body[data-view="student"]{font-size:8.45pt;line-height:1.34}
+  body[data-view="student"] section{padding:2.4mm 0}
+  body[data-view="student"] h2{font-size:16.5pt;margin:0 0 2mm}
+  body[data-view="student"] h3{font-size:12.5pt;margin:2mm 0 1.4mm}
+  body[data-view="student"] h4{margin:1mm 0}
+  body[data-view="student"] p,body[data-view="student"] ul,body[data-view="student"] ol{margin:1.2mm 0}
+  body[data-view="student"] li{margin:.6mm 0}
+  body[data-view="student"] .worksheet-title{padding-bottom:2mm;margin-bottom:2.5mm}
+  body[data-view="student"] .material{padding:3mm}
+  body[data-view="student"] .ticket-head{padding-bottom:2mm;margin-bottom:2mm}
+  body[data-view="student"] table{margin:2mm 0}
+  body[data-view="student"] .compact th,body[data-view="student"] .compact td{font-size:7.8pt;padding:1.25mm 1.5mm}
+  body[data-view="student"] .scatter-graph{max-height:57mm;margin:2mm 0}
+  body[data-view="student"] .legend{font-size:7.8pt;gap:4mm}
+  body[data-view="student"] .task-with-hints{padding:2.8mm 3mm;margin:2.8mm 0}
+  body[data-view="student"] .task-head h3{margin:0 0 1.4mm}
+  body[data-view="student"] .answerbox{min-height:9mm;margin:1.5mm 0}
+  body[data-view="student"] .callout{padding:2mm}
+  body[data-view="student"] .interim-product{padding:2mm 2.5mm;margin:2mm 0}
+  body[data-view="student"] .tool-strip{grid-template-columns:1fr 1fr;gap:2mm;margin:2mm 0}
+  body[data-view="student"] .tool-strip>div{padding:2mm}
+  body[data-view="student"] .risk-grid{grid-template-columns:1fr 1fr;gap:1.7mm;margin:2mm 0}
+  body[data-view="student"] .risk-card{padding:1.8mm}
+  body[data-view="student"] .release-card{padding:2.2mm;break-inside:auto;page-break-inside:auto}
+  body[data-view="student"] .release-head{padding-bottom:1.5mm;margin-bottom:1.5mm}
+  body[data-view="student"] .release-card table{margin:1mm 0}
+  body[data-view="student"] .release-card .compact th,body[data-view="student"] .release-card .compact td{padding:1mm 1.3mm}
+  body[data-view="student"] .release-card td{height:6mm}
+}
+</style>
+<style id="week5-simulation-styles">
+/* Interaktive, vollständig lokale Aufgabenhilfen – Woche 5 */
+.simulation-only{display:none}
+[data-view="all"] .simulation-only,[data-view="simulations"] .simulation-only{display:block}
+[data-view="simulations"] main>section:not(.simulation-only){display:none!important}
+.sim-intro{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin:1rem 0}
+.sim-card{border:1px solid var(--line);border-radius:var(--radius);background:#f8fbfd;padding:1rem;page-break-inside:avoid}
+.sim-card h3{margin-top:.1rem;color:#183b52}
+.sim-tag{display:inline-block;padding:.18rem .52rem;border-radius:999px;background:#dceef4;color:#16465d;font-size:.78rem;font-weight:800;margin-bottom:.45rem}
+.sim-panel{border:1px solid #aebdca;border-radius:14px;background:#fff;padding:1rem;margin:1rem 0;box-shadow:0 6px 18px #1f293710;scroll-margin-top:92px}
+.sim-panel h3{margin-top:.05rem;color:#183b52}.sim-panel h4{color:#183b52}
+.sim-controls{display:flex;flex-wrap:wrap;align-items:end;gap:.7rem;margin:.75rem 0}
+.sim-controls label{display:grid;gap:.3rem;font-weight:700;color:#34495e;min-width:180px}
+.sim-controls select,.sim-controls input{font:inherit;border:1px solid #8797a6;border-radius:9px;padding:.5rem .6rem;background:#fff;color:#172033;max-width:100%}
+.sim-controls input[type="range"]{padding:0;min-width:220px}
+.sim-button,.sim-link{font:inherit;border:1px solid #0b6b8a;background:#0b6b8a;color:#fff;border-radius:999px;padding:.5rem .8rem;cursor:pointer;font-weight:700;text-decoration:none;display:inline-block}
+.sim-button.secondary{background:#fff;color:#0b6b8a}.sim-button.tertiary{background:#eef8fb;color:#17445a}
+.sim-feedback{min-height:3.2rem;border-left:5px solid #78909c;background:#f3f7f9;border-radius:9px;padding:.65rem .8rem;margin:.65rem 0;color:#253546}
+.sim-feedback.ok{border-left-color:#2f8b56;background:#e8f6ee}.sim-feedback.warn{border-left-color:#d69a00;background:#fff5d9}.sim-feedback.bad{border-left-color:#b74343;background:#fff0f0}
+.sim-task-note{margin:.55rem 0 .85rem;padding:.65rem .78rem;border-left:4px solid #0b6b8a;background:#eef8fb;border-radius:8px;color:#24475b;page-break-inside:avoid}
+.sim-task-note .sim-link{margin:.45rem .35rem 0 0}
+.sim-graph{display:block;width:100%;height:auto;border:1px solid #aebbc7;border-radius:12px;background:#fff;touch-action:manipulation;margin:.75rem 0}
+.sim-row{display:grid;grid-template-columns:1.25fr .75fr;gap:1rem;margin:.7rem 0}
+.sim-subpanel{border:1px solid #ccd7df;border-radius:12px;background:#fafcfd;padding:.8rem}
+.sim-stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.65rem;margin:.75rem 0}
+.sim-stat{border:1px solid #aebbc7;border-radius:10px;background:#fbfdff;padding:.65rem;min-height:82px}
+.sim-stat b{display:block;color:#183b52;margin-bottom:.25rem}.sim-stat output,.sim-stat .big{display:block;font-size:1.08rem;font-weight:800;color:#172033}
+.sim-checklist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45rem .8rem;margin:.7rem 0}
+.sim-checklist label{display:flex;gap:.5rem;align-items:flex-start;border:1px solid #d4dde4;border-radius:9px;padding:.55rem;background:#fff}
+.sim-note{border-left:4px solid #0b6b8a;background:#eef8fb;padding:.65rem .8rem;border-radius:8px;margin:.6rem 0}
+.sim-output{display:inline-block;min-width:2.6em;text-align:center;font-weight:800;color:#183b52}
+.sim-toggle-row{display:flex;flex-wrap:wrap;gap:.8rem;margin:.55rem 0}
+.sim-toggle-row label{display:flex;align-items:center;gap:.35rem;font-weight:700}
+.sim-table{font-size:.9rem}.sim-table th,.sim-table td{text-align:center;padding:.34rem .4rem}.sim-table th:first-child{text-align:left}
+.sim-badge{display:inline-block;border-radius:999px;padding:.2rem .55rem;font-size:.8rem;font-weight:800;background:#e8f1f5;color:#29475d}
+@media(max-width:900px){.sim-intro{grid-template-columns:1fr}.sim-row{grid-template-columns:1fr}.sim-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.sim-stat-grid,.sim-checklist{grid-template-columns:1fr}.sim-controls label{min-width:100%}.sim-controls input[type="range"]{min-width:100%}}
+@media print{.simulation-only,.sim-task-note{display:none!important}}
+</style></head>
+<body data-print-hints="hide" data-view="all">
+<div class="appbar no-print"><div class="inner">
+<div class="brand">11BC · Mathematik · Woche 5</div>
+<button aria-pressed="true" class="viewbtn active" data-target="all" type="button">Gesamt</button>
+<button aria-pressed="false" class="viewbtn" data-target="student" type="button">Schülerarbeitsblatt</button><button aria-pressed="false" class="viewbtn" data-target="simulations" type="button">Simulationen</button>
+<button aria-pressed="false" class="viewbtn" data-target="teacher" type="button">Lehrkraftfassung</button>
+<button aria-pressed="false" class="viewbtn" data-target="solution" type="button">Musterlösung</button>
+<span class="control-label">Druck-Hilfen:</span>
+<button aria-pressed="true" class="hintprintbtn active" data-hint-target="hide" type="button">ohne Hilfen</button>
+<button aria-pressed="false" class="hintprintbtn" data-hint-target="show" type="button">mit Hilfen</button>
+<button class="printbtn" id="print-document" type="button">Drucken</button>
+</div></div>
+<main>
+<header class="hero">
+<div class="kicker">Unterrichtswoche 5 · Von Daten zu Funktionen I</div>
+<h1>Trendgerade und lineare Regression</h1>
+<p>Zwei problem- und handlungsorientierte Mathematikstunden für die Klasse 11BC im Bildungsgang Allgemeine Hochschulreife mit International Business Communication.</p>
+<p class="view-note">Die Datei ist eine einzelne, vollständig lokal bedienbare HTML-Datei. Ansichten, aufgabennahe Hilfen, drei interaktive Simulationen, Druckvarianten und Grafiken benötigen keine weitere Ressource.</p>
+<div class="meta"><div><b>Zeitraum</b>5. Unterrichtswoche · Datum einzutragen</div><div><b>Stundenlage</b>2 × 45 Minuten</div><div><b>Planungsmodus</b>Gemeinsamer Modelltest · Freigabekarte</div><div><b>Werkzeuge</b> Arbeitsblatt, Beamer, Taschenrechner; GeoGebra/CAS und lokale Simulationen zur Kontrolle</div></div>
+</header>
+<section class="teacher-only" id="planung">
+<h2>1. Knappe Planungsübersicht</h2>
+<div class="grid2">
+<div class="card problem"><h3>Berufliche Problemsituation</h3><p>Die Abteilung <b>International Sales Analytics</b> der didaktisch konstruierten EuroTrade Accessories GmbH testet ein Dashboard zur Personalplanung. Aus sechs EU-Kampagnen soll es die Zahl qualifizierter Händleranfragen aus dem geplanten Kontaktvolumen schätzen. Zwei Geraden stehen zur Auswahl: Eine trifft den ersten und letzten Messpunkt exakt; die andere gleicht alle sechs Daten aus.</p></div>
+<div class="card"><h3>Untersuchungsfrage</h3><p>Welche Gerade beschreibt den Datentrend fachlich besser, wie sind ihre Parameter und Abweichungen zu deuten, und unter welchen Grenzen darf das Dashboard für eine betriebliche Planung freigegeben werden?</p><h3>Handlungsprodukt</h3><p>Eine <b>Regressions- und Freigabekarte</b> mit ausgewähltem Modell, Residuenbeleg, Parameterdeutung, Beispielprognose, Modellbereich, Warnhinweis und begründeter Freigabeentscheidung.</p></div>
+</div>
+<p class="good"><b>Fachlich nächster Schritt:</b> Der in Woche 4 gesicherte Wechsel zwischen Tabelle, Graph, Term und Sprache wird auf Streudaten übertragen. Die Lernenden verstehen eine Trendgerade als Modell, unterscheiden eine Zwei-Punkte-Gerade von einer Ausgleichsgeraden und interpretieren Steigung, Achsenabschnitt und Residuen.</p>
+<h3>Einordnung in das Halbjahresskript und Rückblick</h3>
+<table><tr><th>Aspekt</th><th>Planung</th></tr>
+<tr><td>Kapitel / Woche</td><td>Kapitel „Regression und Trendgerade“, Woche 5 „Trendgerade und lineare Regression“.</td></tr>
+<tr><td>Rückblick Woche 1</td><td>Ökonomische Wertepaare wurden gelesen, geordnet und in Koordinatensysteme übertragen; Einfluss- und Ergebnisgröße wurden unterschieden.</td></tr>
+<tr><td>Rückblick Woche 2</td><td>Trends, Ausreißer, Datenqualität und Aussagegrenzen wurden kritisch geprüft.</td></tr>
+<tr><td>Rückblick Woche 3</td><td>Funktionen wurden als eindeutige Zuordnungen geprüft; Funktionswerte und sachliche Definitionsbereiche wurden gedeutet.</td></tr>
+<tr><td>Rückblick Woche 4</td><td>Sprache, Tabelle, Graph und Term wurden auf Konsistenz geprüft, ineinander überführt und zweckbezogen ausgewählt.</td></tr>
+<tr><td>Neuer Kern</td><td>Streudaten durch eine lineare Ausgleichsgerade modellieren; Residuen vergleichen; Steigung und Achsenabschnitt im Kontext deuten; Modellgrenzen für eine betriebliche Automatisierung festlegen.</td></tr>
+<tr><td>Bewusste Grenze</td><td>Keine formale Herleitung der Methode der kleinsten Quadrate, kein Korrelationskoeffizient, keine systematische Preisabsatzfunktion und keine Regression mit anderen Funktionstypen. Das Preisabsatzmodell bleibt Woche 6 vorbehalten.</td></tr>
+<tr><td>Didaktische Brücke</td><td>Die bereits bekannten Darstellungen werden genutzt, um aus einer Punktwolke ein Modell zu entwickeln. Die Quadratsumme wird als verständliches Vergleichskriterium verwendet, ohne das Optimierungsverfahren herzuleiten.</td></tr></table>
+<h3>Lernvoraussetzungen und Lernziele</h3>
+<div class="grid2"><div class="card"><h4>Lernvoraussetzungen</h4><ul><li>Eingabe, Ausgabe, Funktionswert und Definitionsbereich benennen.</li><li>Wertepaare lesen und Punkte im Koordinatensystem deuten.</li><li>Einfache lineare Terme auswerten und Darstellungen vergleichen.</li><li>Trends und Ausreißer sprachlich beschreiben.</li><li>Heterogene Lerngruppe mit Bedarf an sprachlichen und strukturellen Hilfen.</li></ul></div><div class="card"><h4>Lernziele</h4><ul><li><b>Erklären:</b> Leistung und Grenze einer Trend- beziehungsweise Ausgleichsgeraden.</li><li><b>Unterscheiden:</b> Gerade durch zwei ausgewählte Punkte und Regressionsgerade über alle Daten.</li><li><b>Prüfen:</b> Residuen und Quadratsummen als Modellvergleich nutzen.</li><li><b>Interpretieren:</b> Steigung, Achsenabschnitt, Prognosewert und Residuum im Kontext.</li><li><b>Beurteilen:</b> Modellbereich und Eignung für eine begrenzte Automatisierung festlegen.</li></ul></div></div>
+<h3>Problemstruktur und Produktlogik</h3>
+<table><tr><th>Stunde</th><th>Ungelöstes Teilproblem</th><th>Sichtbares Ergebnis</th><th>Bezug zum Gesamtprodukt</th></tr>
+<tr><td>1</td><td>Zwei Geraden wirken plausibel; eine trifft zwei Punkte exakt, die andere gleicht alle Daten aus.</td><td><b>Modell-Vorprüfbogen:</b> Größen geklärt, Kandidaten verglichen, Residuen und Quadratsummen dokumentiert, geeignete Gerade vorläufig ausgewählt.</td><td>Liefert den mathematischen Beleg für die Modellwahl.</td></tr>
+<tr><td>2</td><td>Parameter, Prognosewert und betriebliche Einsatzgrenzen müssen geklärt werden.</td><td><b>Regressions- und Freigabekarte:</b> Modell, Deutungen, Prognose, Modellbereich, Warnhinweise und Freigabe.</td><td>Abschließendes Handlungsprodukt für International Sales Analytics.</td></tr></table>
+<h3>AFB, Lernwege und Hilfekonzept</h3>
+<div class="grid3"><div class="card"><h4>Basisweg</h4><p>Aufgaben 1–2 mit markierten Einheiten, teilweise vorgegebenen Modellwerten und gestuften Hilfen; Aufgabe 3 mit Satzstartern; Aufgabe 5 mit strukturierter Produktkarte.</p></div><div class="card"><h4>Standardweg</h4><p>Alle Aufgaben selbstständig beziehungsweise in Partnerarbeit; Schwerpunkt AFB II: Modellwerte berechnen, Residuen vergleichen, Parameter und Modellbereich interpretieren.</p></div><div class="card"><h4>Erweiterung</h4><p>Die Dashboard-Prognose für <span class="formula">x = 8</span> kritisch prüfen und zwischen rechnerischer Fortsetzung, sachlicher Gültigkeit und Kausalbehauptung unterscheiden.</p></div></div>
+<table><tr><th>AFB</th><th>Tatsächliche Denkleistung</th><th>Stellen der Planung</th></tr>
+<tr><td>AFB I</td><td>Daten und Größen entnehmen, Eingabe/Ausgabe kennzeichnen, bekannte Werte in Kandidatengeraden einsetzen.</td><td>Aufgabe 1; Teilrechnungen in Aufgabe 2.</td></tr>
+<tr><td>AFB II</td><td>Darstellungen auswerten, Residuen und Quadratsummen vergleichen, Regressionsparameter und Prognosewerte im Kontext interpretieren, Modellbereich festlegen.</td><td>Kern in Aufgaben 2–4.</td></tr>
+<tr><td>AFB III</td><td>Eignung für betriebliche Automatisierung beurteilen, Extrapolation und Achsenabschnitt kritisch prüfen, begrenzte Freigabe begründen.</td><td>Aufgabe 5 und Erweiterung.</td></tr></table>
+<p><b>Aufgabennahe Hilfen:</b> Jede Hilfe steht im selben Aufgabencontainer. Hilfe 1 lenkt auf die entscheidende Information, Hilfe 2 bietet Begriff oder Struktur, Hilfe 3 eröffnet einen konkreten ersten Schritt. Die vollständige Entscheidung bleibt stets bei den Lernenden.</p><p><b>Simulationseinsatz:</b> Der Residuen-Scanner unterstützt die Vorzeichen- und Abstandsdeutung, der Geraden-Optimierer den Vergleich von Residuen und Quadratsummen und das Prognose-Labor die Unterscheidung von Interpolation, Extrapolation und rechnerischem Achsenabschnitt. Die Werkzeuge sind optional, werden erst nach eigener Rechnung genutzt und treffen keine Freigabeentscheidung.</p>
+<p><b>Dokumentierte technische Fortführung:</b> Grundlayout, Farbkonzept, Kopfbereich, Karten-, Tabellen-, Ansichts- und Drucklogik aus Woche 1–4 werden fortgeführt. Ergänzt wurden ein lokaler Reiter „Simulationen“, aufgabennahe Sprungschaltflächen sowie dynamisch erzeugte Inline-SVG-Grafiken. Formeln werden ohne externen Bibliotheksloader mit lokalem Unicode/HTML dargestellt; die Kernfunktion nutzt keinen Browserspeicher. Die restriktive CSP und die Druckumschaltung bleiben vollständig lokal.</p>
+<h3>Unvermeidbare Annahmen</h3>
+<ul class="assumptions"><li>Schule, konkretes Datum, Anwesenheit und aktuelle Schwierigkeiten wurden nicht angegeben; es gilt das Klassenprofil mit heterogener Jahrgangsstufe 11.</li><li>Die Stunden liegen getrennt und dauern jeweils 45 Minuten; Stunde 2 reaktiviert das Zwischenprodukt kurz.</li><li>Unternehmen, Abteilung, Kampagnen, Dashboard und sämtliche Daten sind didaktisch konstruiert.</li><li>Die Kontaktmenge <span class="formula">x</span> wird in Hunderten angegeben; der beobachtete und freigegebene Modellbereich liegt zwischen 100 und 600 Kontakten.</li><li>GeoGebra oder CAS dient nur zur Kontrolle der Regressionsparameter. Residuenvergleich und fachliche Interpretation werden sichtbar auf dem Arbeitsblatt dokumentiert.</li><li>Die lokalen Simulationen sind optionale Verständigungs- und Kontrollhilfen. Sie werden in der Druckfassung ausgeblendet und ersetzen weder die handschriftliche Rechnung noch GeoGebra/CAS als vorgesehenes Kontrollwerkzeug.</li></ul>
+</section>
+<section class="teacher-only" id="verlauf">
+<h2>2. Verlaufsplan für beide Stunden</h2>
+<h3>Stunde 1: Welche Gerade beschreibt den Datentrend?</h3>
+<table class="timeline"><tr><th>Zeit</th><th>Phase</th><th>Lehrkrafthandeln</th><th>Lernendenhandeln</th><th>Sozialform</th><th>Material</th><th>Erwartetes Zwischenergebnis / Produktbezug</th></tr>
+<tr><td>0–7</td><td>Problemöffnung</td><td>Projiziert das Dashboard-Freigabeticket und die Punktwolke. Fragt nach dem betrieblichen Risiko einer ungeprüften Planungslinie.</td><td>Benennen mögliche Über- oder Unterbesetzung und erkennen den Entscheidungsbedarf.</td><td>Plenum</td><td>Ticket / Seite 1</td><td>Problem, Daten und Entscheidungsdruck sind verstanden.</td></tr>
+<tr><td>7–14</td><td>Auftrag klären</td><td>Sichert Untersuchungsfrage und Handlungsprodukt; reaktiviert Eingabe, Ausgabe und Darstellungen.</td><td>Bearbeiten Aufgabe 1 und formulieren die Größenbeziehung.</td><td>EA → kurzer Abgleich</td><td>Aufgabe 1</td><td>Gemeinsame Arbeitsrichtung und Größenklarheit.</td></tr>
+<tr><td>14–29</td><td>Kandidaten prüfen</td><td>Führt den Begriff Residuum als beobachtet minus modelliert ein; fordert erst Einzelrechnungen, dann Partnervergleich.</td><td>Berechnen Modellwerte und Residuen für A und B; bilden die Quadratsummen.</td><td>EA → PA</td><td>Aufgabe 2 / Rechner</td><td>Ausgefüllte Vergleichstabelle mit mathematischem Beleg.</td></tr>
+<tr><td>29–39</td><td>Modellwahl sichern</td><td>Kontrastiert „trifft zwei Punkte exakt“ und „gleicht alle Daten aus“; thematisiert, dass nicht jeder Punkt getroffen werden muss.</td><td>Begründen die vorläufige Wahl der Geraden B mit allen Daten und der kleineren Quadratsumme.</td><td>Strukturierter Vergleich</td><td>Vorprüfbogen</td><td>Begrifflich geklärte Modellwahl.</td></tr>
+<tr><td>39–45</td><td>Zwischensicherung</td><td>Lässt den Vorprüfbogen abschließen und offene Deutungsfragen markieren.</td><td>Dokumentieren Modellgleichung, Vergleichsbeleg und offene Fragen zu Parametern und Gültigkeit.</td><td>Einzelarbeit</td><td>Zwischenprodukt</td><td><b>Stundenprodukt:</b> geprüfter Modell-Vorprüfbogen.</td></tr></table>
+<h3>Stunde 2: Unter welchen Grenzen darf das Modell ins Dashboard?</h3>
+<table class="timeline"><tr><th>Zeit</th><th>Phase</th><th>Lehrkrafthandeln</th><th>Lernendenhandeln</th><th>Sozialform</th><th>Material</th><th>Erwartetes Zwischenergebnis / Produktbezug</th></tr>
+<tr><td>0–5</td><td>Reaktivierung</td><td>Zeigt die beiden Quadratsummen und fragt nach dem Unterschied zwischen Punkt-Treffer und Ausgleich.</td><td>Reaktivieren Modellwahl und Residuenbegriff.</td><td>Think–Pair–Share kurz</td><td>Vorprüfbogen</td><td>Prüflogik ist handlungsbereit.</td></tr>
+<tr><td>5–16</td><td>Tool-Kontrolle</td><td>Lässt die lineare Regression mit GeoGebra/CAS kontrollieren oder zeigt den vorbereiteten Ergebnisbildschirm. Verlangt den Abgleich mit Aufgabe 2.</td><td>Notieren <span class="formula">a = 5</span>, <span class="formula">b = 26</span> und bestätigen die Gerade B anhand der Residuen.</td><td>PA</td><td>iPad/CAS, Aufgabe 3</td><td>Regressionsgleichung ist kontrolliert, nicht bloß übernommen.</td></tr>
+<tr><td>16–27</td><td>Parameter deuten</td><td>Lenkt konsequent auf Einheiten, Näherungszeichen und den beobachteten Bereich.</td><td>Deuten Steigung, Achsenabschnitt, Residuum und Prognose für 450 Kontakte.</td><td>EA → Partnerkontrolle</td><td>Aufgabe 3</td><td>Kontextgebundene Modellinterpretation.</td></tr>
+<tr><td>27–35</td><td>Grenzen prüfen</td><td>Konfrontiert mit <span class="formula">x = 0</span>, <span class="formula">x = 8</span> und einer Kausalbehauptung.</td><td>Prüfen Modellbereich, Extrapolation, Achsenabschnitt und Aussagegrenzen.</td><td>Partnerarbeit</td><td>Aufgabe 4</td><td>Begründete Warnhinweise.</td></tr>
+<tr><td>35–42</td><td>Handlungsprodukt</td><td>Gibt Produktkriterien frei und fordert eine eindeutige, aber begrenzte Freigabeentscheidung.</td><td>Erstellen die Regressions- und Freigabekarte.</td><td>Partnerarbeit</td><td>Aufgabe 5</td><td>Vollständiges Gesamtprodukt.</td></tr>
+<tr><td>42–45</td><td>Entscheidungsvergleich</td><td>Lässt zwei Karten anhand der Kriterien vergleichen und sichert den Merksatz.</td><td>Präzisieren Näherungscharakter und Modellgrenze.</td><td>Plenum</td><td>Produktkriterien / Tafel</td><td><b>Endprodukt:</b> begrenzt freigabefähige Modellkarte.</td></tr></table>
+</section>
+<section class="student-material worksheet-page" id="schueler-seite-1">
+<div class="worksheet-title"><div><h2>Trendgerade prüfen</h2><p>EuroTrade Accessories GmbH · International Sales Analytics</p></div><div><b>Seite 1 von 3</b><br/>Name: ____________<br/>Datum: ____________</div></div>
+<div class="material">
+<div class="ticket-head"><div><h3>Dashboard-Freigabeticket DA-05</h3><p><b>Kapazitätsplanung für EU-Händleranfragen</b></p></div><span class="status">offen</span></div>
+<p>Sechs EU-Kampagnen liefern unterschiedliche Werte. Das Dashboard soll aus dem geplanten Kontaktvolumen die ungefähre Zahl qualifizierter Händleranfragen schätzen. Zwei Geraden sind vorbereitet. Vor der Freigabe muss geklärt werden, welche Gerade den gemeinsamen Trend besser beschreibt und wo das Modell eingesetzt werden darf.</p>
+<table class="compact"><tr><th>Kampagne</th><th>Benelux</th><th>Nordics</th><th>France</th><th>Iberia</th><th>Italy</th><th>DACH</th></tr><tr><th><span class="formula">x</span>: Kontakte in Hunderten</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr><tr><th><span class="formula">y</span>: qualifizierte Anfragen</th><td>30</td><td>37</td><td>41</td><td>46</td><td>52</td><td>55</td></tr></table>
+<p><b>Kandidat A:</b> Gerade durch den ersten und letzten Datenpunkt: <span class="formula">y = 5x + 25</span><br/><b>Kandidat B:</b> Ausgleichsgerade des Dashboard-Prototyps: <span class="formula">ŷ = 5x + 26</span></p>
+<p><b>Arbeitsauftrag:</b> Prüft beide Geraden, wählt das fachlich geeignetere Trendmodell und erstellt eine begründete Regressions- und Freigabekarte.</p>
+</div>
+<svg aria-labelledby="scatterTitle scatterDesc" class="scatter-graph" role="img" viewbox="0 0 720 390"><title id="scatterTitle">Punktwolke mit zwei Kandidatengeraden</title><desc id="scatterDesc">Sechs didaktisch konstruierte Kampagnendaten. Gerade A geht exakt durch den ersten und letzten Punkt. Gerade B ist eine Ausgleichsgerade.</desc><rect fill="#fff" height="390" width="720" x="0" y="0"></rect><g stroke="#dbe4eb" stroke-width="1"><line x1="70.0" x2="70.0" y1="35" y2="335"></line><line x1="158.6" x2="158.6" y1="35" y2="335"></line><line x1="247.1" x2="247.1" y1="35" y2="335"></line><line x1="335.7" x2="335.7" y1="35" y2="335"></line><line x1="424.3" x2="424.3" y1="35" y2="335"></line><line x1="512.9" x2="512.9" y1="35" y2="335"></line><line x1="601.4" x2="601.4" y1="35" y2="335"></line><line x1="690.0" x2="690.0" y1="35" y2="335"></line><line x1="70" x2="690" y1="335.0" y2="335.0"></line><line x1="70" x2="690" y1="297.5" y2="297.5"></line><line x1="70" x2="690" y1="260.0" y2="260.0"></line><line x1="70" x2="690" y1="222.5" y2="222.5"></line><line x1="70" x2="690" y1="185.0" y2="185.0"></line><line x1="70" x2="690" y1="147.5" y2="147.5"></line><line x1="70" x2="690" y1="110.0" y2="110.0"></line><line x1="70" x2="690" y1="72.5" y2="72.5"></line><line x1="70" x2="690" y1="35.0" y2="35.0"></line></g><g stroke="#263746" stroke-width="2"><line x1="70" x2="698" y1="335" y2="335"></line><line x1="70" x2="70" y1="342" y2="27"></line></g><line stroke="#9a5b20" stroke-dasharray="11 7" stroke-width="4" x1="70.0" x2="690.0" y1="297.5" y2="35.0"></line><line stroke="#0b6b8a" stroke-width="4" x1="70.0" x2="672.3" y1="290.0" y2="35.0"></line><g fill="#b3263e" stroke="#fff" stroke-width="2"><circle cx="158.6" cy="260.0" r="7"></circle><circle cx="247.1" cy="207.5" r="7"></circle><circle cx="335.7" cy="177.5" r="7"></circle><circle cx="424.3" cy="140.0" r="7"></circle><circle cx="512.9" cy="95.0" r="7"></circle><circle cx="601.4" cy="72.5" r="7"></circle></g><g fill="#34495e" font-family="Arial,Helvetica,sans-serif" font-size="13"><text text-anchor="middle" x="70.0" y="357">0</text><text text-anchor="middle" x="158.6" y="357">1</text><text text-anchor="middle" x="247.1" y="357">2</text><text text-anchor="middle" x="335.7" y="357">3</text><text text-anchor="middle" x="424.3" y="357">4</text><text text-anchor="middle" x="512.9" y="357">5</text><text text-anchor="middle" x="601.4" y="357">6</text><text text-anchor="middle" x="690.0" y="357">7</text><text text-anchor="end" x="60" y="339.0">20</text><text text-anchor="end" x="60" y="301.5">25</text><text text-anchor="end" x="60" y="264.0">30</text><text text-anchor="end" x="60" y="226.5">35</text><text text-anchor="end" x="60" y="189.0">40</text><text text-anchor="end" x="60" y="151.5">45</text><text text-anchor="end" x="60" y="114.0">50</text><text text-anchor="end" x="60" y="76.5">55</text><text text-anchor="end" x="60" y="39.0">60</text><text text-anchor="middle" x="380.0" y="378">geplante Händlerkontakte x (in Hunderten)</text><text text-anchor="middle" transform="rotate(-90 18 185.0)" x="18" y="185.0">qualifizierte Anfragen y</text><text fill="#0b6b8a" font-weight="700" x="473.0" y="50.0">B: ŷ = 5x + 26</text><text fill="#7a4618" font-weight="700" x="446.4" y="83.0">A: y = 5x + 25</text></g></svg>
+<div class="legend"><span><span class="point-key"></span>Datenpunkt</span><span><span class="line-key dashed"></span>Kandidat A</span><span><span class="line-key"></span>Kandidat B</span></div>
+<section class="task-with-hints" id="aufgabe-1">
+<div class="task-head"><h3>Aufgabe 1 · Größen und Problem klären</h3><span class="afb">AFB I</span></div>
+<ol><li>Notiere Eingabegröße und Ausgabegröße jeweils mit Einheit.</li><li>Beschreibe den Trend der Punktwolke in einem vollständigen Satz.</li><li>Erkläre, warum eine Planungslinie betrieblich geprüft werden muss.</li></ol>
+<div class="answerbox"></div>
+<div aria-label="Hilfen zu Aufgabe 1" class="inline-hints">
+<details><summary>Hilfe 1 zu Aufgabe 1: Denkimpuls</summary><div><p>Welche Größe plant die Abteilung zuerst? Welche Größe soll das Dashboard daraus schätzen?</p></div></details>
+<details><summary>Hilfe 2 zu Aufgabe 1: Satzstarter</summary><div><p>„Mit zunehmendem … nimmt … tendenziell … . Eine ungeprüfte Linie könnte …“</p></div></details>
+</div>
+<div class="teacher-inline-note teacher-only"><b>Lehrkrafthinweis:</b> Hilfe 1 ist fachlich orientierend und für den Basisweg vorgesehen. Hilfe 2 unterstützt sprachlich. Öffnen, wenn Einheiten fehlen oder der Trend nur mit „geht hoch“ beschrieben wird.</div>
+</section>
+</section>
+<section class="student-material worksheet-page" id="schueler-seite-2">
+<div class="worksheet-title"><div><h2>Zwei Geraden vergleichen</h2><p>Modell-Vorprüfbogen · Residuen und Quadratsummen</p></div><div><b>Seite 2 von 3</b></div></div>
+<div class="callout"><div class="icon">↕</div><div><b>Residuum:</b> <span class="formula">r = beobachteter Wert y − Modellwert ŷ</span>. Ein positives Residuum bedeutet: Der Datenpunkt liegt über der Geraden. Bei der linearen Regression wird die Summe der quadrierten Residuen möglichst klein.</div></div>
+<section class="task-with-hints" id="aufgabe-2">
+<div class="task-head"><h3>Aufgabe 2 · Kandidaten rechnerisch prüfen</h3><span class="afb">AFB II</span></div>
+<ol><li>Ergänze die Modellwerte und Residuen.</li><li>Quadriere jedes Residuum und bilde für beide Geraden <span class="formula">Σr²</span>.</li><li>Begründe, welche Gerade alle sechs Daten besser ausgleicht. Unterscheide dabei „trifft zwei Punkte exakt“ und „beschreibt den gemeinsamen Trend“.</li></ol>
+<table class="compact"><tr><th><span class="formula">x</span></th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><th><span class="formula">Σr²</span></th></tr>
+<tr><th>beobachtet <span class="formula">y</span></th><td>30</td><td>37</td><td>41</td><td>46</td><td>52</td><td>55</td><td>–</td></tr>
+<tr><th>A: Modellwert</th><td>30</td><td>35</td><td>40</td><td>45</td><td>50</td><td>55</td><td></td></tr>
+<tr><th>A: Residuum <span class="formula">r</span></th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><th>B: Modellwert</th><td>31</td><td>36</td><td>41</td><td>46</td><td>51</td><td>56</td><td></td></tr>
+<tr><th>B: Residuum <span class="formula">r</span></th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table>
+<div class="answerbox"></div>
+<div class="sim-task-note no-print"><b>Optionale Offline-Hilfe zu Aufgabe 2:</b> Rechne mindestens eine Spalte selbst. Der <b>Residuen-Scanner</b> macht danach Vorzeichen und vertikalen Abstand sichtbar; der <b>Geraden-Optimierer</b> zeigt, wie sich die Quadratsumme beim Verschieben der Geraden verändert.<br/><button class="sim-link" data-sim-target="sim-residual" type="button">Residuen-Scanner öffnen</button><button class="sim-link" data-sim-target="sim-optimizer" type="button">Geraden-Optimierer öffnen</button></div><div aria-label="Hilfen zu Aufgabe 2" class="inline-hints">
+<details><summary>Hilfe 1 zu Aufgabe 2: Denkimpuls</summary><div><p>Berechne für jede Spalte zuerst <span class="formula">beobachtet − Modellwert</span>. Prüfe das Vorzeichen am Graphen.</p></div></details>
+<details><summary>Hilfe 2 zu Aufgabe 2: Strukturhilfe</summary><div><p>Arbeite zeilenweise: Modellwerte kontrollieren → Residuen bilden → Residuen quadrieren → Quadrate addieren → beide Summen vergleichen.</p></div></details>
+<details><summary>Hilfe 3 zu Aufgabe 2: erster Zwischenschritt</summary><div><p>Für Kandidat A bei <span class="formula">x = 2</span>: <span class="formula">r = 37 − 35</span>. Berechne anschließend <span class="formula">r²</span> selbst.</p></div></details>
+</div>
+<div class="teacher-inline-note teacher-only"><b>Lehrkrafthinweis:</b> Hilfe 1 unterstützt den Residuenbegriff, Hilfe 2 die Arbeitsstruktur, Hilfe 3 den konkreten Rechenstart. Hilfe 3 erst öffnen, wenn beobachteter Wert und Modellwert vertauscht werden. Eine weitere Stufe ist nötig, wenn nur die Anzahl getroffener Punkte verglichen wird.</div>
+</section>
+<div class="interim-product"><b>Zwischenprodukt Stunde 1:</b> Modell-Vorprüfbogen mit ausgewählter Geraden, beiden Quadratsummen und einem Satz, warum eine Ausgleichsgerade nicht jeden Datenpunkt treffen muss.</div>
+</section>
+<section class="student-material worksheet-page" id="schueler-seite-3">
+<div class="worksheet-title"><div><h2>Regressionsmodell deuten und freigeben</h2><p>Von der mathematischen Prüfung zur betrieblichen Entscheidung</p></div><div><b>Seite 3 von 3</b></div></div>
+<section class="task-with-hints" id="aufgabe-3">
+<div class="task-head"><h3>Aufgabe 3 · Regression kontrollieren und deuten</h3><span class="afb">AFB II</span></div>
+<div class="tool-strip"><div><b>GeoGebra / CAS-Kontrolle</b><br/>Daten als zwei Listen erfassen → lineare Regression in der Form <span class="formula">ax + b</span> ausführen → <span class="formula">a</span> und <span class="formula">b</span> notieren.</div><div><b>Fachlicher Kontrollauftrag</b><br/>Das Tool-Ergebnis muss mit Kandidat B und dem Residuenvergleich übereinstimmen. Erst danach wird es interpretiert.</div></div>
+<ol><li>Notiere das kontrollierte Modell <span class="formula">ŷ = ax + b</span>.</li><li>Deute <span class="formula">a</span> und <span class="formula">b</span> mit Einheiten. Erkläre, warum <span class="formula">b</span> hier nicht als gesicherte betriebliche Grundmenge gilt.</li><li>Berechne die Schätzung für 450 geplante Kontakte und formuliere sie mit „ungefähr“.</li><li>Deute das Residuum der Kampagne mit <span class="formula">x = 2</span>.</li></ol>
+<div class="sim-task-note no-print"><b>Optionale Offline-Hilfe zu Aufgabe 3:</b> Nutze den <b>Geraden-Optimierer</b> zur Kontrolle der Regressionsgeraden und das <b>Prognose-Labor</b> erst nach deiner eigenen Rechnung für 450 Kontakte.<br/><button class="sim-link" data-sim-target="sim-optimizer" type="button">Regression kontrollieren</button><button class="sim-link" data-sim-target="sim-forecast" type="button">Prognose-Labor öffnen</button></div><div aria-label="Hilfen zu Aufgabe 3" class="inline-hints">
+<details><summary>Hilfe 1 zu Aufgabe 3: Denkimpuls</summary><div><p>Beachte: Eine Einheit auf der x-Achse entspricht 100 Kontakten.</p></div></details>
+<details><summary>Hilfe 2 zu Aufgabe 3: Satzstarter</summary><div><p>„Pro zusätzlichen 100 Kontakten … ungefähr … . Der Achsenabschnitt würde bei … bedeuten, liegt aber …“</p></div></details>
+<details><summary>Hilfe 3 zu Aufgabe 3: erster Zwischenschritt</summary><div><p>450 Kontakte entsprechen <span class="formula">x = 4,5</span>. Setze diesen Wert in <span class="formula">ŷ = 5x + 26</span> ein.</p></div></details>
+</div>
+<div class="teacher-inline-note teacher-only"><b>Lehrkrafthinweis:</b> Hilfe 1 ist fachlich-einheitenbezogen, Hilfe 2 sprachlich, Hilfe 3 konkret. Hilfe 2 öffnen, wenn Zahlen korrekt, aber ohne Kontext gedeutet werden; Hilfe 3 bei falscher Umrechnung von 450 Kontakten.</div>
+</section>
+<section class="task-with-hints" id="aufgabe-4">
+<div class="task-head"><h3>Aufgabe 4 · Modellbereich und Grenzen prüfen</h3><span class="afb">AFB II–III</span></div>
+<p>Beurteile jede Aussage mit <b>tragfähig</b> oder <b>nicht tragfähig</b> und begründe knapp.</p>
+<div class="risk-grid"><div class="risk-card">A. „Das Dashboard darf für 100 bis 600 geplante Kontakte eine ungefähre Anfragezahl liefern.“</div><div class="risk-card">B. „Bei 0 Kontakten entstehen sicher 26 Anfragen.“</div><div class="risk-card">C. „Für 800 Kontakte sind 66 Anfragen zuverlässig vorhergesagt.“</div><div class="risk-card">D. „Mehr Kontakte verursachen nachweislich die zusätzlichen Anfragen.“</div></div>
+<div class="sim-task-note no-print"><b>Optionale Offline-Hilfe zu Aufgabe 4:</b> Im <b>Prognose- und Modellbereich-Labor</b> kannst du Eingaben innerhalb und außerhalb der beobachteten 100–600 Kontakte vergleichen. Achte darauf, dass mathematische Berechenbarkeit nicht automatisch betriebliche Gültigkeit bedeutet.<br/><button class="sim-link" data-sim-target="sim-forecast" type="button">Modellbereich-Labor öffnen</button></div><div aria-label="Hilfen zu Aufgabe 4" class="inline-hints">
+<details><summary>Hilfe 1 zu Aufgabe 4: Denkimpuls</summary><div><p>Liegt die Eingabe innerhalb oder außerhalb der beobachteten Werte? Beschreibt das Modell Zusammenhang oder Ursache?</p></div></details>
+<details><summary>Hilfe 2 zu Aufgabe 4: Begriffshilfe</summary><div><p><b>Interpolation:</b> Schätzung innerhalb des beobachteten Bereichs. <b>Extrapolation:</b> Fortsetzung außerhalb des beobachteten Bereichs. <b>Korrelation:</b> gemeinsamer Trend, nicht automatisch Ursache.</p></div></details>
+</div>
+<div class="teacher-inline-note teacher-only"><b>Lehrkrafthinweis:</b> Hilfe 1 ist fachlich prüfend, Hilfe 2 begrifflich. Eine zweite Stufe ist nötig, wenn rechnerische Berechenbarkeit mit sachlicher Gültigkeit gleichgesetzt oder aus dem Trend eine Ursache abgeleitet wird.</div>
+</section>
+<section class="task-with-hints" id="aufgabe-5">
+<div class="task-head"><h3>Aufgabe 5 · Regressions- und Freigabekarte</h3><span class="afb">AFB III</span></div>
+<div class="release-card"><div class="release-head"><div><h4>Dashboard DA-05 · Freigabeentscheidung</h4><p>International Sales Analytics</p></div><div>Status: __________________</div></div>
+<table class="compact"><tr><th>1. Modell und Beleg</th><td></td></tr><tr><th>2. Steigung / Achsenabschnitt</th><td></td></tr><tr><th>3. Beispielschätzung</th><td></td></tr><tr><th>4. Modellbereich</th><td></td></tr><tr><th>5. Warnhinweise</th><td></td></tr><tr><th>6. Freigabeentscheidung</th><td></td></tr></table></div>
+<p><b>Produktkriterien:</b> Modellwahl mit Residuenbeleg; Parameter mit Einheiten; Prognose als Näherung; sinnvoller Modellbereich; mindestens zwei fachliche Grenzen; eindeutige und begründete Freigabe.</p>
+<div class="sim-task-note no-print"><b>Optionale Offline-Hilfe zu Aufgabe 5:</b> Der <b>Vollständigkeitscheck</b> zählt nur vorhandene Bausteine. Er entscheidet weder über die Qualität der Begründung noch über den Freigabestatus.<br/><button class="sim-link" data-sim-target="sim-release-check" type="button">Vollständigkeitscheck öffnen</button></div><div aria-label="Hilfen zu Aufgabe 5" class="inline-hints">
+<details><summary>Hilfe 1 zu Aufgabe 5: Entscheidungsstruktur</summary><div><p>1. Modell nennen. 2. mathematischen Beleg anführen. 3. Parameter und Prognose deuten. 4. Bereich festlegen. 5. Risiken nennen. 6. Freigabe begründen.</p></div></details>
+<details><summary>Hilfe 2 zu Aufgabe 5: Satzstarter</summary><div><p>„Wir empfehlen eine begrenzte Freigabe, weil … . Das Dashboard darf nur … und muss anzeigen, dass … . Nicht zulässig ist …“</p></div></details>
+<details><summary>Hilfe 3 zu Aufgabe 5: Prüffragen</summary><div><p>Steht ein Näherungszeichen beziehungsweise „ungefähr“? Ist <span class="formula">x = 0</span> ausgeschlossen? Wird Extrapolation außerhalb 100–600 Kontakte verhindert? Wird keine Ursache behauptet?</p></div></details>
+</div>
+<div class="teacher-inline-note teacher-only"><b>Lehrkrafthinweis:</b> Hilfe 1 ist strukturierend und für den Basisweg vorgesehen, Hilfe 2 sprachlich, Hilfe 3 fachlich kontrollierend. Die Freigabeentscheidung darf nicht vorgegeben werden. Eine weitere Stufe ist nötig, wenn nur „freigeben/nicht freigeben“ ohne Bedingungen genannt wird.</div>
+</section>
+<p class="small"><b>Erweiterung:</b> Das Dashboard berechnet für 800 Kontakte <span class="formula">ŷ = 66</span>. Erkläre präzise, warum die Rechnung mathematisch möglich, die Prognose aber fachlich nicht freigegeben ist.</p>
+</section>
+<section aria-labelledby="simulation-title" class="simulation-only" id="simulationen">
+<h2 id="simulation-title">Interaktive Offline-Simulationen als Aufgabenhilfe</h2>
+<div class="note"><b>Arbeitsprinzip:</b> Die Simulationen ersetzen keine Rechnung. Beginne im Schülerarbeitsblatt und nutze das passende Werkzeug anschließend zum Sichtbarmachen, Kontrollieren und Interpretieren. Alle Daten, Berechnungen, Grafiken und Rückmeldungen laufen lokal in dieser Datei.</div>
+<div class="sim-intro">
+<div class="sim-card"><span class="sim-tag">Aufgabe 2 und 3</span><h3>Residuen-Scanner</h3><p>Prüft einen selbst berechneten Modellwert und ein Residuum. Danach werden Datenpunkt, Modellpunkt, Vorzeichen und vertikaler Abstand sichtbar.</p><button class="sim-link" data-sim-target="sim-residual" type="button">Zum Scanner</button></div>
+<div class="sim-card"><span class="sim-tag">Aufgabe 2 und 3</span><h3>Geraden-Optimierer</h3><p>Verändert Steigung und Achsenabschnitt, zeichnet alle Residuen und vergleicht die Summe ihrer Quadrate. Presets A, B und die berechnete Regressionsgerade stehen zur Kontrolle bereit.</p><button class="sim-link" data-sim-target="sim-optimizer" type="button">Zum Optimierer</button></div>
+<div class="sim-card"><span class="sim-tag">Aufgabe 3 bis 5</span><h3>Prognose- und Freigabe-Labor</h3><p>Kontrolliert eigene Prognosen, unterscheidet Interpolation und Extrapolation und prüft die Vollständigkeit der Freigabekarte.</p><button class="sim-link" data-sim-target="sim-forecast" type="button">Zum Labor</button></div>
+</div>
+<article aria-labelledby="sim-residual-title" class="sim-panel" id="sim-residual">
+<h3 id="sim-residual-title">1. Residuen-Scanner: beobachtet minus modelliert</h3>
+<p><b>Auftrag:</b> Wähle eine Gerade und eine Kampagne. Berechne Modellwert und Residuum zuerst selbst. Erst nach richtiger Eingabe wird der vertikale Abstand im Graphen hervorgehoben.</p>
+<div class="sim-controls">
+<label>Gerade<select id="resModel"><option value="A">Kandidat A: y = 5x + 25</option><option value="B">Kandidat B: ŷ = 5x + 26</option></select></label>
+<label>Kampagne / x-Wert<input aria-describedby="resXOut" id="resX" max="6" min="1" step="1" type="range" value="2"/><span>gewählt: x = <output class="sim-output" id="resXOut">2</output></span></label>
+<label>Mein Modellwert ŷ<input id="resOwnY" inputmode="decimal" step="1" type="number"/></label>
+<label>Mein Residuum r = y − ŷ<input id="resOwnR" inputmode="decimal" step="1" type="number"/></label>
+<button class="sim-button" id="resCheck" type="button">Rechnung und Abstand prüfen</button>
+<button class="sim-button secondary" id="resReset" type="button">Eingaben löschen</button>
+</div>
+<div aria-live="polite" class="sim-feedback" id="resFeedback">Nutze das Vorzeichen bewusst: Punkt über der Geraden → positives Residuum; Punkt unter der Geraden → negatives Residuum.</div>
+<div class="sim-stat-grid">
+<div class="sim-stat"><b>Beobachteter Wert</b><output id="resObserved">noch nicht freigegeben</output></div>
+<div class="sim-stat"><b>Modellwert</b><output id="resPredicted">noch nicht freigegeben</output></div>
+<div class="sim-stat"><b>Residuum</b><output id="resValue">noch nicht freigegeben</output></div>
+<div class="sim-stat"><b>Lage</b><output id="resPosition">noch nicht freigegeben</output></div>
+</div>
+<svg aria-labelledby="resGraphTitle resGraphDesc" class="sim-graph" id="resGraph" role="img" viewbox="0 0 760 420"><title id="resGraphTitle">Punktwolke mit ausgewählter Kandidatengerade</title><desc id="resGraphDesc">Nach korrekter eigener Rechnung wird das ausgewählte Residuum als vertikaler Abstand zwischen Datenpunkt und Modellpunkt angezeigt.</desc></svg>
+<div class="sim-note"><b>Prüffrage:</b> Warum kann eine Gerade mit weniger exakten Punkt-Treffern trotzdem die kleinere Quadratsumme besitzen?</div>
+</article>
+<article aria-labelledby="sim-optimizer-title" class="sim-panel" id="sim-optimizer">
+<h3 id="sim-optimizer-title">2. Geraden-Optimierer: Residuen und Quadratsumme</h3>
+<p><b>Auftrag:</b> Lade zuerst A und B und vergleiche die sichtbaren Residuen. Verändere anschließend Steigung und Achsenabschnitt. Die Quadratsumme ist ein Vergleichskriterium: kleinere Werte bedeuten insgesamt kleinere quadrierte vertikale Abweichungen.</p>
+<div class="sim-controls">
+<label>Steigung a<input id="optM" max="6.5" min="3.5" step="0.1" type="range" value="5"/><span>a = <output class="sim-output" id="optMOut">5,0</output></span></label>
+<label>Achsenabschnitt b<input id="optB" max="32" min="20" step="0.5" type="range" value="25"/><span>b = <output class="sim-output" id="optBOut">25,0</output></span></label>
+<button class="sim-button tertiary" data-preset="A" type="button">Kandidat A laden</button>
+<button class="sim-button tertiary" data-preset="B" type="button">Kandidat B laden</button>
+<button class="sim-button" id="optRegression" type="button">Regression aus allen Daten berechnen</button>
+<button class="sim-button secondary" id="optReset" type="button">Zurücksetzen</button>
+</div>
+<div class="sim-toggle-row">
+<label><input checked="" id="optShowResiduals" type="checkbox"/> Residuen im Graphen anzeigen</label>
+<label><input checked="" id="optShowSquares" type="checkbox"/> Beiträge r² als Balken anzeigen</label>
+</div>
+<div class="sim-stat-grid">
+<div class="sim-stat"><b>Gerade</b><output id="optEquation">ŷ = 5,0x + 25,0</output></div>
+<div class="sim-stat"><b>Σr²</b><output id="optSSE">10,00</output></div>
+<div class="sim-stat"><b>Summe der Residuen</b><output id="optSumR">6,00</output></div>
+<div class="sim-stat"><b>Einordnung</b><output id="optStatus">Kandidat A</output></div>
+</div>
+<div aria-live="polite" class="sim-feedback" id="optFeedback">Vergleiche A und B: Nicht die Zahl exakt getroffener Punkte, sondern die gesamte quadrierte Abweichung entscheidet.</div>
+<div class="sim-row">
+<div><svg aria-labelledby="optGraphTitle optGraphDesc" class="sim-graph" id="optGraph" role="img" viewbox="0 0 760 420"><title id="optGraphTitle">Veränderbare Gerade in der Punktwolke</title><desc id="optGraphDesc">Die Gerade wird über Steigung und Achsenabschnitt verändert. Auf Wunsch erscheinen vertikale Residuen.</desc></svg></div>
+<div><svg aria-labelledby="squareGraphTitle squareGraphDesc" class="sim-graph" id="squareGraph" role="img" viewbox="0 0 460 420"><title id="squareGraphTitle">Beiträge zur Quadratsumme</title><desc id="squareGraphDesc">Für jeden x-Wert zeigt ein Balken den Beitrag r Quadrat zur Summe der quadrierten Residuen.</desc></svg></div>
+</div>
+<div class="sim-note"><b>Fachliche Grenze:</b> Das Werkzeug berechnet die Regressionsparameter lokal aus den sechs Daten. Es liefert keine Ursachenanalyse und keine Freigabeentscheidung.</div>
+</article>
+<article aria-labelledby="sim-forecast-title" class="sim-panel" id="sim-forecast">
+<h3 id="sim-forecast-title">3. Prognose- und Modellbereich-Labor</h3>
+<p><b>Auftrag:</b> Wähle ein Kontaktvolumen, berechne die Schätzung mit ŷ = 5x + 26 selbst und gib sie ein. Danach ordnet das Labor die Eingabe in Bezug auf den beobachteten Bereich ein.</p>
+<div class="sim-controls">
+<label>Kontakte in Hunderten x<input id="forecastX" max="8" min="0" step="0.5" type="range" value="4.5"/><span>x = <output class="sim-output" id="forecastXOut">4,5</output> = <output id="forecastContacts">450</output> Kontakte</span></label>
+<label>Meine Schätzung ŷ<input id="forecastOwn" inputmode="decimal" step="0.5" type="number"/></label>
+<button class="sim-button" id="forecastCheck" type="button">Prognose und Bereich prüfen</button>
+<button class="sim-button secondary" id="forecastReset" type="button">Zurücksetzen</button>
+</div>
+<div aria-live="polite" class="sim-feedback" id="forecastFeedback">Innerhalb 1 ≤ x ≤ 6 wird zwischen beobachteten Kontaktvolumina geschätzt. Außerhalb wird das Modell fortgesetzt.</div>
+<div class="sim-stat-grid">
+<div class="sim-stat"><b>Rechnung</b><output id="forecastCalc">noch nicht freigegeben</output></div>
+<div class="sim-stat"><b>Schätzwert</b><output id="forecastValue">noch nicht freigegeben</output></div>
+<div class="sim-stat"><b>Bereich</b><output id="forecastZone">noch nicht freigegeben</output></div>
+<div class="sim-stat"><b>Betrieblicher Hinweis</b><output id="forecastWarning">noch nicht freigegeben</output></div>
+</div>
+<svg aria-labelledby="forecastGraphTitle forecastGraphDesc" class="sim-graph" id="forecastGraph" role="img" viewbox="0 0 760 420"><title id="forecastGraphTitle">Regressionsgerade mit gewählter Prognose</title><desc id="forecastGraphDesc">Der beobachtete Bereich von x gleich eins bis sechs wird markiert. Nach korrekter Rechnung erscheint der gewählte Modellpunkt.</desc></svg>
+<div class="sim-subpanel" id="sim-release-check">
+<h4>Vollständigkeitscheck der Regressions- und Freigabekarte</h4>
+<p>Setze nur Häkchen für Inhalte, die tatsächlich auf eurer Karte stehen. Der Check zählt Bausteine, bewertet aber weder Richtigkeit noch Qualität.</p>
+<div class="sim-checklist" id="releaseChecks">
+<label><input type="checkbox"/> Modellgleichung und Residuen-/Quadratsummenbeleg</label>
+<label><input type="checkbox"/> Steigung und Achsenabschnitt mit Einheiten und Grenze</label>
+<label><input type="checkbox"/> Beispielschätzung als Näherung</label>
+<label><input type="checkbox"/> Modellbereich 100–600 Kontakte</label>
+<label><input type="checkbox"/> mindestens zwei fachliche Warnhinweise</label>
+<label><input type="checkbox"/> eindeutige, bedingte Freigabeentscheidung</label>
+</div>
+<button class="sim-button" id="releaseCheck" type="button">Vollständigkeit prüfen</button>
+<button class="sim-button secondary" id="releaseReset" type="button">Häkchen löschen</button>
+<div aria-live="polite" class="sim-feedback" id="releaseFeedback">Eine vollständige Karte enthält sechs Bausteine. Prüft anschließend die Begründungen gegenseitig.</div>
+</div>
+</article>
+</section><section class="solution-only" id="musterloesung">
+<h2>3. Vollständige Musterlösung</h2>
+<h3>Aufgabe 1</h3>
+<div class="card solution"><p><b>Eingabe:</b> geplante Händlerkontakte <span class="formula">x</span> in Hunderten. <b>Ausgabe:</b> Zahl qualifizierter Händleranfragen <span class="formula">y</span>. Die Punktwolke zeigt einen positiven, annähernd linearen Trend: Mit wachsendem Kontaktvolumen steigt die Zahl qualifizierter Anfragen tendenziell. Eine ungeprüfte Linie kann die Personalplanung verzerren und zu Über- oder Unterbesetzung führen.</p></div>
+<h3>Aufgabe 2</h3>
+<div class="card solution"><table class="compact"><tr><th><span class="formula">x</span></th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><th><span class="formula">Σr²</span></th></tr>
+<tr><th>beobachtet <span class="formula">y</span></th><td>30</td><td>37</td><td>41</td><td>46</td><td>52</td><td>55</td><td>–</td></tr>
+<tr><th>A: Modellwert</th><td>30</td><td>35</td><td>40</td><td>45</td><td>50</td><td>55</td><td>–</td></tr>
+<tr><th>A: Residuum</th><td>0</td><td>2</td><td>1</td><td>1</td><td>2</td><td>0</td><td><b>10</b></td></tr>
+<tr><th>B: Modellwert</th><td>31</td><td>36</td><td>41</td><td>46</td><td>51</td><td>56</td><td>–</td></tr>
+<tr><th>B: Residuum</th><td>−1</td><td>1</td><td>0</td><td>0</td><td>1</td><td>−1</td><td><b>4</b></td></tr></table>
+<p>Kandidat A trifft den ersten und letzten Datenpunkt exakt, liegt aber bei allen vier mittleren Punkten unter den Beobachtungen. Kandidat B trifft nicht alle Punkte, gleicht die Abweichungen aber besser aus. Da <span class="formula">Σr² = 4</span> kleiner als <span class="formula">Σr² = 10</span> ist und alle sechs Daten gemeinsam berücksichtigt werden, wird Kandidat B als Trendmodell ausgewählt.</p></div>
+<h3>Aufgabe 3</h3>
+<div class="card solution"><p><b>Regressionsmodell:</b> <span class="formula">ŷ = 5x + 26</span>.</p><ul><li><b>Steigung <span class="formula">a = 5</span>:</b> Pro zusätzlichen 100 geplanten Händlerkontakten steigen die qualifizierten Anfragen im Modell um ungefähr 5.</li><li><b>Achsenabschnitt <span class="formula">b = 26</span>:</b> Rechnerisch liefert das Modell bei <span class="formula">x = 0</span> den Wert 26. Dieser Wert ist nicht als gesicherte Grundmenge zu deuten, weil 0 Kontakte außerhalb des beobachteten und freigegebenen Bereichs liegt und weitere Einflüsse nicht erfasst sind.</li><li><b>450 Kontakte:</b> <span class="formula">x = 4,5</span>; <span class="formula">ŷ(4,5) = 5 · 4,5 + 26 = 48,5</span>. Das Modell schätzt ungefähr 49 qualifizierte Anfragen.</li><li><b>Residuum bei <span class="formula">x = 2</span>:</b> Beobachtet wurden 37, modelliert 36; <span class="formula">r = 1</span>. Die Kampagne lag eine Anfrage über dem Modellwert.</li></ul></div>
+<h3>Aufgabe 4</h3>
+<div class="card solution"><ul><li><b>A tragfähig:</b> 100 bis 600 Kontakte entsprechen dem beobachteten Bereich <span class="formula">1 ≤ x ≤ 6</span>; dort kann die Gerade als grobe Planungsschätzung genutzt werden.</li><li><b>B nicht tragfähig:</b> Der Achsenabschnitt ist eine rechnerische Fortsetzung außerhalb des Datenbereichs, keine sichere Aussage über 0 Kontakte.</li><li><b>C nicht tragfähig:</b> 800 Kontakte liegen außerhalb des Datenbereichs. Der Wert 66 ist eine Extrapolation und mit diesen Daten nicht zuverlässig abgesichert.</li><li><b>D nicht tragfähig:</b> Die Daten zeigen einen positiven Zusammenhang, belegen aber keine Ursache. Länder-, Kampagnen- oder Marktunterschiede können mitwirken.</li></ul></div>
+<h3>Aufgabe 5 · Ausgefüllte Regressions- und Freigabekarte</h3>
+<div class="release-card solution"><div class="release-head"><div><h4>Dashboard DA-05 · Freigabeentscheidung</h4><p>International Sales Analytics</p></div><span class="decision-stamp">Begrenzt freigeben</span></div>
+<table class="compact"><tr><th>1. Modell und Beleg</th><td><span class="formula">ŷ = 5x + 26</span>. Kandidat B nutzt alle sechs Daten; seine Quadratsumme <span class="formula">Σr² = 4</span> ist kleiner als bei Kandidat A mit 10.</td></tr><tr><th>2. Steigung / Achsenabschnitt</th><td>Je weitere 100 Kontakte werden ungefähr 5 zusätzliche Anfragen geschätzt. Der Achsenabschnitt 26 ist bei 0 Kontakten nicht als reale Grundmenge freizugeben.</td></tr><tr><th>3. Beispielschätzung</th><td>Für 450 Kontakte: <span class="formula">ŷ(4,5) = 48,5</span>, also ungefähr 49 Anfragen.</td></tr><tr><th>4. Modellbereich</th><td><span class="formula">1 ≤ x ≤ 6</span>, entsprechend 100 bis 600 geplanten Kontakten.</td></tr><tr><th>5. Warnhinweise</th><td>Ergebnisse sind Näherungen; keine Extrapolation; keine Kausalbehauptung; länder- und kampagnenspezifische Einflüsse bleiben unberücksichtigt.</td></tr><tr><th>6. Freigabeentscheidung</th><td>Begrenzte Freigabe für eine grobe interne Kapazitätsplanung innerhalb 100–600 Kontakte. Das Dashboard muss „ungefähr“ anzeigen und Eingaben außerhalb des Bereichs sperren oder deutlich als nicht abgesichert kennzeichnen. Für verbindliche länderspezifische Personalentscheidungen sind zusätzliche Daten erforderlich.</td></tr></table></div>
+<h3>Erweiterung</h3><div class="card solution"><p>Für <span class="formula">x = 8</span> kann der Term zwar <span class="formula">ŷ = 5 · 8 + 26 = 66</span> berechnen. Der Wert liegt jedoch außerhalb des beobachteten Bereichs und ist daher eine Extrapolation. Mathematische Berechenbarkeit ersetzt keine sachliche Gültigkeit; die Freigabegrenze bleibt bei 600 Kontakten.</p></div>
+</section>
+<section class="teacher-only" id="sicherung">
+<h2>4. Ergebnissicherung / Tafelbild</h2>
+<div class="board"><h3>Von der Punktwolke zur Trendgeraden</h3><p><b>Modell:</b> <span class="formula">ŷ = ax + b</span> beschreibt einen Trend näherungsweise und muss nicht jeden Datenpunkt treffen.</p><p><b>Residuum:</b> <span class="formula">r = y − ŷ</span>. Positiv: Punkt über der Geraden; negativ: Punkt unter der Geraden.</p><p><b>Regressionsidee:</b> Die lineare Ausgleichsgerade macht <span class="formula">Σr²</span> möglichst klein.</p><p><b>Deutung:</b> <span class="formula">a</span> beschreibt die ungefähre Änderung je x-Einheit; <span class="formula">b</span> ist der Modellwert bei <span class="formula">x = 0</span> und muss sachlich geprüft werden.</p><p><b>Freigabe:</b> Datenbereich nennen → Näherung kennzeichnen → Extrapolation vermeiden → Zusammenhang nicht automatisch als Ursache deuten.</p><p><b>Merksatz:</b> Eine Regressionsgerade ist ein nützliches Modell, keine exakte Wahrheit.</p></div>
+<h3>Differenzierung und sprachliche Unterstützung</h3>
+<div class="grid2"><div class="card"><h4>Fachliche Differenzierung</h4><ul><li><b>Basis:</b> vorgegebene Modellwerte nutzen, Residuen zeilenweise bilden, Entscheidungsschema und Produktkarte verwenden.</li><li><b>Standard:</b> vollständiger Residuenvergleich, Tool-Kontrolle, Parameter- und Modellbereichsdeutung.</li><li><b>Erweiterung:</b> rechnerische Extrapolation und sachliche Gültigkeit trennen; Korrelation und Kausalität unterscheiden.</li><li>Schnelle Lernende formulieren eine Dashboard-Prüfregel: Eingabe zwischen 1 und 6, Ausgabe mit Näherungshinweis, sonst Warnmeldung.</li></ul></div><div class="card"><h4>Sprachliche Unterstützung</h4><ul><li>Begriffspaare: beobachtet ↔ modelliert; exakt getroffen ↔ ausgeglichen; Interpolation ↔ Extrapolation; Zusammenhang ↔ Ursache.</li><li>Satzstarter direkt an Aufgaben und Produktkarte.</li><li>Begründungsstruktur: Datenbeleg – mathematisches Ergebnis – Kontextdeutung – Grenze – Entscheidung.</li><li>Einheiten werden konsequent versprachlicht: „pro 100 Kontakte“ und „Anfragen“.</li></ul></div></div>
+<h3>Typische Fehler und mögliche Reaktionen</h3>
+<table><tr><th>Typischer Fehler</th><th>Mögliche Lehrkraftreaktion</th></tr>
+<tr><td>„Die beste Gerade muss alle Punkte treffen.“</td><td>Auf Streudaten verweisen und fragen, ob eine einzige Gerade bei allen sechs verschiedenen Punkten überhaupt exakt möglich ist.</td></tr>
+<tr><td>Kandidat A wird gewählt, weil er zwei Punkte exakt trifft.</td><td>Alle sechs Residuen und beide Quadratsummen sichtbar vergleichen lassen.</td></tr>
+<tr><td>Residuum wird als Modellwert minus Beobachtung gebildet.</td><td>Graphische Lage prüfen: Punkt über der Geraden muss bei der vereinbarten Definition ein positives Residuum ergeben.</td></tr>
+<tr><td>Nur die Summe der Residuen wird verglichen.</td><td>Zeigen, dass positive und negative Abweichungen sich aufheben können; deshalb Quadrate verwenden.</td></tr>
+<tr><td>Steigung 5 wird als „fünf Kontakte“ gedeutet.</td><td>x-Achse und Einheit markieren: eine x-Einheit entspricht 100 Kontakten.</td></tr>
+<tr><td>Der Achsenabschnitt wird als sichere Grundnachfrage interpretiert.</td><td>Prüfen lassen, ob <span class="formula">x = 0</span> beobachtet wurde und im Modellbereich liegt.</td></tr>
+<tr><td>Die Modellwerte werden mit Gleichheitszeichen als exakte Zukunftswerte notiert.</td><td>Näherungszeichen beziehungsweise „ungefähr“ und Modellcharakter einfordern.</td></tr>
+<tr><td>800 Kontakte werden bedenkenlos berechnet und freigegeben.</td><td>Zwischen mathematischer Fortsetzung und sachlicher Extrapolation unterscheiden lassen.</td></tr>
+<tr><td>Aus dem positiven Trend wird eine Ursache abgeleitet.</td><td>Nach weiteren Einflussgrößen fragen: Land, Kampagne, Saison, Produktmix.</td></tr></table>
+<h3>Übergang zur separaten Übungsstunde</h3>
+<p>Die separate Übungsstunde kann weitere kleine Punktwolken, Residuentabellen und CAS-Kontrollen verwenden: Trendrichtung beschreiben, Kandidatengeraden vergleichen, Steigung und Achsenabschnitt deuten sowie Modellbereiche begrenzen. Woche 6 kann anschließend die lineare Preisabsatzfunktion als ökonomisches Modell einführen.</p>
+</section>
+<section class="teacher-only" id="quellen">
+<h2>5. Quellen- und Kennzeichnungsverzeichnis</h2>
+<ul class="source-list">
+<li><b>Aus dem Klassenprofil übernommen:</b> Klasse 11BC, Bildungsgang D28, Fachbereich Wirtschaft und Verwaltung, international-kaufmännische Kontexte, heterogene Lerngruppe, Standardausstattung und Ausschluss generativer KI für Lernende.</li>
+<li><b>Aus dem Halbjahresskript übernommen:</b> Kapitel „Regression und Trendgerade“, Woche 5 „Trendgerade und lineare Regression“; Trendgerade erklären, exakte Gerade und Ausgleichsgerade unterscheiden, Steigung und Achsenabschnitt deuten sowie Regression als Modell mit Fehlern verstehen.</li>
+<li><b>Aus Woche 1–4 weitergeführt beziehungsweise abgeleitet:</b> Wertepaare, Koordinatensystem, Trendbeschreibung, Datenqualität, Funktionsbegriff, Funktionswerte, Definitionsbereich und Darstellungswechsel; außerdem Layout, Farbkonzept, Karten- und Tabellenstil, Kopfbereich, Kapitelstruktur, Ansichts- und Drucklogik.</li>
+<li><b>Aus der älteren didaktischen Jahresplanung abgeleitet:</b> Übergeordnetes Teilthema „Von Daten zu Funktionen – Regression“ und CAS-Bezug. Angaben zu SH, D23 oder anderen Bildungsgängen wurden nicht übernommen.</li>
+<li><b>Aus einer Übung abgeleitet:</b> Die Skriptidee, eine Gerade durch zwei Punkte von einer Regressionsgeraden zu unterscheiden, wurde in eine betriebliche Modell- und Freigabeprüfung übertragen.</li>
+<li><b>Extern recherchiert:</b> GeoGebra Manual, „FitLine Command“ und „ResidualPlot Command“ (Abruf 22.07.2026): fachliche Absicherung der y-auf-x-Ausgleichsgeraden und der Definition des Residuums als y − f(x). GeoGebra Content Team, „Lines of Best Fit and Residuals“ (Abruf 22.07.2026): didaktische Orientierung für das Verändern einer Geraden und das Beobachten der Summe quadrierter Residuen. OpenStax, „Introductory Business Statistics 2e“, Abschnitt zur Regressionsgleichung (Abruf 22.07.2026): fachliche Absicherung des Kleinste-Quadrate-Kriteriums. Keine externen Daten übernommen.</li>
+<li><b>Didaktisch ergänzt:</b> Dashboard-Freigabeticket, Zwei-Kandidaten-Vergleich, Residuen-Quadratsumme als didaktische Brücke, aufgabennahe Hilfen, Produktkriterien, Fehlerdiagnosen und begrenzte Freigabeentscheidung.</li>
+<li><b>Didaktisch konstruierte Daten:</b> EuroTrade Accessories GmbH, Abteilung, EU-Kampagnen, Dashboard DA-05, Kontakt- und Anfragewerte sowie alle betrieblichen Bedingungen.</li>
+<li><b>Technische Kennzeichnung:</b> Einzelne UTF-8-HTML-Datei mit restriktiver CSP, vollständig eingebettetem CSS und JavaScript, Inline-SVG und lokaler Unicode/HTML-Formeldarstellung. Keine externe oder benachbarte Ressource, kein Online-Fallback und keine Browserspeicher-Abhängigkeit. Die Simulationen verwenden ausschließlich lokales JavaScript und dynamisch erzeugte Inline-SVG-Elemente; es werden keine GeoGebra-Applets oder Netzressourcen eingebettet.</li>
+</ul>
+</section>
+</main>
+<script id="week5-controls-and-simulations">
+(function(){
+'use strict';
+var openedForPrint=[];
+var views=['all','student','simulations','teacher','solution'];
+var hintModes=['hide','show'];
+function setView(view){
+  if(views.indexOf(view)===-1){view='all';}
+  document.body.dataset.view=view;
+  document.querySelectorAll('.viewbtn').forEach(function(button){
+    var active=button.dataset.target===view;
+    button.classList.toggle('active',active);
+    button.setAttribute('aria-pressed',String(active));
+  });
+}
+function setPrintHints(mode){
+  if(hintModes.indexOf(mode)===-1){mode='hide';}
+  document.body.dataset.printHints=mode;
+  document.querySelectorAll('.hintprintbtn').forEach(function(button){
+    var active=button.dataset.hintTarget===mode;
+    button.classList.toggle('active',active);
+    button.setAttribute('aria-pressed',String(active));
+  });
+}
+function preparePrintHints(){
+  openedForPrint=[];
+  if(document.body.dataset.view==='student' && document.body.dataset.printHints==='show'){
+    document.querySelectorAll('.student-material .inline-hints details').forEach(function(detail){
+      openedForPrint.push({element:detail,wasOpen:detail.open}); detail.open=true;
+    });
+  }
+}
+function restorePrintHints(){openedForPrint.forEach(function(item){item.element.open=item.wasOpen;});openedForPrint=[];}
+document.querySelectorAll('.viewbtn').forEach(function(button){button.addEventListener('click',function(){setView(button.dataset.target);});});
+document.querySelectorAll('.hintprintbtn').forEach(function(button){button.addEventListener('click',function(){setPrintHints(button.dataset.hintTarget);});});
+document.getElementById('print-document').addEventListener('click',function(){preparePrintHints();window.print();});
+window.addEventListener('beforeprint',preparePrintHints);window.addEventListener('afterprint',restorePrintHints);
+
+document.querySelectorAll('[data-sim-target]').forEach(function(button){
+  button.addEventListener('click',function(){
+    setView('simulations');
+    var target=document.getElementById(button.dataset.simTarget);
+    if(target){window.requestAnimationFrame(function(){target.scrollIntoView({behavior:'smooth',block:'start'});});}
+  });
+});
+
+var NS='http://www.w3.org/2000/svg';
+var xs=[1,2,3,4,5,6], ys=[30,37,41,46,52,55];
+function pred(x,m,b){return m*x+b;}
+function regression(){
+  var n=xs.length,sx=0,sy=0,sxy=0,sxx=0;
+  xs.forEach(function(x,i){sx+=x;sy+=ys[i];sxy+=x*ys[i];sxx+=x*x;});
+  var m=(n*sxy-sx*sy)/(n*sxx-sx*sx); return {m:m,b:(sy-m*sx)/n};
+}
+var reg=regression();
+function residuals(m,b){return xs.map(function(x,i){return ys[i]-pred(x,m,b);});}
+function sse(m,b){return residuals(m,b).reduce(function(sum,r){return sum+r*r;},0);}
+function sumResiduals(m,b){return residuals(m,b).reduce(function(sum,r){return sum+r;},0);}
+function de(v,d){d=(d===undefined?1:d);var n=Math.abs(v)<Math.pow(10,-d)/2?0:v;return n.toFixed(d).replace('.',',');}
+function nearly(a,b,t){return Math.abs(a-b)<=(t||0.01);}
+function setFeedback(id,msg,kind){var el=document.getElementById(id);if(!el)return;el.className='sim-feedback'+(kind?' '+kind:'');el.textContent=msg;}
+function svgEl(name,attrs,text){var el=document.createElementNS(NS,name);Object.keys(attrs||{}).forEach(function(k){el.setAttribute(k,String(attrs[k]));});if(text!==undefined)el.textContent=text;return el;}
+function clearSvg(svg,title,desc){while(svg.firstChild)svg.removeChild(svg.firstChild);svg.appendChild(svgEl('title',{},title));svg.appendChild(svgEl('desc',{},desc));}
+function graphScales(W,H){var left=66,right=W-28,top=26,bottom=H-60;return {left:left,right:right,top:top,bottom:bottom,sx:function(x){return left+(x/8)*(right-left);},sy:function(y){return bottom-((y-20)/50)*(bottom-top);}};}
+function drawBase(svg,m,b,opts){
+  opts=opts||{};var W=760,H=420,g=graphScales(W,H);clearSvg(svg,opts.title||'Regressionsgraph',opts.desc||'Punktwolke und Modellgerade');
+  if(opts.shadeDomain){svg.appendChild(svgEl('rect',{x:g.sx(1),y:g.top,width:g.sx(6)-g.sx(1),height:g.bottom-g.top,fill:'#eaf6ef'}));svg.appendChild(svgEl('text',{x:(g.sx(1)+g.sx(6))/2,y:g.top+18,'text-anchor':'middle',fill:'#2f6f4e','font-size':'13','font-weight':'700'},'beobachteter Bereich 1 ≤ x ≤ 6'));}
+  for(var y=20;y<=70;y+=5){svg.appendChild(svgEl('line',{x1:g.left,y1:g.sy(y),x2:g.right,y2:g.sy(y),stroke:'#d9e1e7','stroke-width':'1'}));svg.appendChild(svgEl('text',{x:g.left-10,y:g.sy(y)+4,'text-anchor':'end',fill:'#506070','font-size':'12'},String(y)));}
+  for(var x=0;x<=8;x++){svg.appendChild(svgEl('line',{x1:g.sx(x),y1:g.top,x2:g.sx(x),y2:g.bottom,stroke:'#edf1f4','stroke-width':'1'}));svg.appendChild(svgEl('text',{x:g.sx(x),y:g.bottom+22,'text-anchor':'middle',fill:'#506070','font-size':'12'},String(x)));}
+  svg.appendChild(svgEl('line',{x1:g.left,y1:g.bottom,x2:g.right,y2:g.bottom,stroke:'#263746','stroke-width':'2'}));svg.appendChild(svgEl('line',{x1:g.left,y1:g.top,x2:g.left,y2:g.bottom,stroke:'#263746','stroke-width':'2'}));
+  svg.appendChild(svgEl('text',{x:(g.left+g.right)/2,y:H-15,'text-anchor':'middle',fill:'#263746','font-size':'13','font-weight':'700'},'geplante Händlerkontakte x (in Hunderten)'));
+  svg.appendChild(svgEl('text',{x:16,y:(g.top+g.bottom)/2,transform:'rotate(-90 16 '+((g.top+g.bottom)/2)+')','text-anchor':'middle',fill:'#263746','font-size':'13','font-weight':'700'},'qualifizierte Anfragen y'));
+  var x1=0,x2=8;svg.appendChild(svgEl('line',{x1:g.sx(x1),y1:g.sy(pred(x1,m,b)),x2:g.sx(x2),y2:g.sy(pred(x2,m,b)),stroke:opts.lineColor||'#0b6b8a','stroke-width':'4'}));
+  if(opts.showResiduals){xs.forEach(function(x,i){var yh=pred(x,m,b);svg.appendChild(svgEl('line',{x1:g.sx(x),y1:g.sy(ys[i]),x2:g.sx(x),y2:g.sy(yh),stroke:'#d69a00','stroke-width':'3','stroke-dasharray':'6 4'}));svg.appendChild(svgEl('circle',{cx:g.sx(x),cy:g.sy(yh),r:'4',fill:'#fff',stroke:'#0b6b8a','stroke-width':'2'}));});}
+  xs.forEach(function(x,i){svg.appendChild(svgEl('circle',{cx:g.sx(x),cy:g.sy(ys[i]),r:'6',fill:'#b3263e',stroke:'#fff','stroke-width':'2'}));});
+  if(opts.selectedX!==undefined && opts.reveal){var i=xs.indexOf(opts.selectedX),yh=pred(opts.selectedX,m,b),yo=ys[i];svg.appendChild(svgEl('line',{x1:g.sx(opts.selectedX),y1:g.sy(yo),x2:g.sx(opts.selectedX),y2:g.sy(yh),stroke:'#7c3aed','stroke-width':'6'}));svg.appendChild(svgEl('circle',{cx:g.sx(opts.selectedX),cy:g.sy(yh),r:'7',fill:'#fff',stroke:'#7c3aed','stroke-width':'3'}));svg.appendChild(svgEl('text',{x:g.sx(opts.selectedX)+12,y:(g.sy(yo)+g.sy(yh))/2-6,fill:'#5b21b6','font-size':'13','font-weight':'700'},'r = '+de(yo-yh,0)));}
+  if(opts.forecastX!==undefined && opts.reveal){var fy=pred(opts.forecastX,m,b);svg.appendChild(svgEl('line',{x1:g.sx(opts.forecastX),y1:g.bottom,x2:g.sx(opts.forecastX),y2:g.sy(fy),stroke:'#7c3aed','stroke-width':'2','stroke-dasharray':'5 4'}));svg.appendChild(svgEl('circle',{cx:g.sx(opts.forecastX),cy:g.sy(fy),r:'8',fill:'#7c3aed',stroke:'#fff','stroke-width':'2'}));svg.appendChild(svgEl('text',{x:g.sx(opts.forecastX)+10,y:g.sy(fy)-10,fill:'#5b21b6','font-size':'13','font-weight':'700'},'('+de(opts.forecastX,1)+' | '+de(fy,1)+')'));}
+  return g;
+}
+
+// Residuen-Scanner
+var resModel=document.getElementById('resModel'),resX=document.getElementById('resX'),resReveal=false;
+function resParams(){return resModel.value==='A'?{m:5,b:25}:{m:5,b:26};}
+function updateResBase(){document.getElementById('resXOut').textContent=resX.value;var p=resParams();drawBase(document.getElementById('resGraph'),p.m,p.b,{selectedX:Number(resX.value),reveal:resReveal,title:'Residuen-Scanner',desc:'Punktwolke mit ausgewählter Kandidatengerade und gegebenenfalls hervorgehobenem Residuum.'});}
+function resetResReveal(){resReveal=false;['resObserved','resPredicted','resValue','resPosition'].forEach(function(id){document.getElementById(id).textContent='noch nicht freigegeben';});setFeedback('resFeedback','Berechne Modellwert und Residuum zuerst selbst.','');updateResBase();}
+resX.addEventListener('input',resetResReveal);resModel.addEventListener('change',resetResReveal);
+document.getElementById('resCheck').addEventListener('click',function(){var x=Number(resX.value),i=xs.indexOf(x),p=resParams(),yh=pred(x,p.m,p.b),r=ys[i]-yh,ownY=Number(document.getElementById('resOwnY').value),ownR=Number(document.getElementById('resOwnR').value);if(!Number.isFinite(ownY)||!Number.isFinite(ownR)){setFeedback('resFeedback','Trage sowohl den Modellwert als auch das Residuum ein.','warn');return;}if(!nearly(ownY,yh)||!nearly(ownR,r)){setFeedback('resFeedback','Noch nicht passend. Prüfe zuerst den Term und dann die Reihenfolge beobachtet minus modelliert.','bad');resReveal=false;updateResBase();return;}resReveal=true;document.getElementById('resObserved').textContent=de(ys[i],0)+' Anfragen';document.getElementById('resPredicted').textContent=de(yh,0)+' Anfragen';document.getElementById('resValue').textContent=(r>0?'+':'')+de(r,0);document.getElementById('resPosition').textContent=r>0?'Punkt über der Geraden':r<0?'Punkt unter der Geraden':'Punkt auf der Geraden';setFeedback('resFeedback','Richtig. Das Residuum ist der vertikale Unterschied y − ŷ und trägt mit r² = '+de(r*r,0)+' zur Quadratsumme bei.','ok');updateResBase();});
+document.getElementById('resReset').addEventListener('click',function(){document.getElementById('resOwnY').value='';document.getElementById('resOwnR').value='';resetResReveal();});
+
+// Geraden-Optimierer
+var optM=document.getElementById('optM'),optB=document.getElementById('optB');
+function drawSquares(rs,show){var svg=document.getElementById('squareGraph'),W=460,H=420,left=52,right=432,top=34,bottom=350;clearSvg(svg,'Beiträge zur Quadratsumme','Balkendiagramm der sechs Werte r Quadrat.');var vals=rs.map(function(r){return r*r;}),max=Math.max(4,Math.max.apply(null,vals));for(var y=0;y<=max;y+=Math.max(1,Math.ceil(max/5))){var py=bottom-(y/max)*(bottom-top);svg.appendChild(svgEl('line',{x1:left,y1:py,x2:right,y2:py,stroke:'#e0e6eb'}));svg.appendChild(svgEl('text',{x:left-8,y:py+4,'text-anchor':'end','font-size':'11',fill:'#506070'},String(y)));}var bw=42,gap=(right-left)/6;vals.forEach(function(v,i){var h=show?(v/max)*(bottom-top):0;svg.appendChild(svgEl('rect',{x:left+i*gap+10,y:bottom-h,width:bw,height:h,fill:'#d69a00'}));svg.appendChild(svgEl('text',{x:left+i*gap+31,y:bottom+20,'text-anchor':'middle','font-size':'12',fill:'#506070'},'x='+xs[i]));if(show)svg.appendChild(svgEl('text',{x:left+i*gap+31,y:bottom-h-7,'text-anchor':'middle','font-size':'12','font-weight':'700',fill:'#7c4b00'},de(v,2)));});svg.appendChild(svgEl('line',{x1:left,y1:bottom,x2:right,y2:bottom,stroke:'#263746','stroke-width':'2'}));svg.appendChild(svgEl('text',{x:16,y:(top+bottom)/2,transform:'rotate(-90 16 '+((top+bottom)/2)+')','text-anchor':'middle','font-size':'12','font-weight':'700',fill:'#263746'},'Beitrag r²'));if(!show)svg.appendChild(svgEl('text',{x:(left+right)/2,y:(top+bottom)/2,'text-anchor':'middle','font-size':'14',fill:'#506070'},'Anzeige ausgeschaltet'));}
+function updateOptimizer(message){var m=Number(optM.value),b=Number(optB.value),rs=residuals(m,b),S=sse(m,b),sum=sumResiduals(m,b);document.getElementById('optMOut').textContent=de(m,1);document.getElementById('optBOut').textContent=de(b,1);document.getElementById('optEquation').textContent='ŷ = '+de(m,1)+'x '+(b>=0?'+ ':'− ')+de(Math.abs(b),1);document.getElementById('optSSE').textContent=de(S,2);document.getElementById('optSumR').textContent=de(sum,2);var status='eigene Gerade';if(nearly(m,5,.051)&&nearly(b,25,.051))status='Kandidat A';if(nearly(m,5,.051)&&nearly(b,26,.051))status='Kandidat B / Regression';document.getElementById('optStatus').textContent=status;drawBase(document.getElementById('optGraph'),m,b,{showResiduals:document.getElementById('optShowResiduals').checked,title:'Geraden-Optimierer',desc:'Punktwolke mit veränderbarer Gerade und optionalen Residuen.'});drawSquares(rs,document.getElementById('optShowSquares').checked);if(message)setFeedback('optFeedback',message,message.indexOf('Minimum')>=0?'ok':'');}
+optM.addEventListener('input',function(){updateOptimizer();});optB.addEventListener('input',function(){updateOptimizer();});document.getElementById('optShowResiduals').addEventListener('change',function(){updateOptimizer();});document.getElementById('optShowSquares').addEventListener('change',function(){updateOptimizer();});
+document.querySelectorAll('[data-preset]').forEach(function(btn){btn.addEventListener('click',function(){optM.value='5';optB.value=btn.dataset.preset==='A'?'25':'26';updateOptimizer(btn.dataset.preset==='A'?'Kandidat A trifft den ersten und letzten Punkt exakt. Vergleiche dennoch Σr² mit Kandidat B.':'Kandidat B gleicht alle sechs Daten aus. Seine Quadratsumme ist kleiner als bei A.');});});
+document.getElementById('optRegression').addEventListener('click',function(){optM.value=reg.m.toFixed(1);optB.value=reg.b.toFixed(1);updateOptimizer('Minimum für lineare Geraden: Aus allen sechs Daten ergibt sich ŷ = '+de(reg.m,1)+'x + '+de(reg.b,1)+' mit Σr² = '+de(sse(reg.m,reg.b),2)+'.');});
+document.getElementById('optReset').addEventListener('click',function(){optM.value='5';optB.value='25';document.getElementById('optShowResiduals').checked=true;document.getElementById('optShowSquares').checked=true;setFeedback('optFeedback','Vergleiche A und B: Nicht die Zahl exakt getroffener Punkte, sondern die gesamte quadrierte Abweichung entscheidet.','');updateOptimizer();});
+
+// Prognose- und Bereichslabor
+var forecastX=document.getElementById('forecastX'),forecastReveal=false;
+function zoneFor(x){if(x>=1&&x<=6)return 'Interpolation im beobachteten Bereich';if(x===0)return 'Extrapolation zum Achsenabschnitt';return 'Extrapolation außerhalb der Daten';}
+function warningFor(x){if(x>=1&&x<=6)return 'Als ungefähre Planungshilfe im beobachteten Bereich verwendbar.';if(x===0)return '26 ist nur der rechnerische Achsenabschnitt, keine gesicherte Grundmenge.';return 'Rechnerisch möglich, aber nicht zuverlässig durch die sechs Daten abgesichert.';}
+function updateForecastBase(){var x=Number(forecastX.value);document.getElementById('forecastXOut').textContent=de(x,1);document.getElementById('forecastContacts').textContent=de(100*x,0);drawBase(document.getElementById('forecastGraph'),5,26,{shadeDomain:true,forecastX:x,reveal:forecastReveal,title:'Prognose- und Modellbereich-Labor',desc:'Regressionsgerade mit markiertem beobachteten Bereich und gegebenenfalls ausgewählter Prognose.'});}
+function resetForecastReveal(){forecastReveal=false;['forecastCalc','forecastValue','forecastZone','forecastWarning'].forEach(function(id){document.getElementById(id).textContent='noch nicht freigegeben';});setFeedback('forecastFeedback','Berechne die Schätzung zuerst selbst und beachte anschließend den beobachteten Bereich.','');updateForecastBase();}
+forecastX.addEventListener('input',resetForecastReveal);
+document.getElementById('forecastCheck').addEventListener('click',function(){var x=Number(forecastX.value),correct=pred(x,5,26),own=Number(document.getElementById('forecastOwn').value);if(!Number.isFinite(own)){setFeedback('forecastFeedback','Trage zuerst deinen berechneten Schätzwert ein.','warn');return;}if(!nearly(own,correct,.01)){setFeedback('forecastFeedback','Noch nicht passend. Setze x in ŷ = 5x + 26 ein und rechne Punkt vor Strich.','bad');forecastReveal=false;updateForecastBase();return;}forecastReveal=true;document.getElementById('forecastCalc').textContent='5 · '+de(x,1)+' + 26';document.getElementById('forecastValue').textContent='ungefähr '+de(correct,1)+' Anfragen';document.getElementById('forecastZone').textContent=zoneFor(x);document.getElementById('forecastWarning').textContent=warningFor(x);setFeedback('forecastFeedback',x>=1&&x<=6?'Rechnung richtig. Die Schätzung liegt innerhalb des beobachteten Bereichs, bleibt aber ein Näherungswert.':'Rechnung richtig, aber die Eingabe liegt außerhalb des beobachteten Bereichs. Die Fortsetzung ist eine Extrapolation und benötigt einen Warnhinweis.',x>=1&&x<=6?'ok':'warn');updateForecastBase();});
+document.getElementById('forecastReset').addEventListener('click',function(){document.getElementById('forecastOwn').value='';resetForecastReveal();});
+
+// Vollständigkeitscheck
+function releaseCount(){return Array.from(document.querySelectorAll('#releaseChecks input')).filter(function(c){return c.checked;}).length;}
+document.getElementById('releaseCheck').addEventListener('click',function(){var n=releaseCount();if(n===6)setFeedback('releaseFeedback','Alle sechs Bausteine sind markiert. Prüft jetzt gegenseitig Einheiten, Näherungscharakter, Modellgrenzen und die Qualität der Begründung.','ok');else if(n>=4)setFeedback('releaseFeedback',n+' von 6 Bausteinen sind markiert. Ergänzt die fehlenden Felder, ohne die Freigabeentscheidung unkritisch vorwegzunehmen.','warn');else setFeedback('releaseFeedback',n+' von 6 Bausteinen sind markiert. Nutzt die Produktstruktur in Aufgabe 5 und arbeitet systematisch von Modellbeleg bis Freigabe.','bad');});
+document.getElementById('releaseReset').addEventListener('click',function(){document.querySelectorAll('#releaseChecks input').forEach(function(c){c.checked=false;});setFeedback('releaseFeedback','Eine vollständige Karte enthält sechs Bausteine. Prüft anschließend die Begründungen gegenseitig.','');});
+
+// Initialisierung
+var params=new URLSearchParams(window.location.search);setView(params.get('view')||'all');setPrintHints(params.get('hints')||'hide');updateResBase();updateOptimizer();updateForecastBase();
+})();
+</script></body>
+</html>
