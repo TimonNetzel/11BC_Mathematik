@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; script-src-attr 'none'; style-src 'unsafe-inline'; img-src data:; font-src 'none'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; child-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>11BC · Mathematik · Woche 7 · Ganzrationale Funktionen · Offline-Simulationen</title>
+<style>
+:root{--ink:#172033;--muted:#526079;--paper:#fff;--soft:#eef5f8;--soft2:#f8fafc;--accent:#0b6b8a;--accent2:#8b4a1f;--line:#bcc9d4;--good:#e8f6ee;--warn:#fff5d9;--teacher:#f3effb;--solution:#eef8f3;--danger:#b3263e;--radius:14px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#e9eef3;color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.48;font-size:16px}
+button{font:inherit}
+.appbar{position:sticky;top:0;z-index:20;background:#162434;color:#fff;border-bottom:4px solid var(--accent);box-shadow:0 2px 12px #0003}
+.appbar .inner{max-width:1180px;margin:auto;padding:.7rem 1rem;display:flex;align-items:center;gap:.55rem;flex-wrap:wrap}
+.brand{font-weight:800;margin-right:auto}
+.viewbtn,.printbtn,.hintprintbtn{border:1px solid #ffffff66;background:#ffffff12;color:#fff;border-radius:999px;padding:.48rem .75rem;cursor:pointer}
+.viewbtn.active,.hintprintbtn.active{background:#fff;color:#162434}
+.control-label{font-size:.82rem;color:#dce8ee;margin-left:.35rem}
+main{max-width:1180px;margin:1.3rem auto 3rem;background:var(--paper);box-shadow:0 12px 35px #1f293733;border-radius:18px;overflow:hidden}
+.hero{padding:2rem 2.2rem;background:linear-gradient(135deg,#0b6b8a,#193a53);color:#fff}
+.hero h1{margin:.15rem 0 .55rem;font-size:clamp(1.8rem,4vw,3rem);line-height:1.08}
+.hero p{max-width:930px;margin:.4rem 0}
+.meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7rem;margin-top:1.2rem}
+.meta div{background:#ffffff18;border:1px solid #ffffff33;border-radius:12px;padding:.65rem}
+.meta b{display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:#d9edf4}
+section{padding:1.55rem 2.2rem;border-bottom:1px solid #dde5ec}
+h2{font-size:1.55rem;margin:.1rem 0 1rem;color:#183b52}
+h3{font-size:1.18rem;margin:1rem 0 .55rem}
+h4{margin:.8rem 0 .35rem}
+p{margin:.45rem 0}
+ul,ol{margin:.45rem 0 .8rem;padding-left:1.3rem}
+li{margin:.22rem 0}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.card{border:1px solid var(--line);border-radius:var(--radius);padding:1rem;background:#fff;page-break-inside:avoid}
+.card.soft{background:var(--soft2)}
+.card.problem{border-left:7px solid var(--accent);background:#f4fbfd}
+.card.teacher{background:var(--teacher);border-color:#cabde5}
+.card.solution{background:var(--solution);border-color:#a9d4bd}
+.note{padding:.75rem .9rem;border-radius:10px;background:var(--warn);border-left:5px solid #d69a00}
+.good{padding:.75rem .9rem;border-radius:10px;background:var(--good);border-left:5px solid #2f8b56}
+.tag{display:inline-block;padding:.17rem .5rem;border-radius:999px;background:#e3eef3;color:#173e52;font-size:.78rem;font-weight:700;margin:.1rem .12rem .1rem 0}
+.formula{display:inline-block;font-family:"Times New Roman",serif;font-size:1.06em;white-space:nowrap}
+table{width:100%;border-collapse:collapse;margin:.7rem 0 1rem;page-break-inside:auto}
+th,td{border:1px solid #aebbc7;padding:.48rem .55rem;vertical-align:top}
+th{background:#e7f0f4;text-align:left}
+tr{page-break-inside:avoid}
+.timeline th:nth-child(1){width:7%}.timeline th:nth-child(2){width:12%}.timeline th:nth-child(5){width:10%}.timeline th:nth-child(6){width:12%}
+.compact th,.compact td{padding:.34rem .42rem;font-size:.93rem}
+.material{border:2px solid #29475d;border-radius:12px;padding:1rem;background:#fff;page-break-inside:avoid}
+.ticket-head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;border-bottom:2px solid #29475d;padding-bottom:.55rem;margin-bottom:.7rem}
+.status{display:inline-block;border:2px solid #b56a00;color:#7c4b00;background:#fff8e8;border-radius:8px;padding:.28rem .55rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.status.goodstatus{border-color:#2f8b56;color:#1e6f43;background:#effaf3}
+.task-with-hints{border:1px solid var(--line);border-left:5px solid var(--accent2);border-radius:12px;padding:.85rem 1rem;margin:1rem 0;background:#fffaf6;page-break-inside:auto}
+.task-head{display:flex;gap:.7rem;justify-content:space-between;align-items:flex-start}
+.task-head h3{margin:.05rem 0 .45rem}
+.afb{font-size:.76rem;font-weight:700;background:#efe8df;color:#6d3b19;border-radius:999px;padding:.15rem .42rem;white-space:nowrap}
+.answerline{border-bottom:1px solid #5f6b76;height:1.25rem;margin:.25rem 0}
+.answerbox{border:1px dashed #73808c;min-height:3.5rem;margin:.45rem 0;background:#fff}
+.answerbox.tall{min-height:6.3rem}
+.inline-hints{margin:.55rem 0 .2rem;padding:.25rem .55rem .35rem;border-left:3px solid #d69a00;background:#fffdf5;border-radius:0 10px 10px 0}
+details{border:1px solid var(--line);border-radius:10px;margin:.45rem 0;background:#fff;page-break-inside:avoid}
+summary{cursor:pointer;font-weight:700;padding:.62rem .78rem}
+details>div{padding:0 .78rem .75rem}
+.inline-hints details{background:#fff9e8;border-color:#d2b977}
+.inline-hints summary{color:#5f4512}
+.teacher-inline-note{margin:.55rem 0 0;padding:.62rem .75rem;background:var(--teacher);border:1px solid #cabde5;border-radius:9px;font-size:.9rem}
+.small{font-size:.9rem;color:var(--muted)}
+.kicker{font-size:.82rem;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:#c7e7f1}
+.callout{display:grid;grid-template-columns:auto 1fr;gap:.65rem;align-items:start;background:#eef6fa;border-radius:12px;padding:.8rem}
+.callout .icon{font-size:1.4rem}
+.board{background:#1c2c2b;color:#f5fff9;border:9px solid #8b6a45;border-radius:8px;padding:1rem 1.2rem;box-shadow:inset 0 0 0 2px #5d4530;page-break-inside:avoid}
+.board h3{color:#fff;margin-top:0}
+.pagebreak{break-before:page;page-break-before:always}
+.source-list li{margin:.45rem 0}
+.assumptions{font-size:.92rem}
+.worksheet-page{background:#fff}
+.worksheet-title{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;border-bottom:2px solid #29475d;padding-bottom:.5rem;margin-bottom:.75rem}
+.worksheet-title h2{margin:0;color:#183b52}
+.worksheet-title p{margin:.15rem 0}
+.review-board{border:2px solid #182d40;background:#f8fbfd;border-radius:14px;padding:.85rem;page-break-inside:avoid}
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
+.review-panel{border:1px solid #aebbc7;border-radius:10px;padding:.65rem;background:#fff}
+.review-panel h4{margin-top:0;color:#183b52}
+.model-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.55rem;margin:.65rem 0}
+.model-card{border:1px solid #9fb0be;border-top:6px solid var(--accent);border-radius:10px;padding:.6rem;background:#fff;text-align:center;page-break-inside:avoid}
+.model-card b{display:block;margin-bottom:.2rem}
+.model-graph{width:100%;height:auto;border:1px solid #c2ccd5;background:#fff;margin:.55rem 0;page-break-inside:avoid}
+.grid line{stroke:#d9e1e8;stroke-width:1}
+.axis{stroke:#172033;stroke-width:2}
+.curve{fill:none;stroke:#0b6b8a;stroke-width:3}
+.curve-b{stroke:#8b4a1f;stroke-dasharray:10 5}
+.curve-c{stroke:#762b5b;stroke-dasharray:2 5;stroke-width:4}
+.pilot-point{fill:#b3263e;stroke:#fff;stroke-width:1.5}
+.point-label,.tick-label,.axis-label,.legend-svg text{font:12px Arial,Helvetica,sans-serif;fill:#172033}
+.axis-label{font-weight:700}
+.legend{display:flex;gap:1rem;flex-wrap:wrap;font-size:.9rem;color:var(--muted)}
+.line-key{display:inline-block;width:2.2rem;border-top:4px solid #0b6b8a;vertical-align:middle;margin-right:.3rem}
+.line-key.dashed{border-top-color:#8b4a1f;border-top-style:dashed}
+.line-key.dotted{border-top-color:#762b5b;border-top-style:dotted}
+.point-key{display:inline-block;width:.72rem;height:.72rem;border-radius:50%;background:#b3263e;vertical-align:middle;margin-right:.3rem}
+.interim-product{border:2px solid #0b6b8a;background:#eef8fb;border-radius:12px;padding:.72rem .85rem;margin:.8rem 0;page-break-inside:avoid}
+.check-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.45rem}
+.check-cell{border:1px solid #aebbc7;background:#fff;border-radius:9px;padding:.48rem;min-height:3.2rem}
+.release-card{border:3px double #29475d;border-radius:12px;padding:.85rem;background:#fff;page-break-inside:avoid}
+.release-card th{width:34%}.release-card td{width:66%}
+.release-head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;border-bottom:2px solid #29475d;padding-bottom:.55rem;margin-bottom:.65rem}
+.criteria li{margin:.3rem 0}
+.decision-stamp{display:inline-block;border:2px solid #2f8b56;color:#1e6f43;background:#effaf3;border-radius:8px;padding:.3rem .55rem;font-weight:800;text-transform:uppercase;letter-spacing:.03em}
+.sentence-starters{background:#eef6fa;border-left:5px solid var(--accent);padding:.72rem;border-radius:10px}
+.domain-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.55rem;margin:.6rem 0}
+.domain-card{border:1px solid #aebbc7;border-radius:10px;padding:.58rem;background:#fff;page-break-inside:avoid}
+.domain-card b{display:block;color:#183b52}
+[data-view="student"] .teacher-only,[data-view="student"] .solution-only{display:none!important}
+[data-view="teacher"] .solution-only{display:none!important}
+[data-view="solution"] .teacher-only,[data-view="solution"] .student-material{display:none!important}
+.view-note{font-size:.84rem;color:#dce8ee}
+@media(max-width:850px){.meta,.grid2,.grid3,.review-grid,.model-strip,.check-grid,.domain-grid{grid-template-columns:1fr}.appbar .inner{align-items:flex-start}main{margin:0;border-radius:0}section,.hero{padding:1.2rem}.timeline{font-size:.88rem;display:block;overflow-x:auto}.release-head,.worksheet-title{display:block}}
+@page{size:A4;margin:14mm}
+@media print{
+ body{background:#fff;font-size:9.6pt}
+ .appbar{display:none!important}
+ main{max-width:none;margin:0;box-shadow:none;border-radius:0}
+ .hero{background:#fff;color:#111;padding:0 0 5mm;border-bottom:2px solid #111}
+ .hero .kicker,.hero .view-note{color:#333}
+ .meta div{background:#fff;border:1px solid #999}
+ .meta b{color:#333}
+ section{padding:5mm 0;border-bottom:0}
+ h2{color:#111}
+ h2,h3,h4{break-after:avoid-page;page-break-after:avoid}
+ .card,.material,.task-with-hints,details{box-shadow:none}
+ .no-print{display:none!important}
+ .worksheet-page{padding:0}
+ body[data-view="student"] .hero{display:none!important}
+ body[data-view="student"] .worksheet-page{display:block}
+ body[data-view="student"][data-print-hints="hide"] .inline-hints{display:none!important}
+ body[data-view="student"][data-print-hints="show"] .inline-hints{display:block!important}
+ body[data-view="student"][data-print-hints="show"] .inline-hints details{break-inside:auto}
+ body[data-view="student"] .teacher-only,body[data-view="student"] .solution-only{display:none!important}
+ body[data-view="teacher"] .solution-only{display:none!important}
+ body[data-view="solution"] .teacher-only,body[data-view="solution"] .student-material{display:none!important}
+ .answerbox{min-height:14mm}
+ .answerbox.tall{min-height:25mm}
+ .compact th,.compact td{font-size:8.8pt;padding:1.7mm 2mm}
+}
+@media print{
+ body[data-view="student"]{font-size:8.2pt;line-height:1.28}
+ body[data-view="student"] section{padding:2mm 0}
+ body[data-view="student"] h2{font-size:15.5pt;margin:0 0 1.8mm}
+ body[data-view="student"] h3{font-size:11.5pt;margin:1.5mm 0 1mm}
+ body[data-view="student"] h4{margin:.8mm 0}
+ body[data-view="student"] p,body[data-view="student"] ul,body[data-view="student"] ol{margin:.8mm 0}
+ body[data-view="student"] li{margin:.35mm 0}
+ body[data-view="student"] .worksheet-title{padding-bottom:1.5mm;margin-bottom:1.8mm}
+ body[data-view="student"] .material,body[data-view="student"] .review-board{padding:2.2mm}
+ body[data-view="student"] .ticket-head{padding-bottom:1.4mm;margin-bottom:1.4mm}
+ body[data-view="student"] table{margin:1.4mm 0}
+ body[data-view="student"] .compact th,body[data-view="student"] .compact td{font-size:7.35pt;padding:.85mm 1.05mm}
+ body[data-view="student"] .task-with-hints{padding:2mm 2.4mm;margin:1.8mm 0}
+ body[data-view="student"] .task-head h3{margin:0 0 .8mm}
+ body[data-view="student"] .answerbox{min-height:6.5mm;margin:.8mm 0}
+ body[data-view="student"] .answerbox.tall{min-height:13mm}
+ body[data-view="student"] .model-graph{max-height:66mm;margin:1mm 0}
+ body[data-view="student"] .model-strip{gap:1mm;margin:1mm 0}
+ body[data-view="student"] .model-card{padding:1mm}
+ body[data-view="student"] .interim-product{padding:1.4mm 1.8mm;margin:1.2mm 0}
+ body[data-view="student"] .check-grid,body[data-view="student"] .domain-grid{gap:1mm}
+ body[data-view="student"] .check-cell,body[data-view="student"] .domain-card{padding:1.1mm;min-height:6mm}
+ body[data-view="student"] .release-card{padding:1.7mm;break-inside:auto;page-break-inside:auto}
+ body[data-view="student"] .release-head{padding-bottom:1mm;margin-bottom:1mm}
+ body[data-view="student"] .release-card table{margin:.8mm 0}
+ body[data-view="student"] .release-card .compact th,body[data-view="student"] .release-card .compact td{padding:.7mm .9mm}
+ body[data-view="student"] .release-card td{height:5mm}
+ body[data-view="student"] .model-strip{grid-template-columns:repeat(3,minmax(0,1fr))}
+ body[data-view="student"] .review-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ body[data-view="student"] #arbeitsblatt-seite-1{display:grid;grid-template-columns:.9fr 1.1fr;gap:1.2mm 1.8mm;align-items:start}
+ body[data-view="student"] #arbeitsblatt-seite-1>.worksheet-title,body[data-view="student"] #arbeitsblatt-seite-1>.review-board,body[data-view="student"] #arbeitsblatt-seite-1>.callout,body[data-view="student"] #arbeitsblatt-seite-1>.interim-product{grid-column:1/-1}
+ body[data-view="student"] #arbeitsblatt-seite-1 #aufgabe-1,body[data-view="student"] #arbeitsblatt-seite-1 #aufgabe-2{margin:0}
+ body[data-view="student"] #arbeitsblatt-seite-1 #aufgabe-1 .answerbox,body[data-view="student"] #arbeitsblatt-seite-1 #aufgabe-2 .answerbox{min-height:4mm}
+ body[data-view="student"] #arbeitsblatt-seite-1 #aufgabe-2 .model-graph{max-height:44mm}
+ body[data-view="student"] #arbeitsblatt-seite-1 .compact th,body[data-view="student"] #arbeitsblatt-seite-1 .compact td{font-size:6.7pt;padding:.55mm .7mm}
+ body[data-view="student"] #arbeitsblatt-seite-1 .interim-product{margin-top:0}
+ body[data-view="student"] #arbeitsblatt-seite-1 .check-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+ body[data-view="student"] #arbeitsblatt-seite-2,body[data-view="student"] #arbeitsblatt-seite-3{page-break-before:always}
+}
+</style>
+
+<style id="week7-simulation-styles">
+/* Interaktive, vollständig lokale Aufgabenhilfen – Woche 7 */
+.simulation-only{display:none}
+[data-view="all"] .simulation-only,[data-view="simulations"] .simulation-only{display:block}
+[data-view="simulations"] main>section:not(.simulation-only){display:none!important}
+.sim-intro{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin:1rem 0}
+.sim-card{border:1px solid var(--line);border-radius:var(--radius);background:#f8fbfd;padding:1rem;page-break-inside:avoid}
+.sim-card h3{margin-top:.1rem;color:#183b52}.sim-tag{display:inline-block;padding:.18rem .52rem;border-radius:999px;background:#dceef4;color:#16465d;font-size:.78rem;font-weight:800;margin-bottom:.45rem}
+.sim-panel{border:1px solid #aebdca;border-radius:14px;background:#fff;padding:1rem;margin:1rem 0;box-shadow:0 6px 18px #1f293710;scroll-margin-top:92px}
+.sim-panel h3{margin-top:.05rem;color:#183b52}.sim-panel h4{color:#183b52}
+.sim-controls{display:flex;flex-wrap:wrap;align-items:end;gap:.7rem;margin:.75rem 0}
+.sim-controls label{display:grid;gap:.3rem;font-weight:700;color:#34495e;min-width:180px}
+.sim-controls select,.sim-controls input{font:inherit;border:1px solid #8797a6;border-radius:9px;padding:.5rem .6rem;background:#fff;color:#172033;max-width:100%}
+.sim-controls input[type="range"]{padding:0;min-width:220px}
+.sim-button,.sim-link{font:inherit;border:1px solid #0b6b8a;background:#0b6b8a;color:#fff;border-radius:999px;padding:.5rem .8rem;cursor:pointer;font-weight:700;text-decoration:none;display:inline-block}
+.sim-button.secondary{background:#fff;color:#0b6b8a}.sim-button.tertiary{background:#eef8fb;color:#17445a}
+.sim-feedback{min-height:3.2rem;border-left:5px solid #78909c;background:#f3f7f9;border-radius:9px;padding:.65rem .8rem;margin:.65rem 0;color:#253546}
+.sim-feedback.ok{border-left-color:#2f8b56;background:#e8f6ee}.sim-feedback.warn{border-left-color:#d69a00;background:#fff5d9}.sim-feedback.bad{border-left-color:#b74343;background:#fff0f0}
+.sim-task-note{margin:.55rem 0 .85rem;padding:.65rem .78rem;border-left:4px solid #0b6b8a;background:#eef8fb;border-radius:8px;color:#24475b;page-break-inside:avoid}
+.sim-task-note .sim-link{margin:.45rem .35rem 0 0}
+.sim-graph{display:block;width:100%;height:auto;border:1px solid #aebbc7;border-radius:12px;background:#fff;touch-action:manipulation;margin:.75rem 0}
+.sim-row{display:grid;grid-template-columns:1.15fr .85fr;gap:1rem;margin:.7rem 0}
+.sim-subpanel{border:1px solid #ccd7df;border-radius:12px;background:#fafcfd;padding:.8rem}
+.sim-stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.65rem;margin:.75rem 0}
+.sim-stat{border:1px solid #aebbc7;border-radius:10px;background:#fbfdff;padding:.65rem;min-height:82px}
+.sim-stat b{display:block;color:#183b52;margin-bottom:.25rem}.sim-stat output,.sim-stat .big{display:block;font-size:1.06rem;font-weight:800;color:#172033}
+.sim-note{border-left:4px solid #0b6b8a;background:#eef8fb;padding:.65rem .8rem;border-radius:8px;margin:.6rem 0}
+.sim-output{display:inline-block;min-width:2.6em;text-align:center;font-weight:800;color:#183b52}
+.sim-toggle-row{display:flex;flex-wrap:wrap;gap:.8rem;margin:.55rem 0}.sim-toggle-row label{display:flex;align-items:center;gap:.35rem;font-weight:700}
+.sim-coeff-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.65rem;margin:.75rem 0}.sim-coeff-grid label{display:grid;gap:.3rem;border:1px solid #ccd7df;border-radius:10px;padding:.6rem;background:#fff;font-weight:700}.sim-coeff-grid input{width:100%}
+.sim-value-table{font-size:.9rem}.sim-value-table th,.sim-value-table td{text-align:center;padding:.36rem .42rem}.sim-value-table .delta{background:#fff8e8}
+.sim-condition-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.55rem;margin:.75rem 0}
+.sim-condition{border:1px solid #cbd5dd;border-radius:10px;background:#fff;padding:.62rem;min-height:88px}
+.sim-condition b{display:block;color:#183b52}.sim-condition .lamp{display:inline-block;width:.85rem;height:.85rem;border-radius:50%;background:#9aa8b4;margin-right:.35rem;vertical-align:-.05rem}
+.sim-condition.ok{background:#eff9f3;border-color:#9ac8ac}.sim-condition.ok .lamp{background:#2f8b56}.sim-condition.no{background:#fff3f3;border-color:#d6a8a8}.sim-condition.no .lamp{background:#b74343}
+.sim-dashboard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem;margin:.75rem 0}
+.sim-screen{border:2px solid #263746;border-radius:12px;background:#172536;color:#f7fbff;padding:.8rem;min-height:170px}.sim-screen h4{color:#fff;margin-top:0}.sim-screen .screen-output{color:#ffe2a8}
+.sim-checklist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45rem .8rem;margin:.7rem 0}.sim-checklist label{display:flex;gap:.5rem;align-items:flex-start;border:1px solid #d4dde4;border-radius:9px;padding:.55rem;background:#fff}
+.sim-badge{display:inline-block;border-radius:999px;padding:.2rem .55rem;font-size:.8rem;font-weight:800;background:#e8f1f5;color:#29475d}
+.sim-lock{color:#6b7280;font-style:italic}
+@media(max-width:900px){.sim-intro,.sim-row,.sim-dashboard-grid{grid-template-columns:1fr}.sim-stat-grid,.sim-coeff-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sim-condition-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.sim-stat-grid,.sim-coeff-grid,.sim-condition-grid,.sim-checklist{grid-template-columns:1fr}.sim-controls label{min-width:100%}.sim-controls input[type="range"]{min-width:100%}}
+@media print{.simulation-only,.sim-task-note{display:none!important}}
+</style>
+</head>
+<body data-view="all" data-print-hints="hide">
+<div class="appbar no-print"><div class="inner">
+<div class="brand">11BC · Mathematik · Woche 7</div>
+<button class="viewbtn active" type="button" data-target="all" aria-pressed="true">Gesamt</button>
+<button class="viewbtn" type="button" data-target="student" aria-pressed="false">Schülerarbeitsblatt</button><button class="viewbtn" type="button" data-target="simulations" aria-pressed="false">Simulationen</button>
+<button class="viewbtn" type="button" data-target="teacher" aria-pressed="false">Lehrkraftfassung</button>
+<button class="viewbtn" type="button" data-target="solution" aria-pressed="false">Musterlösung</button>
+<span class="control-label">Druck-Hilfen:</span>
+<button class="hintprintbtn active" type="button" data-hint-target="hide" aria-pressed="true">ohne Hilfen</button>
+<button class="hintprintbtn" type="button" data-hint-target="show" aria-pressed="false">mit Hilfen</button>
+<button class="printbtn" type="button" id="print-document">Drucken</button>
+</div></div>
+<main>
+<header class="hero">
+<div class="kicker">Unterrichtswoche 7 · Von Daten zu Funktionen I</div>
+<h1>Von linear zu quadratisch und kubisch: Kostenmodelle prüfen</h1>
+<p>Zwei problem- und handlungsorientierte Mathematikstunden für die Klasse 11BC im Bildungsgang Allgemeine Hochschulreife mit International Business Communication.</p>
+<p class="view-note">Die Datei ist eine einzelne, vollständig lokal bedienbare HTML-Datei. Ansichten, aufgabennahe Hilfen, drei interaktive Simulationen, Druckvarianten, Formeln und Grafiken benötigen keine weitere Ressource.</p>
+<div class="meta"><div><b>Zeitraum</b>7. Unterrichtswoche · Datum einzutragen</div><div><b>Stundenlage</b>2 × 45 Minuten</div><div><b>Planungsmodus</b>Gemeinsame Go-live-Prüfung · Modellfreigabe</div><div><b>Werkzeuge</b>Arbeitsblatt, Beamer, Taschenrechner; GeoGebra optional und drei lokale Simulationen zur Kontrolle</div></div>
+</header>
+
+<section class="teacher-only" id="planung">
+<h2>1. Knappe Planungsübersicht</h2>
+<div class="grid2">
+<div class="card problem"><h3>Berufliche Problemsituation</h3><p>Die Abteilung <b>European Logistics Controlling</b> der didaktisch konstruierten EuroTrade Distribution GmbH will ein Prognose-Modul für tägliche Zoll- und Handlingkosten im Benelux-Versand freigeben. Drei Modellregeln liefern bei 300 Exportpaketen denselben Wert von 2.700 €, unterscheiden sich aber bei anderen Mengen deutlich. Der bisherige Systemtest prüft nur diesen einen Wert und bezeichnet alle drei Regeln als „gleichwertig“.</p></div>
+<div class="card"><h3>Untersuchungsfrage</h3><p>Welche Regeln sind Funktionen und ganzrationale Funktionen, welchen Grad und Leitkoeffizienten besitzen sie, welches Modell beschreibt die Pilotdaten angemessen und unter welchen Grenzen darf es automatisiert eingesetzt werden?</p><h3>Handlungsprodukt</h3><p>Ein <b>Modellklassen- und Freigabeprotokoll MK-07</b> mit Klassifikation, Darstellungsabgleich, Funktionswertdeutung, sachlichem Definitionsbereich, Automatisierungsregel und begründeter Freigabeentscheidung.</p></div>
+</div>
+<div class="good"><b>Fachlich nächster Schritt:</b> Nach linearen Preisabsatzmodellen erweitern die Lernenden ihr Funktionsverständnis auf ganzrationale Funktionen ersten, zweiten und dritten Grades. Sie erkennen Grad, Leitkoeffizient und Grundform und unterscheiden lineare, quadratische und kubische Verläufe, ohne Nullstellen oder faktorisierte Formen aus Woche 8 vorwegzunehmen.</div>
+
+<h3>Einordnung in das Halbjahresskript und Rückblick</h3>
+<table><tr><th>Aspekt</th><th>Planung</th></tr>
+<tr><td>Kapitel / Woche</td><td>Kapitel „Ganzrationale Funktionen“, Woche 7 „Von linear zu quadratisch und höhergradig“.</td></tr>
+<tr><td>Rückblick Woche 1–2</td><td>Ökonomische Wertepaare, Diagramme, Trends, Ausreißer und Datenqualität wurden untersucht.</td></tr>
+<tr><td>Rückblick Woche 3–4</td><td>Funktionen wurden als eindeutige Zuordnungen erkannt; Eingabe, Ausgabe, Funktionswerte, Definitionsbereiche sowie Tabelle, Graph, Term und Sprache wurden verknüpft.</td></tr>
+<tr><td>Rückblick Woche 5–6</td><td>Lineare Regression und lineare Preisabsatzfunktionen wurden modellbezogen gedeutet, auf Datenbereiche begrenzt und für eine betriebliche Automatisierung geprüft.</td></tr>
+<tr><td>Neuer Kern</td><td>Ganzrationale Funktion erkennen; Grad und Leitkoeffizient bestimmen; lineare, quadratische und kubische Grundformen und Verläufe unterscheiden; ein nichtlineares Kostenmodell anhand mehrerer Darstellungen prüfen.</td></tr>
+<tr><td>Bewusste Grenze</td><td>Keine Nullstellenbestimmung, keine faktorisierte Form, keine systematische Parameterwirkung, keine Monotonieanalyse und keine Gewinnoptimierung.</td></tr>
+<tr><td>Didaktische Brücke</td><td>Änderungen zwischen benachbarten Tabellenwerten werden qualitativ verglichen, um „gleichmäßiges“ und „gekrümmtes“ Wachstum sichtbar zu machen. Ein formales Differenzenverfahren wird nicht eingeführt.</td></tr>
+</table>
+
+<h3>Lernvoraussetzungen und Lernziele</h3>
+<div class="grid2"><div class="card"><h4>Lernvoraussetzungen</h4><ul><li>Funktionsbegriff als eindeutige Zuordnung.</li><li>Eingabe, Ausgabe, Funktionswert und sachlicher Definitionsbereich.</li><li>Wertetabellen und Graphen lesen sowie Werte in Terme einsetzen.</li><li>Lineare Modelle und konstante Änderungsrate aus den Vorwochen.</li><li>Modellwert, Datenbereich und betriebliche Freigabe unterscheiden.</li></ul></div><div class="card"><h4>Lernziele</h4><ul><li><b>AFB I:</b> Eingabe und Ausgabe kennzeichnen, Funktionswerte einsetzen, Grad und Leitkoeffizient einfacher Polynome bestimmen.</li><li><b>AFB II:</b> Funktionen und Nicht-Funktionen sowie ganzrationale und nicht ganzrationale Funktionen unterscheiden; Tabelle, Graph und Term abgleichen; lineare, quadratische und kubische Verläufe beschreiben; einen sachlichen Definitionsbereich festlegen.</li><li><b>AFB III:</b> die Eignung eines Modells für eine begrenzte betriebliche Automatisierung beurteilen und die Entscheidung mit Daten, Modellklasse und Grenzen begründen.</li></ul></div></div>
+
+<h3>Problemstruktur und Produktlogik</h3>
+<table><tr><th>Element</th><th>Ausgestaltung</th></tr><tr><td>Handelnde Stelle</td><td>European Logistics Controlling und das Go-live-Team für das Kostenprognose-Modul.</td></tr><tr><td>Ungelöstes Problem</td><td>Ein Ein-Punkt-Test erklärt drei unterschiedlich komplexe Modelle fälschlich für gleichwertig.</td></tr><tr><td>Daten / Bedingungen</td><td>Pilotkosten für 0–400 Pakete; drei Kandidatenterme; Kapazität 450 Pakete; nur Pilotbereich darf automatisch freigegeben werden.</td></tr><tr><td>Zwischenergebnis Stunde 1</td><td>Modellklassen-Vorprüfbogen: Funktion / ganzrational, Grad, Leitkoeffizient, Grundform und erster Datenabgleich.</td></tr><tr><td>Abschlussprodukt Stunde 2</td><td>Modellklassen- und Freigabeprotokoll MK-07 mit Modellwahl und Einsatzregeln.</td></tr></table>
+
+<h3>AFB, Lernwege und Hilfekonzept</h3>
+<div class="grid3"><div class="card"><h4>Basisweg</h4><p>Begriffsbox, teilweise ausgefüllte Prüftabelle, vorgegebene Pilotdaten, markierte Graphstile und strukturierte Freigabekarte. Hilfe 1 wird früh geöffnet; Hilfe 2 stützt Sprache und Begriffe; Hilfe 3 eröffnet einen konkreten Rechenschritt.</p></div><div class="card"><h4>Standardweg</h4><p>Alle Kandidaten selbst klassifizieren, fehlende Tabellenwerte berechnen, Darstellungen abgleichen, Funktionswerte deuten und eine datenbasierte Freigabeentscheidung formulieren.</p></div><div class="card"><h4>Erweiterung</h4><p>Reduzierte Polynome mit Nullkoeffizienten klassifizieren und erklären, warum der höchste geschriebene Exponent nicht automatisch der Grad ist.</p></div></div>
+<div class="note"><b>Aufgabennahe Hilfen:</b> Jede Hilfe steht ausschließlich im zugehörigen Aufgabencontainer. Hilfe 1 orientiert, Hilfe 2 strukturiert fachlich oder sprachlich, Hilfe 3 gibt einen ersten konkreten Schritt. Die vollständige Modellwahl und AFB-III-Begründung bleiben bei den Lernenden.</div>
+<div class="card teacher"><p><b>Simulationseinsatz:</b> Das Grad- und Leitkoeffizienten-Labor unterstützt Aufgabe 1 und die Erweiterung bei der Unterscheidung von Funktion, ganzrationaler Funktion, Grad und Leitkoeffizient. Das Mehrpunkt- und Änderungs-Labor unterstützt Aufgaben 2 und 3 beim Abgleich von Term, Tabelle, Graph und Kostenänderungen. Das Freigabe- und Systemregel-Labor unterstützt Aufgaben 4 und 5 bei der Trennung von mathematischem, ökonomischem und betrieblich freigegebenem Bereich sowie beim Testen lokaler Systemreaktionen. Alle Werkzeuge werden erst nach einem eigenen Ansatz genutzt, geben keine vollständige AFB-III-Begründung vor und ersetzen weder Rechnung noch Protokoll.</p><p><b>Technische Fortführung:</b> Wie in Woche 6 ergänzt ein lokaler Reiter „Simulationen“ die bestehenden Ansichten. Sämtliche Eingaben, Rückmeldungen und dynamisch erzeugten Inline-SVG-Grafiken laufen mit eingebettetem JavaScript in dieser einzelnen Datei. Es gibt keinen Loader, keinen externen Link, keinen Netzpfad und keine Browserspeicher-Abhängigkeit.</p></div>
+<div class="card teacher assumptions"><h4>Unvermeidbare Annahmen</h4><ul><li>Schule, konkretes Datum, Anwesenheit und aktuelle Schwierigkeiten wurden nicht angegeben; es gilt das Klassenprofil mit heterogener Jahrgangsstufe 11.</li><li>Die beiden Stunden liegen getrennt und dauern jeweils 45 Minuten; Stunde 2 reaktiviert den Vorprüfbogen.</li><li>Unternehmen, Abteilung, Modul, Terme, Kosten und Grenzen sind didaktisch konstruiert.</li><li><span class="formula">x</span> bezeichnet die tägliche Exportmenge in Hunderten von Paketen; die Funktionswerte werden in Hunderten Euro angegeben.</li><li>Das Pilotfenster umfasst 0–400 Pakete; die technische Kapazität beträgt 450 Pakete. Automatisch freigegeben wird nur der durch Pilotdaten abgesicherte Bereich.</li><li>GeoGebra ist nur eine optionale Kontrolle nach eigener Rechnung und Interpretation; die statische Inline-Grafik ist vollständig offline verfügbar.</li><li>Technisch wird die stabile Basis aus Woche 6 fortgeführt; neu sind nur die auf das Modellvergleichsproblem zugeschnittenen Karten und Graphstile.</li><li>Die drei lokalen Simulationen sind optionale Verständigungs- und Kontrollhilfen. Sie werden in der Druckfassung ausgeblendet und ersetzen weder die handschriftliche Bearbeitung noch die fachliche Freigabebegründung.</li></ul></div>
+</section>
+
+<section class="teacher-only" id="verlauf">
+<h2>2. Verlaufsplan für beide Stunden</h2>
+<h3>Stunde 1: Sind drei gleiche Testausgaben wirklich drei gleichwertige Modelle?</h3>
+<table class="timeline"><tr><th>Zeit</th><th>Phase</th><th>Lehrkrafthandeln</th><th>Lernendenhandeln</th><th>Sozialform</th><th>Material</th><th>Erwartetes Zwischenergebnis / Produktbezug</th></tr>
+<tr><td>0–6</td><td>Problemöffnung</td><td>Projiziert das Go-live-Board: drei Terme, bei <span class="formula">x=3</span> jeweils 27, Status „gleichwertig“. Fordert eine erste Risikoeinschätzung.</td><td>Benennen, warum ein einzelner Testwert keine Modellgleichheit beweist; formulieren Prüfbedarf.</td><td>Plenum</td><td>Einstiegsboard</td><td>Untersuchungsfrage und Produktauftrag sind verstanden.</td></tr>
+<tr><td>6–18</td><td>Begriffe und Modellklasse</td><td>Reaktiviert Funktion als eindeutige Zuordnung. Gibt gestufte Hilfen nur bedarfsorientiert frei.</td><td>Bearbeiten Aufgabe 1: Funktion / Nicht-Funktion, ganzrational / nicht ganzrational, Grad und Leitkoeffizient.</td><td>EA → kurzer Partnerabgleich</td><td>Aufgabe 1</td><td>Klassifikation der Regeln ist dokumentiert.</td></tr>
+<tr><td>18–34</td><td>Mehrpunktprüfung</td><td>Fordert eigene Werteberechnung vor der Graphauswertung; optional anschließend GeoGebra-Kontrolle.</td><td>Vervollständigen Tabelle, vergleichen Pilotdaten und ordnen Terme den drei Graphformen zu.</td><td>EA → PA</td><td>Aufgabe 2, Rechner, Grafik</td><td>Darstellungsabgleich zeigt: Ein-Punkt-Test ist unzureichend.</td></tr>
+<tr><td>34–41</td><td>Verlauf beschreiben</td><td>Lenkt auf konstante versus veränderliche Zuwächse und auf die Begriffe linear, quadratisch, kubisch.</td><td>Beschreiben die drei Grundverläufe in vollständigen Sätzen.</td><td>Partnerarbeit</td><td>Aufgabe 2</td><td>Fachsprachliche Modellbeschreibung.</td></tr>
+<tr><td>41–45</td><td>Zwischensicherung</td><td>Lässt den Modellklassen-Vorprüfbogen ausfüllen und eine offene Freigabefrage markieren.</td><td>Dokumentieren Modellklasse, Datenpassung und offenen Gültigkeitsbereich.</td><td>Einzelarbeit</td><td>Zwischenprodukt</td><td>Stundenprodukt: geprüfter Modellklassen-Vorprüfbogen.</td></tr>
+</table>
+<h3>Stunde 2: Welches Modell darf das Kostenmodul automatisiert verwenden?</h3>
+<table class="timeline"><tr><th>Zeit</th><th>Phase</th><th>Lehrkrafthandeln</th><th>Lernendenhandeln</th><th>Sozialform</th><th>Material</th><th>Erwartetes Zwischenergebnis / Produktbezug</th></tr>
+<tr><td>0–5</td><td>Reaktivierung</td><td>Zeigt die Aussage „Alle Modelle liefern bei 300 Paketen 2.700 €“. Fragt: „Welche zusätzliche Information hat Stunde 1 geliefert?“</td><td>Reaktivieren Grad, Graphform und Mehrpunktprüfung.</td><td>Think–Pair–Share kurz</td><td>Vorprüfbogen</td><td>Modellklassen und Datenbezug sind aktiviert.</td></tr>
+<tr><td>5–17</td><td>Funktionswerte deuten</td><td>Besteht auf Rechenweg, Einheit und sprachlicher Kontextdeutung.</td><td>Berechnen Werte des quadratischen Kandidaten und interpretieren sie; vergleichen linearen und quadratischen Wert.</td><td>EA → PA</td><td>Aufgabe 3, Rechner</td><td>Kontextgerechte Modellwerte und Unterschied der Modellklassen.</td></tr>
+<tr><td>17–29</td><td>Definitionsbereich und Regeln</td><td>Gibt die drei Bereichskarten frei und fordert die Schnittmenge sowie klare Systemreaktionen.</td><td>Unterscheiden mathematischen, ökonomischen und automatisch freigegebenen Bereich; formulieren Prüfregeln.</td><td>Partnerarbeit</td><td>Aufgabe 4</td><td>Begründeter Automatisierungsbereich.</td></tr>
+<tr><td>29–40</td><td>Freigabeprodukt</td><td>Moderiert strukturierten Vergleich zweier Paare; fordert Datenbeleg, Modellklasse, Grenze und Warnhinweis.</td><td>Füllen MK-07 aus und treffen eine begrenzte Freigabeentscheidung.</td><td>PA → Paarvergleich</td><td>Aufgabe 5</td><td>Vollständiges Handlungsprodukt MK-07.</td></tr>
+<tr><td>40–45</td><td>Ergebnissicherung</td><td>Sichert Merksatz und Prüfsequenz; trennt Funktion, Polynomklasse und betriebliche Gültigkeit.</td><td>Vergleichen Entscheidungen, korrigieren Produkt und formulieren eine Systemwarnung.</td><td>Plenum</td><td>Tafelbild</td><td>Gemeinsame fachliche Freigabelogik.</td></tr>
+</table>
+</section>
+
+<section class="teacher-only" id="einstieg">
+<h2>Vollständiges Einstiegsmaterial: Go-live-Board</h2>
+<div class="review-board"><div class="ticket-head"><div><b>EuroTrade Distribution GmbH</b><br><span class="small">European Logistics Controlling · Benelux Cost Forecast</span></div><span class="status">Freigabe offen</span></div><div class="review-grid"><div class="review-panel"><h4>Pilotdaten</h4><table class="compact"><tr><th>x in 100 Paketen</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><th>Kosten in 100 €</th><td>12</td><td>15</td><td>20</td><td>27</td><td>36</td></tr></table><p class="small"><b>Betrieblicher Hinweis:</b> Bei hoher Auslastung nehmen Zusatzprüfungen, Engpasskosten und Überstunden zu.</p></div><div class="review-panel"><h4>Aktueller Systemtest</h4><p>Prüfwert: <span class="formula">x=3</span></p><p>Alle drei Kandidaten liefern <span class="formula">27</span>.</p><p class="status goodstatus">Systemmeldung: gleichwertig</p></div></div><div class="model-strip"><div class="model-card"><b>Kandidat A</b><span class="formula">A(x)=5x+12</span></div><div class="model-card"><b>Kandidat B</b><span class="formula">B(x)=x²+2x+12</span></div><div class="model-card"><b>Kandidat C</b><span class="formula">C(x)=x³−3x²+5x+12</span></div></div><div class="callout"><div class="icon">?</div><div><b>Arbeitsauftrag:</b> Prüft die Modellklassen und mehrere Darstellungen. Erstellt anschließend ein Freigabeprotokoll, das festlegt, welches Modell in welchem Bereich automatisiert genutzt werden darf.</div></div></div>
+</section>
+
+<section class="student-material worksheet-page" id="arbeitsblatt-seite-1">
+<div class="worksheet-title"><div><h2>Kostenmodelle klassifizieren und vergleichen</h2><p>Schülerarbeitsblatt · Seite 1 von 3 · Stunde 1</p></div><p>Name: ____________________</p></div>
+<div class="review-board"><div class="ticket-head"><div><b>Go-live-Prüfung MK-07</b><br><span class="small">European Logistics Controlling · didaktisch konstruierte Daten</span></div><span class="status">Ein-Punkt-Test</span></div><p><b>Eingabe:</b> <span class="formula">x</span> = tägliche Exportmenge in Hunderten von Paketen. <b>Ausgabe:</b> Kosten in Hunderten Euro.</p><div class="model-strip"><div class="model-card"><b>A</b><span class="formula">A(x)=5x+12</span></div><div class="model-card"><b>B</b><span class="formula">B(x)=x²+2x+12</span></div><div class="model-card"><b>C</b><span class="formula">C(x)=x³−3x²+5x+12</span></div></div><p><b>Pilotdaten:</b> <span class="formula">(0|12), (1|15), (2|20), (3|27), (4|36)</span>. Bei <span class="formula">x=3</span> liefern A, B und C jeweils 27.</p><p class="small"><b>Betrieblicher Hinweis:</b> Bei hoher Auslastung nehmen Zusatzprüfungen, Engpasskosten und Überstunden zu.</p></div>
+<div class="callout"><div class="icon">?</div><div><b>Untersuchungsfrage:</b> Welcher Term ist als Kostenmodell fachlich geeignet, und unter welchen Grenzen darf er automatisiert eingesetzt werden?</div></div>
+
+<div class="task-with-hints" id="aufgabe-1"><div class="task-head"><h3>Aufgabe 1 · Funktion und Polynomklasse prüfen</h3><span class="afb">AFB I / II</span></div>
+<p>Ergänze die Prüftabelle. Nutze für den Grad den höchsten Exponenten mit einem von 0 verschiedenen Koeffizienten.</p>
+<table class="compact"><tr><th>Regel</th><th>Funktion?</th><th>ganzrational?</th><th>Grad</th><th>Leitkoeffizient</th></tr><tr><td><span class="formula">A(x)=5x+12</span></td><td></td><td></td><td></td><td></td></tr><tr><td><span class="formula">B(x)=x²+2x+12</span></td><td></td><td></td><td></td><td></td></tr><tr><td><span class="formula">C(x)=x³−3x²+5x+12</span></td><td></td><td></td><td></td><td></td></tr><tr><td><span class="formula">D(x)=12+4/x</span></td><td></td><td></td><td>—</td><td>—</td></tr><tr><td>Manuelle Regel: Bei <span class="formula">x=3</span> darf 25, 27 oder 29 ausgegeben werden.</td><td></td><td>—</td><td>—</td><td>—</td></tr></table>
+<p>Formuliere den Unterschied zwischen „Funktion“ und „ganzrationale Funktion“ in einem Satz.</p><div class="answerbox"></div>
+<div class="sim-task-note no-print"><b>Optionale Offline-Hilfe zu Aufgabe 1:</b> Klassifiziere zunächst mindestens zwei Regeln selbst. Im <b>Grad- und Leitkoeffizienten-Labor</b> kannst du danach Funktionseigenschaft, Polynomklasse, Grad und Leitkoeffizient getrennt prüfen. Die Koeffizienten-Lupe hilft bei der Erweiterung mit Nullkoeffizienten.<br><button class="sim-link" type="button" data-sim-target="sim-degree">Grad-Labor öffnen</button></div>
+<div class="inline-hints" aria-label="Hilfen zu Aufgabe 1"><details><summary>Hilfe 1 zu Aufgabe 1: Denkimpuls</summary><div><p>Prüfe zuerst die Eindeutigkeit: Erhält jede zulässige Eingabe genau eine Ausgabe?</p></div></details><details><summary>Hilfe 2 zu Aufgabe 1: Begriffs- und Strukturhilfe</summary><div><p>Eine ganzrationale Funktion besteht aus Summen von Potenzen <span class="formula">x⁰, x¹, x², …</span> mit nichtnegativen ganzzahligen Exponenten. Der Leitkoeffizient steht vor der höchsten vorkommenden Potenz.</p></div></details><details><summary>Hilfe 3 zu Aufgabe 1: erster Zwischenschritt</summary><div><p>Bei <span class="formula">B(x)=1·x²+2x+12</span> ist die höchste Potenz <span class="formula">x²</span>. Beginne damit, Grad und Leitkoeffizient dieser Zeile einzutragen.</p></div></details></div>
+<div class="teacher-inline-note teacher-only"><b>Lehrkrafthinweis:</b> Basisweg: Hilfe 1 früh öffnen. Hilfe 2 unterstützt fachsprachlich; Hilfe 3 ist der konkrete Fachschritt. Eine weitere Hilfestufe ist nötig, wenn „Funktion“ und „ganzrational“ gleichgesetzt werden, der Nenner bei D übersehen wird oder die Anzahl der Summanden als Grad gilt.</div></div>
+
+<div class="task-with-hints" id="aufgabe-2"><div class="task-head"><h3>Aufgabe 2 · Mehrpunktprüfung und Darstellungsabgleich</h3><span class="afb">AFB I / II</span></div>
+<p>Vervollständige die fehlenden Werte. Vergleiche danach jeden Kandidaten mit den Pilotdaten.</p>
+<table class="compact"><tr><th>x</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><th>Pilot</th><td>12</td><td>15</td><td>20</td><td>27</td><td>36</td></tr><tr><th>A(x)</th><td>12</td><td></td><td>22</td><td>27</td><td></td></tr><tr><th>B(x)</th><td>12</td><td></td><td>20</td><td></td><td>36</td></tr><tr><th>C(x)</th><td>12</td><td>15</td><td></td><td>27</td><td></td></tr></table>
+<p>a) Ordne A, B und C den Graphen 1, 2 und 3 zu. b) Beschreibe, wie sich die Kosten bei jeweils 100 zusätzlichen Paketen verändern. c) Erkläre, warum der Ein-Punkt-Test bei <span class="formula">x=3</span> nicht ausreicht.</p>
+<svg class="model-graph" viewBox="0 0 620 360" role="img" aria-label="Drei Kandidatengraphen und fünf Pilotdatenpunkte">
+<rect x="0" y="0" width="620" height="360" fill="#fff"/>
+<g class="grid"><line x1="80" y1="320" x2="560" y2="320"/><line x1="80" y1="250" x2="560" y2="250"/><line x1="80" y1="180" x2="560" y2="180"/><line x1="80" y1="110" x2="560" y2="110"/><line x1="80" y1="40" x2="560" y2="40"/><line x1="80" y1="40" x2="80" y2="320"/><line x1="200" y1="40" x2="200" y2="320"/><line x1="320" y1="40" x2="320" y2="320"/><line x1="440" y1="40" x2="440" y2="320"/><line x1="560" y1="40" x2="560" y2="320"/></g>
+<line x1="80" y1="320" x2="575" y2="320" class="axis"/><polygon points="575,320 563,314 563,326" fill="#172033"/>
+<line x1="80" y1="330" x2="80" y2="28" class="axis"/><polygon points="80,28 74,40 86,40" fill="#172033"/>
+<text x="76" y="340" class="tick-label">0</text><text x="196" y="340" class="tick-label">1</text><text x="316" y="340" class="tick-label">2</text><text x="436" y="340" class="tick-label">3</text><text x="556" y="340" class="tick-label">4</text>
+<text x="43" y="324" class="tick-label">10</text><text x="43" y="254" class="tick-label">20</text><text x="43" y="184" class="tick-label">30</text><text x="43" y="114" class="tick-label">40</text><text x="43" y="44" class="tick-label">50</text>
+<text x="480" y="354" class="axis-label">x in 100 Paketen</text><text x="5" y="18" class="axis-label">Kosten in 100 €</text>
+<path d="M80.0,306.0 L84.8,304.6 L89.6,303.2 L94.4,301.8 L99.2,300.4 L104.0,299.0 L108.8,297.6 L113.6,296.2 L118.4,294.8 L123.2,293.4 L128.0,292.0 L132.8,290.6 L137.6,289.2 L142.4,287.8 L147.2,286.4 L152.0,285.0 L156.8,283.6 L161.6,282.2 L166.4,280.8 L171.2,279.4 L176.0,278.0 L180.8,276.6 L185.6,275.2 L190.4,273.8 L195.2,272.4 L200.0,271.0 L204.8,269.6 L209.6,268.2 L214.4,266.8 L219.2,265.4 L224.0,264.0 L228.8,262.6 L233.6,261.2 L238.4,259.8 L243.2,258.4 L248.0,257.0 L252.8,255.6 L257.6,254.2 L262.4,252.8 L267.2,251.4 L272.0,250.0 L276.8,248.6 L281.6,247.2 L286.4,245.8 L291.2,244.4 L296.0,243.0 L300.8,241.6 L305.6,240.2 L310.4,238.8 L315.2,237.4 L320.0,236.0 L324.8,234.6 L329.6,233.2 L334.4,231.8 L339.2,230.4 L344.0,229.0 L348.8,227.6 L353.6,226.2 L358.4,224.8 L363.2,223.4 L368.0,222.0 L372.8,220.6 L377.6,219.2 L382.4,217.8 L387.2,216.4 L392.0,215.0 L396.8,213.6 L401.6,212.2 L406.4,210.8 L411.2,209.4 L416.0,208.0 L420.8,206.6 L425.6,205.2 L430.4,203.8 L435.2,202.4 L440.0,201.0 L444.8,199.6 L449.6,198.2 L454.4,196.8 L459.2,195.4 L464.0,194.0 L468.8,192.6 L473.6,191.2 L478.4,189.8 L483.2,188.4 L488.0,187.0 L492.8,185.6 L497.6,184.2 L502.4,182.8 L507.2,181.4 L512.0,180.0 L516.8,178.6 L521.6,177.2 L526.4,175.8 L531.2,174.4 L536.0,173.0 L540.8,171.6 L545.6,170.2 L550.4,168.8 L555.2,167.4 L560.0,166.0" class="curve curve-a"/><path d="M80.0,306.0 L84.8,305.4 L89.6,304.8 L94.4,304.2 L99.2,303.6 L104.0,302.9 L108.8,302.2 L113.6,301.5 L118.4,300.8 L123.2,300.1 L128.0,299.3 L132.8,298.5 L137.6,297.7 L142.4,296.8 L147.2,296.0 L152.0,295.1 L156.8,294.2 L161.6,293.2 L166.4,292.3 L171.2,291.3 L176.0,290.3 L180.8,289.3 L185.6,288.3 L190.4,287.2 L195.2,286.1 L200.0,285.0 L204.8,283.9 L209.6,282.7 L214.4,281.5 L219.2,280.3 L224.0,279.1 L228.8,277.9 L233.6,276.6 L238.4,275.3 L243.2,274.0 L248.0,272.7 L252.8,271.3 L257.6,269.9 L262.4,268.5 L267.2,267.1 L272.0,265.7 L276.8,264.2 L281.6,262.7 L286.4,261.2 L291.2,259.7 L296.0,258.1 L300.8,256.5 L305.6,254.9 L310.4,253.3 L315.2,251.7 L320.0,250.0 L324.8,248.3 L329.6,246.6 L334.4,244.9 L339.2,243.1 L344.0,241.3 L348.8,239.5 L353.6,237.7 L358.4,235.8 L363.2,234.0 L368.0,232.1 L372.8,230.2 L377.6,228.2 L382.4,226.3 L387.2,224.3 L392.0,222.3 L396.8,220.3 L401.6,218.2 L406.4,216.1 L411.2,214.0 L416.0,211.9 L420.8,209.8 L425.6,207.6 L430.4,205.4 L435.2,203.2 L440.0,201.0 L444.8,198.7 L449.6,196.5 L454.4,194.2 L459.2,191.9 L464.0,189.5 L468.8,187.2 L473.6,184.8 L478.4,182.4 L483.2,179.9 L488.0,177.5 L492.8,175.0 L497.6,172.5 L502.4,170.0 L507.2,167.4 L512.0,164.9 L516.8,162.3 L521.6,159.7 L526.4,157.1 L531.2,154.4 L536.0,151.7 L540.8,149.0 L545.6,146.3 L550.4,143.6 L555.2,140.8 L560.0,138.0" class="curve curve-b"/><path d="M80.0,306.0 L84.8,304.6 L89.6,303.3 L94.4,302.1 L99.2,300.9 L104.0,299.8 L108.8,298.7 L113.6,297.7 L118.4,296.7 L123.2,295.8 L128.0,294.9 L132.8,294.1 L137.6,293.3 L142.4,292.5 L147.2,291.8 L152.0,291.0 L156.8,290.4 L161.6,289.7 L166.4,289.1 L171.2,288.5 L176.0,287.9 L180.8,287.3 L185.6,286.7 L190.4,286.1 L195.2,285.6 L200.0,285.0 L204.8,284.4 L209.6,283.9 L214.4,283.3 L219.2,282.7 L224.0,282.1 L228.8,281.5 L233.6,280.9 L238.4,280.3 L243.2,279.6 L248.0,279.0 L252.8,278.2 L257.6,277.5 L262.4,276.7 L267.2,275.9 L272.0,275.1 L276.8,274.2 L281.6,273.3 L286.4,272.3 L291.2,271.3 L296.0,270.2 L300.8,269.1 L305.6,267.9 L310.4,266.7 L315.2,265.4 L320.0,264.0 L324.8,262.6 L329.6,261.1 L334.4,259.5 L339.2,257.8 L344.0,256.1 L348.8,254.3 L353.6,252.4 L358.4,250.4 L363.2,248.4 L368.0,246.2 L372.8,243.9 L377.6,241.6 L382.4,239.1 L387.2,236.6 L392.0,233.9 L396.8,231.2 L401.6,228.3 L406.4,225.3 L411.2,222.2 L416.0,219.0 L420.8,215.6 L425.6,212.2 L430.4,208.6 L435.2,204.9 L440.0,201.0 L444.8,197.0 L449.6,192.9 L454.4,188.6 L459.2,184.2 L464.0,179.7 L468.8,175.0 L473.6,170.1 L478.4,165.1 L483.2,160.0 L488.0,154.6 L492.8,149.2 L497.6,143.5 L502.4,137.7 L507.2,131.7 L512.0,125.6 L516.8,119.2 L521.6,112.7 L526.4,106.1 L531.2,99.2 L536.0,92.1 L540.8,84.9 L545.6,77.5 L550.4,69.8 L555.2,62.0 L560.0,54.0" class="curve curve-c"/>
+<circle cx="80.0" cy="306.0" r="5" class="pilot-point"/><text x="86.0" y="298.0" class="point-label">P0</text><circle cx="200.0" cy="285.0" r="5" class="pilot-point"/><text x="206.0" y="277.0" class="point-label">P1</text><circle cx="320.0" cy="250.0" r="5" class="pilot-point"/><text x="326.0" y="242.0" class="point-label">P2</text><circle cx="440.0" cy="201.0" r="5" class="pilot-point"/><text x="446.0" y="193.0" class="point-label">P3</text><circle cx="560.0" cy="138.0" r="5" class="pilot-point"/><text x="566.0" y="130.0" class="point-label">P4</text>
+<g class="legend-svg"><line x1="315" y1="28" x2="355" y2="28" class="curve curve-a"/><text x="363" y="32">Graph 1</text><line x1="415" y1="28" x2="455" y2="28" class="curve curve-b"/><text x="463" y="32">Graph 2</text><line x1="515" y1="28" x2="555" y2="28" class="curve curve-c"/><text x="563" y="32">3</text></g>
+</svg>
+<div class="legend"><span><span class="line-key"></span>Graph 1</span><span><span class="line-key dashed"></span>Graph 2</span><span><span class="line-key dotted"></span>Graph 3</span><span><span class="point-key"></span>Pilotdaten</span></div>
+<div class="answerbox"></div>
+<div class="sim-task-note no-print"><b>Optionale Offline-Hilfe zu Aufgabe 2:</b> Ergänze zuerst eigene Tabellenwerte und ordne mindestens einen Graphen zu. Im <b>Mehrpunkt- und Änderungs-Labor</b> kannst du anschließend Kandidatenwerte prüfen, Pilotpunkte überlagern und die Kostenänderungen bei gleichen Mengenschritten vergleichen.<br><button class="sim-link" type="button" data-sim-target="sim-compare">Mehrpunkt-Labor öffnen</button></div>
+<div class="inline-hints" aria-label="Hilfen zu Aufgabe 2"><details><summary>Hilfe 1 zu Aufgabe 2: Denkimpuls</summary><div><p>Eine lineare Funktion hat einen geraden Graphen. Vergleiche außerdem nicht nur <span class="formula">x=3</span>, sondern mindestens zwei weitere x-Werte.</p></div></details><details><summary>Hilfe 2 zu Aufgabe 2: Strukturhilfe</summary><div><p>Vergleichsschema: Term → Grad → Tabellenwerte → Graphform → Passung zu den Pilotpunkten. Satzstarter: „Kandidat … passt / passt nicht, weil …“</p></div></details><details><summary>Hilfe 3 zu Aufgabe 2: erster Rechenschritt</summary><div><p>Beginne beispielsweise mit <span class="formula">A(1)=5·1+12</span> und <span class="formula">B(1)=1²+2·1+12</span>. Berechne danach denselben x-Wert für C.</p></div></details></div>
+<div class="teacher-inline-note teacher-only"><b>Lehrkrafthinweis:</b> Hilfe 1 ist visuell und fachlich, Hilfe 2 strukturiert die Darstellungskette, Hilfe 3 unterstützt rechnerisch. Öffnen, wenn nur der gemeinsame Wert 27 betrachtet wird, Kurven ohne Tabellenbeleg zugeordnet werden oder „gekrümmt“ automatisch mit „quadratisch“ gleichgesetzt wird.</div></div>
+
+<div class="interim-product"><h3>Zwischenergebnis Stunde 1 · Modellklassen-Vorprüfbogen</h3><div class="check-grid"><div class="check-cell"><b>Kandidat A:</b><br>Klasse / Grad: __________</div><div class="check-cell"><b>Kandidat B:</b><br>Klasse / Grad: __________</div><div class="check-cell"><b>Kandidat C:</b><br>Klasse / Grad: __________</div><div class="check-cell"><b>Offene Frage:</b><br>____________________</div></div></div>
+</section>
+
+<section class="student-material worksheet-page" id="arbeitsblatt-seite-2">
+<div class="worksheet-title"><div><h2>Modellwerte und Einsatzbereich prüfen</h2><p>Schülerarbeitsblatt · Seite 2 von 3 · Stunde 2</p></div><p>Team: ____________________</p></div>
+<div class="task-with-hints" id="aufgabe-3"><div class="task-head"><h3>Aufgabe 3 · Quadratischen Kandidaten im Kontext deuten</h3><span class="afb">AFB I / II</span></div>
+<p>Das Team prüft Kandidat B genauer: <span class="formula">B(x)=x²+2x+12</span>.</p><ol><li>Berechne <span class="formula">B(2,5)</span> und deute den Wert vollständig im Kontext.</li><li>Vergleiche bei 400 Paketen die Ergebnisse von A und B. Nenne die Kostendifferenz in Euro.</li><li>Erkläre mithilfe der Tabelle oder des Graphen, warum B keinen linearen Verlauf beschreibt.</li></ol>
+<table class="compact"><tr><th>Rechnung</th><th>Ergebnis mit Einheit</th><th>Kontextdeutung</th></tr><tr><td><span class="formula">B(2,5)=</span></td><td></td><td></td></tr><tr><td><span class="formula">A(4)=</span><br><span class="formula">B(4)=</span></td><td>Differenz:</td><td></td></tr></table>
+<div class="sim-task-note no-print"><b>Optionale Offline-Hilfe zu Aufgabe 3:</b> Nutze das <b>Mehrpunkt- und Änderungs-Labor</b> erst nach deinem Rechenansatz. Prüfe dort B(2,5), vergleiche A(4) und B(4) und achte auf die Skalierung „x in 100 Paketen“ und „Kosten in 100 €“.<br><button class="sim-link" type="button" data-sim-target="sim-compare">Änderungs-Labor öffnen</button></div>
+<div class="inline-hints" aria-label="Hilfen zu Aufgabe 3"><details><summary>Hilfe 1 zu Aufgabe 3: Denkimpuls</summary><div><p>Beachte beide Skalierungen: <span class="formula">x=2,5</span> bedeutet 250 Pakete; ein Funktionswert von 23 bedeutet 2.300 €.</p></div></details><details><summary>Hilfe 2 zu Aufgabe 3: Satz- und Strukturhilfe</summary><div><p>Satzstarter: „Bei einer geplanten Tagesmenge von … Paketen schätzt Modell B die Zoll- und Handlingkosten auf … €.“ Für die Nichtlinearität: „Bei gleichen Mengenschritten verändern sich die Kosten nicht immer um …“</p></div></details><details><summary>Hilfe 3 zu Aufgabe 3: erster Rechenschritt</summary><div><p><span class="formula">B(2,5)=(2,5)²+2·2,5+12</span>. Für den Vergleich beginne mit <span class="formula">A(4)=5·4+12</span>.</p></div></details></div>
+<div class="teacher-inline-note teacher-only"><b>Lehrkrafthinweis:</b> Hilfe 1 ist Einheitenhilfe, Hilfe 2 sprachlich und strukturell, Hilfe 3 rechnerisch. Eine weitere Stufe ist erforderlich, wenn 250 in den Term eingesetzt, Hunderte Euro nicht zurückgerechnet oder „quadratisch“ nur am Symbol x² ohne Darstellungsbezug genannt wird.</div></div>
+
+<div class="task-with-hints" id="aufgabe-4"><div class="task-head"><h3>Aufgabe 4 · Definitionsbereiche und Systemreaktionen festlegen</h3><span class="afb">AFB II</span></div>
+<p>Unterscheide die drei Ebenen und bestimme den automatisch freigegebenen Bereich.</p>
+<div class="domain-grid"><div class="domain-card"><b>A · Mathematisch</b>Als Polynom ist B für alle reellen x berechenbar.</div><div class="domain-card"><b>B · Ökonomisch</b>Negative Paketmengen sind nicht sinnvoll.</div><div class="domain-card"><b>C · Betrieblich</b>Pilotdaten: 0–400 Pakete. Technische Kapazität: höchstens 450 Pakete. Eingaben erfolgen in Zehnteln.</div></div>
+<table class="compact"><tr><th>Bereich</th><th>Definitionsbereich / Regel</th><th>Begründung</th></tr><tr><td>mathematisch</td><td></td><td></td></tr><tr><td>ökonomisch plausibel</td><td></td><td></td></tr><tr><td>automatisch freigegeben</td><td></td><td></td></tr></table>
+<p>Formuliere zusätzlich je eine Systemreaktion für negative Eingaben, für 0–400 Pakete, für 410–450 Pakete und für mehr als 450 Pakete.</p><div class="answerbox"></div>
+<div class="sim-task-note no-print"><b>Optionale Offline-Hilfe zu Aufgabe 4:</b> Im <b>Freigabe- und Systemregel-Labor</b> kannst du Testmengen an mathematischer Berechenbarkeit, ökonomischer Plausibilität, Pilotbereich und Kapazität prüfen. Leite die endgültigen Bereiche und Reaktionen trotzdem selbst schriftlich ab.<br><button class="sim-link" type="button" data-sim-target="sim-release">Freigabe-Labor öffnen</button></div>
+<div class="inline-hints" aria-label="Hilfen zu Aufgabe 4"><details><summary>Hilfe 1 zu Aufgabe 4: Denkimpuls</summary><div><p>„Berechenbar“ bedeutet nicht automatisch „durch Daten abgesichert“. Suche für die Freigabe die strengste passende Grenze.</p></div></details><details><summary>Hilfe 2 zu Aufgabe 4: Strukturhilfe</summary><div><p>Prüfreihenfolge: mathematischer Termbereich → ökonomische Plausibilität → Pilotdaten → technische Kapazität. Verwende <span class="formula">x</span> in Hunderten von Paketen.</p></div></details><details><summary>Hilfe 3 zu Aufgabe 4: erster Zwischenschritt</summary><div><p>Der Pilotbereich 0–400 Pakete entspricht <span class="formula">0≤x≤4</span>. Vergleiche diese Grenze mit der Kapazität <span class="formula">x≤4,5</span>.</p></div></details></div>
+<div class="teacher-inline-note teacher-only"><b>Lehrkrafthinweis:</b> Hilfe 1 trennt Modell und Freigabe, Hilfe 2 strukturiert, Hilfe 3 übersetzt Einheiten. Öffnen, wenn nur <span class="formula">D=ℝ</span> genannt wird, 450 Pakete automatisch freigegeben werden oder die Systemreaktion außerhalb des Pilotfensters fehlt.</div></div>
+</section>
+
+<section class="student-material worksheet-page" id="arbeitsblatt-seite-3">
+<div class="worksheet-title"><div><h2>Handlungsprodukt: Modellklassen- und Freigabeprotokoll MK-07</h2><p>Schülerarbeitsblatt · Seite 3 von 3</p></div><p>Team: ____________________</p></div>
+<div class="task-with-hints" id="aufgabe-5"><div class="task-head"><h3>Aufgabe 5 · Modell auswählen und Automatisierung beurteilen</h3><span class="afb">AFB III</span></div>
+<p>Fülle das Protokoll aus. Triff eine begründete Entscheidung: vollständige Freigabe, begrenzte Freigabe oder Ablehnung.</p>
+<div class="release-card"><div class="release-head"><div><b>MK-07 · Go-live-Protokoll</b><br><span class="small">European Logistics Controlling</span></div><span class="status">Entscheidung offen</span></div><table class="compact"><tr><th>1. Ausgewähltes Modell</th><td></td></tr><tr><th>2. Modellklasse</th><td>Grad: ______ · Leitkoeffizient: ______ · Grundform: __________________</td></tr><tr><th>3. Datenbeleg</th><td></td></tr><tr><th>4. Beispielausgabe</th><td></td></tr><tr><th>5. Freigabebereich</th><td></td></tr><tr><th>6. Automatische Prüfregel</th><td></td></tr><tr><th>7. Warnhinweis / Modellgrenze</th><td></td></tr><tr><th>8. Entscheidung und Begründung</th><td class="answerbox tall"></td></tr></table></div>
+<div class="sim-task-note no-print"><b>Optionale Offline-Hilfe zu Aufgabe 5:</b> Konfiguriere im <b>Freigabe- und Systemregel-Labor</b> Eingabegrenzen, Ausgabetext und Reaktionen außerhalb des Pilotbereichs. Das Labor prüft Schutzbausteine, entscheidet aber nicht über eure begründete Modellfreigabe.<br><button class="sim-link" type="button" data-sim-target="sim-release">Systemregel-Labor öffnen</button></div>
+<div class="inline-hints" aria-label="Hilfen zu Aufgabe 5"><details><summary>Hilfe 1 zu Aufgabe 5: Denkimpuls</summary><div><p>Eine Freigabe braucht vier Belege: Datenpassung, korrekte Modellklasse, klarer Einsatzbereich und eine Systemreaktion außerhalb dieses Bereichs.</p></div></details><details><summary>Hilfe 2 zu Aufgabe 5: Entscheidungsstruktur</summary><div><p>Begründungsgerüst: „Wir empfehlen …, weil … . Das Modell ist eine … Funktion vom Grad … . Automatisch darf es nur für … genutzt werden. Außerhalb …, weil … .“</p></div></details><details><summary>Hilfe 3 zu Aufgabe 5: konkreter Einstieg</summary><div><p>Beginne den Datenbeleg mit dem Vergleich der fünf Pilotwerte. Nenne anschließend den Bereich <span class="formula">0≤x≤4</span> und entscheide erst danach über die Freigabeart.</p></div></details></div>
+<div class="teacher-inline-note teacher-only"><b>Lehrkrafthinweis:</b> Hilfe 1 ist fachlich, Hilfe 2 sprachlich und strukturell, Hilfe 3 konkretisiert die Belegreihenfolge. Eine weitere Hilfestufe ist nötig, wenn nur „B passt“ notiert wird, Grad und Leitkoeffizient fehlen, 450 Pakete automatisch eingeschlossen werden oder die AFB-III-Entscheidung ohne Modellgrenze bleibt.</div></div>
+
+<div class="grid2"><div class="card"><h3>Transparente Produktkriterien</h3><ul class="criteria"><li>Funktion und ganzrationale Funktion werden korrekt unterschieden.</li><li>Grad, Leitkoeffizient und Grundform des ausgewählten Modells sind korrekt.</li><li>Die Modellwahl wird mit mehreren Pilotwerten und mindestens einer weiteren Darstellung begründet.</li><li>Ein Funktionswert wird mit Einheiten im Kontext gedeutet.</li><li>Mathematischer, ökonomischer und betrieblicher Bereich werden getrennt.</li><li>Die Automatisierungsregel enthält Freigabe, Weiterleitung und Sperre.</li><li>Die Entscheidung nennt eine Modellgrenze und vermeidet Garantieaussagen.</li></ul></div><div class="card"><h3>Sprachliche Unterstützung</h3><div class="sentence-starters"><p>„Der höchste Exponent mit nicht-null Koeffizient ist …; daher hat die Funktion Grad …“</p><p>„Der Graph ist …, während die Wertzuwächse …“</p><p>„Bei … Paketen schätzt das Modell Kosten von … €.“</p><p>„Rechnerisch ist der Term für … definiert; betrieblich freigegeben ist jedoch nur …“</p></div></div></div>
+
+<div class="task-with-hints" id="erweiterung"><div class="task-head"><h3>Erweiterung · Was passiert bei Nullkoeffizienten?</h3><span class="afb">AFB II / III</span></div><p>Bestimme Grad und Leitkoeffizient von <span class="formula">E(x)=0·x³+2x²+0·x+7</span>. Erkläre, warum E trotz des geschriebenen x³-Terms nicht kubisch ist. Formuliere daraus eine allgemeine Prüfregel.</p><div class="answerbox"></div><div class="sim-task-note no-print"><b>Optionale Offline-Hilfe zur Erweiterung:</b> Stelle in der <b>Koeffizienten-Lupe</b> den Koeffizienten von x³ auf 0 und beobachte, welcher Summand danach tatsächlich den Grad bestimmt. Formuliere die allgemeine Regel anschließend selbst.<br><button class="sim-link" type="button" data-sim-target="sim-degree">Koeffizienten-Lupe öffnen</button></div>
+<div class="inline-hints" aria-label="Hilfen zur Erweiterung"><details><summary>Hilfe 1 zur Erweiterung: Denkimpuls</summary><div><p>Ein Term mit Koeffizient 0 trägt für keinen x-Wert zum Funktionswert bei.</p></div></details><details><summary>Hilfe 2 zur Erweiterung: Strukturhilfe</summary><div><p>Streiche gedanklich alle Summanden mit Koeffizient 0. Suche danach erneut die höchste Potenz.</p></div></details></div></div>
+</section>
+
+
+<section class="simulation-only" id="simulationen" aria-labelledby="simulation-title">
+<h2 id="simulation-title">Interaktive Offline-Simulationen als Aufgabenhilfe</h2>
+<div class="note"><b>Arbeitsprinzip:</b> Beginne jeweils im Schülerarbeitsblatt. Die Simulationen dienen anschließend zum Sichtbarmachen, Kontrollieren und Interpretieren. Sie verwenden ausschließlich die Kandidatenterme, Pilotdaten und Betriebsbedingungen aus MK-07. Alle Berechnungen, Grafiken und Rückmeldungen laufen lokal in dieser Datei.</div>
+<div class="sim-intro">
+<div class="sim-card"><span class="sim-tag">Aufgabe 1 und Erweiterung</span><h3>Grad- und Leitkoeffizienten-Labor</h3><p>Prüft Funktionseigenschaft und Polynomklasse und macht sichtbar, dass nur der höchste Term mit von 0 verschiedenem Koeffizienten den Grad bestimmt.</p><button class="sim-link" type="button" data-sim-target="sim-degree">Zum Grad-Labor</button></div>
+<div class="sim-card"><span class="sim-tag">Aufgaben 2 und 3</span><h3>Mehrpunkt- und Änderungs-Labor</h3><p>Vergleicht A, B und C mit den Pilotdaten, kontrolliert Funktionswerte und untersucht Kostenänderungen bei gleichen Mengenschritten.</p><button class="sim-link" type="button" data-sim-target="sim-compare">Zum Mehrpunkt-Labor</button></div>
+<div class="sim-card"><span class="sim-tag">Aufgaben 4 und 5</span><h3>Freigabe- und Systemregel-Labor</h3><p>Testet Mengen an den Bereichsregeln und erprobt, wie ein begrenzt freigegebenes Prognose-Modul reagieren muss.</p><button class="sim-link" type="button" data-sim-target="sim-release">Zum Freigabe-Labor</button></div>
+</div>
+
+<article class="sim-panel" id="sim-degree" aria-labelledby="sim-degree-title">
+<h3 id="sim-degree-title">1. Grad- und Leitkoeffizienten-Labor</h3>
+<p><b>Auftrag:</b> Wähle eine Regel und trage deine Klassifikation ein. Erst nach einer passenden Eingabe werden Termprofil und Graph freigegeben. Die Koeffizienten-Lupe darunter dient dem Transfer auf Nullkoeffizienten.</p>
+<div class="sim-controls">
+<label>Regel auswählen<select id="degreeCandidate"><option value="A">A(x) = 5x + 12</option><option value="B">B(x) = x² + 2x + 12</option><option value="C">C(x) = x³ − 3x² + 5x + 12</option><option value="D">D(x) = 12 + 4/x</option><option value="E">E(x) = 0x³ + 2x² + 0x + 7</option><option value="M">manuelle Mehrfachregel bei x = 3</option></select></label>
+<label>Ist die Regel eine Funktion?<select id="degreeFunction"><option value="">bitte wählen</option><option value="yes">ja</option><option value="no">nein</option></select></label>
+<label>Ist sie ganzrational?<select id="degreePolynomial"><option value="">bitte wählen</option><option value="yes">ja</option><option value="no">nein</option></select></label>
+<label>Grad<select id="degreeOwn"><option value="">nicht angegeben</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></label>
+<label>Leitkoeffizient<input id="degreeLead" type="number" step="0.1" inputmode="decimal" placeholder="nur bei Polynom"></label>
+<button class="sim-button" type="button" id="degreeCheck">Klassifikation prüfen</button><button class="sim-button secondary" type="button" id="degreeReset">Eingaben löschen</button>
+</div>
+<div class="sim-feedback" id="degreeFeedback" aria-live="polite">Prüfe zuerst Eindeutigkeit, dann die Exponenten und erst danach Grad und Leitkoeffizient.</div>
+<div class="sim-stat-grid"><div class="sim-stat"><b>Funktion?</b><output id="degreeFunctionStat" class="sim-lock">noch nicht freigegeben</output></div><div class="sim-stat"><b>Ganzrational?</b><output id="degreePolyStat" class="sim-lock">noch nicht freigegeben</output></div><div class="sim-stat"><b>Grad</b><output id="degreeDegreeStat" class="sim-lock">noch nicht freigegeben</output></div><div class="sim-stat"><b>Leitkoeffizient</b><output id="degreeLeadStat" class="sim-lock">noch nicht freigegeben</output></div></div>
+<svg class="sim-graph" id="degreeGraph" role="img" aria-labelledby="degreeGraphTitle degreeGraphDesc" viewBox="0 0 780 400"><title id="degreeGraphTitle">Graph der ausgewählten Regel</title><desc id="degreeGraphDesc">Nach korrekter Klassifikation erscheint der Graph der ausgewählten Funktion.</desc></svg>
+<div class="sim-subpanel"><h4>Koeffizienten-Lupe: Welcher Term bestimmt den Grad?</h4><p>Verändere die Koeffizienten von <span class="formula">F(x)=a₃x³+a₂x²+a₁x+a₀</span>. Achte besonders darauf, was geschieht, wenn ein Koeffizient 0 wird.</p>
+<div class="sim-coeff-grid"><label>a₃<input id="coefA3" type="range" min="-3" max="3" step="1" value="0"><output id="coefA3Out">0</output></label><label>a₂<input id="coefA2" type="range" min="-4" max="4" step="1" value="2"><output id="coefA2Out">2</output></label><label>a₁<input id="coefA1" type="range" min="-5" max="5" step="1" value="0"><output id="coefA1Out">0</output></label><label>a₀<input id="coefA0" type="range" min="-5" max="15" step="1" value="7"><output id="coefA0Out">7</output></label></div>
+<div class="sim-stat-grid"><div class="sim-stat"><b>Aktueller Term</b><output id="coefTerm"></output></div><div class="sim-stat"><b>Grad</b><output id="coefDegree"></output></div><div class="sim-stat"><b>Leitkoeffizient</b><output id="coefLead"></output></div><div class="sim-stat"><b>Prüfregel</b><output>höchster Exponent mit Koeffizient ≠ 0</output></div></div>
+<svg class="sim-graph" id="coefGraph" role="img" aria-labelledby="coefGraphTitle coefGraphDesc" viewBox="0 0 780 400"><title id="coefGraphTitle">Polynom mit veränderbaren Koeffizienten</title><desc id="coefGraphDesc">Der Graph verändert sich lokal mit den vier Koeffizienten.</desc></svg></div>
+</article>
+
+<article class="sim-panel" id="sim-compare" aria-labelledby="sim-compare-title">
+<h3 id="sim-compare-title">2. Mehrpunkt- und Änderungs-Labor</h3>
+<p><b>Auftrag:</b> Kontrolliere zuerst einen selbst berechneten Funktionswert. Danach kannst du Wertetabelle, Änderungen und Graph für den gewählten Kandidaten einblenden. Vergleiche stets mehrere Pilotpunkte statt nur x = 3.</p>
+<div class="sim-controls"><label>Kandidat<select id="compareCandidate"><option value="A">A(x) = 5x + 12</option><option value="B">B(x) = x² + 2x + 12</option><option value="C">C(x) = x³ − 3x² + 5x + 12</option></select></label><label>Testmenge x in 100 Paketen<input id="compareX" type="range" min="0" max="4" step="0.5" value="2.5"><span>x = <output class="sim-output" id="compareXOut">2,5</output> = <output id="comparePieces">250</output> Pakete</span></label><label>Mein Funktionswert in 100 €<input id="compareOwn" type="number" step="0.01" inputmode="decimal"></label><button class="sim-button" type="button" id="compareCheck">Eigenen Wert prüfen</button><button class="sim-button secondary" type="button" id="compareReset">Zurücksetzen</button></div>
+<div class="sim-feedback" id="compareFeedback" aria-live="polite">Setze den ausgewählten x-Wert zuerst selbst in den Term ein. Beachte: Ein Funktionswert 23,25 bedeutet 2.325 €.</div>
+<div class="sim-toggle-row"><label><input type="checkbox" id="compareAll"> alle drei Kandidaten zum Nachvergleich zeigen</label><label><input type="checkbox" id="compareChanges" disabled> Wertetabelle und Änderungen anzeigen</label><span class="sim-badge">Pilotdaten: 12, 15, 20, 27, 36</span></div>
+<div class="sim-stat-grid"><div class="sim-stat"><b>Eingabe</b><output id="compareInputStat" class="sim-lock">noch nicht freigegeben</output></div><div class="sim-stat"><b>Modellwert</b><output id="compareValueStat" class="sim-lock">noch nicht freigegeben</output></div><div class="sim-stat"><b>Kosten in Euro</b><output id="compareEuroStat" class="sim-lock">noch nicht freigegeben</output></div><div class="sim-stat"><b>Pilotvergleich</b><output id="comparePilotStat" class="sim-lock">noch nicht freigegeben</output></div></div>
+<svg class="sim-graph" id="compareGraph" role="img" aria-labelledby="compareGraphTitle compareGraphDesc" viewBox="0 0 780 430"><title id="compareGraphTitle">Kandidatengraph und Pilotdaten</title><desc id="compareGraphDesc">Pilotpunkte und nach eigener Rechnung freigegebener Kandidatengraph werden verglichen.</desc></svg>
+<div id="changePanel" class="sim-subpanel" hidden><h4>Wertetabelle und Änderungen bei +100 Paketen</h4><table class="sim-value-table"><tr><th>x</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><th>f(x)</th><td id="v0"></td><td id="v1"></td><td id="v2"></td><td id="v3"></td><td id="v4"></td></tr><tr class="delta"><th>Änderung</th><td>—</td><td id="d1"></td><td id="d2"></td><td id="d3"></td><td id="d4"></td></tr></table><p id="changeInterpretation"></p></div>
+<div class="sim-subpanel"><h4>Welcher Kandidat bildet alle Pilotdaten ab?</h4><div class="sim-controls"><label>Meine Wahl<select id="fitChoice"><option value="">bitte wählen</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select></label><button class="sim-button" type="button" id="fitCheck">Mehrpunktwahl prüfen</button></div><div class="sim-feedback" id="fitFeedback" aria-live="polite">Vergleiche alle fünf Pilotwerte. Ein Treffer bei x = 3 allein reicht nicht.</div></div>
+</article>
+
+<article class="sim-panel" id="sim-release" aria-labelledby="sim-release-title">
+<h3 id="sim-release-title">3. Freigabe- und Systemregel-Labor</h3>
+<p><b>Auftrag:</b> Teste Mengen für das ausgewählte Kostenmodell <span class="formula">B(x)=x²+2x+12</span>. Beobachte die Bereichsebenen getrennt und konfiguriere anschließend eine begrenzte automatische Freigabe.</p>
+<div class="sim-controls"><label>Testmenge x in 100 Paketen<input id="releaseX" type="range" min="-0.5" max="5.5" step="0.1" value="4.2"><span>x = <output class="sim-output" id="releaseXOut">4,2</output> = <output id="releasePieces">420</output> Pakete</span></label><button class="sim-button tertiary" type="button" data-release-x="-0.2">negative Menge</button><button class="sim-button tertiary" type="button" data-release-x="3">Pilotwert x = 3</button><button class="sim-button tertiary" type="button" data-release-x="4.2">420 Pakete</button><button class="sim-button tertiary" type="button" data-release-x="4.8">480 Pakete</button></div>
+<div class="sim-stat-grid"><div class="sim-stat"><b>Modellkosten</b><output id="releaseCost"></output></div><div class="sim-stat"><b>Mathematisch</b><output id="releaseMath"></output></div><div class="sim-stat"><b>Automatisch freigegeben</b><output id="releaseAuto"></output></div><div class="sim-stat"><b>Empfohlene Systemreaktion</b><output id="releaseReaction"></output></div></div>
+<div class="sim-condition-grid"><div class="sim-condition" id="condMath"><b><span class="lamp"></span>Polynomterm</b><span>für alle reellen x berechenbar</span></div><div class="sim-condition" id="condEconomic"><b><span class="lamp"></span>Ökonomisch</b><span>x ≥ 0</span></div><div class="sim-condition" id="condPilot7"><b><span class="lamp"></span>Pilotdaten</b><span>0 ≤ x ≤ 4</span></div><div class="sim-condition" id="condCapacity7"><b><span class="lamp"></span>Technische Kapazität</b><span>x ≤ 4,5</span></div><div class="sim-condition" id="condIncrement"><b><span class="lamp"></span>Eingaberaster</b><span>Zehntelschritte</span></div><div class="sim-condition" id="condAuto7"><b><span class="lamp"></span>Alle Automatikregeln</b><span>gemeinsame Schnittmenge</span></div></div>
+<svg class="sim-graph" id="releaseGraph" role="img" aria-labelledby="releaseGraphTitle releaseGraphDesc" viewBox="0 0 780 350"><title id="releaseGraphTitle">Bereichsebenen des Kostenmodells</title><desc id="releaseGraphDesc">Zahlenstrahlen zeigen ökonomischen, Pilot-, Kapazitäts- und automatischen Bereich mit Testwert.</desc></svg>
+<div class="sim-subpanel"><h4>Eigene Systemregel konfigurieren</h4><div class="sim-controls"><label>untere Automatikgrenze x<input id="ruleMin" type="number" step="0.1" value="-0.5"></label><label>obere Automatikgrenze x<input id="ruleMax" type="number" step="0.1" value="5.5"></label><label>410–450 Pakete<select id="ruleBuffer"><option value="auto">automatisch ausgeben</option><option value="manual">manuell prüfen</option><option value="block">vollständig sperren</option></select></label><label>mehr als 450 Pakete<select id="ruleAbove"><option value="auto">automatisch ausgeben</option><option value="manual">manuell prüfen</option><option value="block">Kapazitätsfehler / sperren</option></select></label><label>Ausgabetext<select id="ruleWording"><option value="guarantee">garantierte Kosten</option><option value="plain">Kosten</option><option value="estimate">Modellschätzung: ungefähr</option></select></label><button class="sim-button" type="button" id="ruleTest">Konfiguration testen</button><button class="sim-button secondary" type="button" id="ruleReset">Prototyp zurücksetzen</button></div>
+<div class="sim-dashboard-grid"><div class="sim-screen"><h4>Ungeprüfter Prototyp</h4><p id="releaseProtoInput"></p><p class="screen-output" id="releaseProtoOutput"></p><p>Keine Datenbereichsprüfung; jeder reelle Wert wird verarbeitet.</p></div><div class="sim-screen"><h4>Eure Konfiguration</h4><p id="releaseConfigInput">Noch nicht getestet</p><p class="screen-output" id="releaseConfigOutput">—</p><p id="releaseConfigNote">Konfiguration ausführen, dann fachlich prüfen.</p></div></div><div class="sim-feedback" id="ruleFeedback" aria-live="polite">Prüfe automatische Grenze, manuellen Pufferbereich, Kapazitätssperre und Näherungswortlaut.</div></div>
+<div class="sim-subpanel"><h4>Vollständigkeitscheck für MK-07</h4><div class="sim-checklist" id="releaseChecks"><label><input type="checkbox"> ausgewähltes Modell mit Datenbeleg</label><label><input type="checkbox"> Grad, Leitkoeffizient und Grundform</label><label><input type="checkbox"> Beispielwert mit beiden Einheiten</label><label><input type="checkbox"> automatischer Freigabebereich</label><label><input type="checkbox"> Systemreaktionen außerhalb des Bereichs</label><label><input type="checkbox"> begründete begrenzte Freigabe oder Ablehnung</label></div><button class="sim-button" type="button" id="releaseComplete">Vollständigkeit prüfen</button><button class="sim-button secondary" type="button" id="releaseChecksReset">Häkchen löschen</button><div class="sim-feedback" id="releaseCompleteFeedback" aria-live="polite">Die Checkliste zählt Bausteine, bewertet aber nicht die Qualität eurer Begründung.</div></div>
+</article>
+</section>
+<section class="solution-only" id="loesung">
+<h2>3. Vollständige Musterlösung</h2>
+<h3>Aufgabe 1</h3>
+<table class="compact"><tr><th>Regel</th><th>Funktion?</th><th>ganzrational?</th><th>Grad</th><th>Leitkoeffizient</th></tr><tr><td><span class="formula">A(x)=5x+12</span></td><td>ja</td><td>ja</td><td>1</td><td>5</td></tr><tr><td><span class="formula">B(x)=x²+2x+12</span></td><td>ja</td><td>ja</td><td>2</td><td>1</td></tr><tr><td><span class="formula">C(x)=x³−3x²+5x+12</span></td><td>ja</td><td>ja</td><td>3</td><td>1</td></tr><tr><td><span class="formula">D(x)=12+4/x</span></td><td>ja, für <span class="formula">x≠0</span></td><td>nein; x steht im Nenner</td><td>—</td><td>—</td></tr><tr><td>Manuelle Mehrfachregel</td><td>nein; derselben Eingabe 3 werden mehrere Ausgaben zugeordnet</td><td>—</td><td>—</td><td>—</td></tr></table>
+<div class="card solution"><p>Eine Funktion ist jede eindeutige Zuordnung von zulässigen Eingaben zu Ausgaben. Eine ganzrationale Funktion ist zusätzlich eine Funktion, deren Term aus einer endlichen Summe nichtnegativer ganzzahliger Potenzen von x besteht.</p></div>
+
+<h3>Aufgabe 2</h3>
+<table class="compact"><tr><th>x</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><th>Pilot</th><td>12</td><td>15</td><td>20</td><td>27</td><td>36</td></tr><tr><th>A(x)</th><td>12</td><td>17</td><td>22</td><td>27</td><td>32</td></tr><tr><th>B(x)</th><td>12</td><td>15</td><td>20</td><td>27</td><td>36</td></tr><tr><th>C(x)</th><td>12</td><td>15</td><td>18</td><td>27</td><td>48</td></tr></table>
+<div class="card solution"><p><b>Zuordnung:</b> Graph 1 ist A, die Gerade. Graph 2 ist B, die nach oben gekrümmte quadratische Funktion. Graph 3 ist C, der kubische Verlauf.</p><p><b>Änderungen:</b> Bei A steigen die Kosten je +100 Pakete konstant um 5 Hundert Euro. Bei B lauten die Zuwächse 3, 5, 7 und 9 Hundert Euro; der Anstieg wird größer. Bei C lauten sie 3, 3, 9 und 21 Hundert Euro; der Verlauf verändert sich noch stärker.</p><p><b>Ein-Punkt-Test:</b> Alle drei Modelle treffen zufällig den Punkt <span class="formula">(3|27)</span>. Nur B trifft alle fünf Pilotpunkte. Ein gemeinsamer Funktionswert beweist daher weder gleiche Terme noch gleiche Graphen oder gleiche Eignung.</p></div>
+
+<h3>Aufgabe 3</h3>
+<div class="card solution"><p><span class="formula">B(2,5)=(2,5)²+2·2,5+12=6,25+5+12=23,25</span>. Bei 250 Paketen schätzt Modell B die täglichen Zoll- und Handlingkosten auf 23,25 Hundert Euro, also <b>2.325 €</b>.</p><p><span class="formula">A(4)=5·4+12=32</span> und <span class="formula">B(4)=4²+2·4+12=36</span>. Das sind 3.200 € beziehungsweise 3.600 €; B liegt um <b>400 €</b> höher.</p><p>B ist nicht linear, weil gleiche Mengenschritte nicht zu konstanten Kostenzuwächsen führen. Die Tabelle zeigt wachsende Zuwächse, und der Graph ist gekrümmt statt gerade.</p></div>
+
+<h3>Aufgabe 4</h3>
+<table class="compact"><tr><th>Bereich</th><th>Definitionsbereich / Regel</th><th>Begründung</th></tr><tr><td>mathematisch</td><td><span class="formula">D=ℝ</span></td><td>Ein Polynom kann für jede reelle Zahl berechnet werden.</td></tr><tr><td>ökonomisch plausibel</td><td><span class="formula">x≥0</span></td><td>Negative Paketmengen sind nicht sinnvoll.</td></tr><tr><td>automatisch freigegeben</td><td><span class="formula">0≤x≤4</span></td><td>Nur 0–400 Pakete sind durch die Pilotdaten abgesichert; der Pilotbereich ist enger als die Kapazität bis 450 Pakete.</td></tr></table>
+<div class="card solution"><ul><li><b>x&lt;0:</b> Eingabe sperren und Fehlermeldung „Paketmenge darf nicht negativ sein“.</li><li><b>0≤x≤4:</b> Kosten mit B berechnen und als Modellschätzung ausgeben.</li><li><b>4&lt;x≤4,5:</b> keine automatische Freigabe; an manuelle Controlling-Prüfung weiterleiten.</li><li><b>x&gt;4,5:</b> Eingabe wegen technischer Kapazitätsüberschreitung sperren.</li></ul></div>
+
+<h3>Aufgabe 5 · Ausgefülltes Modellklassen- und Freigabeprotokoll</h3>
+<div class="release-card"><div class="release-head"><div><b>MK-07 · Go-live-Protokoll</b><br><span class="small">European Logistics Controlling</span></div><span class="decision-stamp">Begrenzt freigegeben</span></div><table class="compact"><tr><th>1. Ausgewähltes Modell</th><td><span class="formula">B(x)=x²+2x+12</span></td></tr><tr><th>2. Modellklasse</th><td>Ganzrationale Funktion zweiten Grades; Leitkoeffizient 1; quadratische Grundform <span class="formula">ax²+bx+c</span>.</td></tr><tr><th>3. Datenbeleg</th><td>B liefert für <span class="formula">x=0,1,2,3,4</span> genau die Pilotwerte 12, 15, 20, 27 und 36. A und C treffen nur einzelne Punkte.</td></tr><tr><th>4. Beispielausgabe</th><td>250 Pakete: <span class="formula">B(2,5)=23,25</span>, also geschätzte Tageskosten von 2.325 €.</td></tr><tr><th>5. Freigabebereich</th><td><span class="formula">0≤x≤4</span>, entsprechend 0–400 Pakete.</td></tr><tr><th>6. Automatische Prüfregel</th><td>Negative Eingaben sperren; im Pilotbereich B berechnen; 410–450 Pakete manuell prüfen; oberhalb 450 Paketen sperren.</td></tr><tr><th>7. Warnhinweis / Modellgrenze</th><td>„Modellschätzung auf Basis der Pilotdaten 0–400 Pakete; keine automatische Extrapolation.“</td></tr><tr><th>8. Entscheidung und Begründung</th><td>Begrenzte Freigabe. B ist eine eindeutige ganzrationale Funktion zweiten Grades und stimmt in allen fünf Prüfwerten mit den Pilotdaten überein. Der gekrümmte Verlauf bildet die stärker werdenden Zusatzkosten bei hoher Auslastung ab. Die Freigabe gilt nur für 0–400 Pakete, weil außerhalb dieses Bereichs keine Pilotdaten vorliegen. Die technische Kapazität von 450 Paketen erweitert nicht automatisch die Modellgültigkeit.</td></tr></table></div>
+
+<h3>Erweiterung</h3>
+<div class="card solution"><p><span class="formula">E(x)=0·x³+2x²+0·x+7=2x²+7</span>. Der x³-Term trägt wegen des Koeffizienten 0 nichts bei. E hat daher Grad 2 und den Leitkoeffizienten 2. Allgemeine Regel: Der Grad ist der höchste Exponent, dessen Koeffizient nicht 0 ist.</p></div>
+</section>
+
+<section class="teacher-only" id="sicherung">
+<h2>4. Ergebnissicherung / Tafelbild</h2>
+<div class="board"><h3>Ganzrationale Funktionen: Modellklasse erkennen und prüfen</h3><p><b>Allgemeine Form:</b> <span class="formula">f(x)=aₙxⁿ+…+a₁x+a₀</span> mit <span class="formula">aₙ≠0</span>.</p><p><b>Grad:</b> höchster Exponent mit nicht-null Koeffizient.</p><p><b>Leitkoeffizient:</b> Koeffizient vor der höchsten Potenz.</p><p><b>Grundformen:</b> Grad 1 linear → Gerade; Grad 2 quadratisch → Parabel; Grad 3 kubisch → kubischer, häufig S-förmiger Verlauf.</p><p><b>Prüfsequenz:</b> Eindeutigkeit → Polynomklasse → Tabelle / Graph / Term abgleichen → Funktionswert deuten → sachlichen Bereich begrenzen → Freigabe entscheiden.</p><p><b>Merksatz:</b> Gleiche Ausgabe an einem Punkt bedeutet nicht dasselbe Modell.</p></div>
+
+<h3>Differenzierung und sprachliche Unterstützung</h3>
+<div class="grid2"><div class="card"><h4>Fachliche Differenzierung</h4><ul><li><b>Basis:</b> Begriffskasten, vorstrukturierte Tabellen, Graphstile, Einheitenhinweise und Freigabekarte.</li><li><b>Standard:</b> vollständige Klassifikation, Mehrpunktprüfung, Darstellungsabgleich, Funktionswert- und Bereichsdeutung.</li><li><b>Erweiterung:</b> Nullkoeffizienten und reduzierte Polynome; allgemeine Gradregel formulieren.</li><li>GeoGebra optional erst nach der eigenen Zuordnung zur Kontrolle der drei Graphen.</li></ul></div><div class="card"><h4>Sprachliche Unterstützung</h4><ul><li>Begriffspaare: Funktion ↔ Nicht-Funktion; ganzrational ↔ nicht ganzrational; Grad ↔ Leitkoeffizient; berechenbar ↔ freigegeben.</li><li>Satzstarter direkt in Aufgaben 1, 3 und 5.</li><li>Begründungsstruktur: Modellklasse – Datenbeleg – Kontextdeutung – Bereich – Entscheidung.</li><li>Einheiten konsequent: x in Hunderten Paketen; Funktionswert in Hunderten Euro.</li></ul></div></div>
+
+<h3>Typische Fehler und mögliche Reaktionen</h3>
+<table><tr><th>Typischer Fehler</th><th>Mögliche Lehrkraftreaktion</th></tr><tr><td>Der Grad wird mit der Anzahl der Summanden verwechselt.</td><td>Alle Exponenten markieren und nur den höchsten Exponenten mit nicht-null Koeffizient auswählen lassen.</td></tr><tr><td>D wird wegen der eindeutigen Ausgabe als ganzrational bezeichnet.</td><td>Funktion und Polynomklasse in zwei getrennten Prüffragen bearbeiten; den variablen Nenner markieren.</td></tr><tr><td>Die manuelle Mehrfachregel wird als Funktion akzeptiert.</td><td>Für <span class="formula">x=3</span> alle möglichen Ausgaben aufschreiben und die Eindeutigkeitsbedingung anwenden.</td></tr><tr><td>Alle drei Kandidaten gelten wegen <span class="formula">A(3)=B(3)=C(3)</span> als gleich.</td><td>Zwei weitere Eingaben verbindlich testen und die Graphen vergleichen.</td></tr><tr><td>Jede gekrümmte Linie wird quadratisch genannt.</td><td>Termgrad, Tabellenwerte und Graphform gemeinsam prüfen; C als Gegenbeispiel nutzen.</td></tr><tr><td><span class="formula">B(2,5)</span> wird als 23,25 € gedeutet.</td><td>Ausgabeeinheit „100 €“ neben jeden Rechenschritt schreiben und zurückskalieren.</td></tr><tr><td>Als Definitionsbereich wird nur <span class="formula">ℝ</span> angegeben.</td><td>Mathematischen, ökonomischen und betrieblichen Bereich in getrennte Zeilen eintragen.</td></tr><tr><td>450 Pakete werden automatisch freigegeben, weil die Anlage sie technisch schafft.</td><td>Datenbereich und Kapazitätsgrenze als zwei verschiedene Belege gegenüberstellen.</td></tr><tr><td>Die Freigabe wird ohne Modellwarnung formuliert.</td><td>Die Aussage „keine Extrapolation außerhalb 0–400 Pakete“ als Pflichtfeld nachfordern.</td></tr></table>
+
+<h3>Übergang zur separaten Übungsstunde</h3>
+<p>Die separate Übungsstunde kann weitere ganzrationale Terme nach Grad und Leitkoeffizient klassifizieren, fehlende Potenzen mit Koeffizient 0 erkennen sowie lineare, quadratische und kubische Tabellen- und Graphverläufe zuordnen. Danach folgt im Halbjahresskript Woche 8 mit Achsenschnittpunkten, Nullstellen und faktorisierter Form.</p>
+</section>
+
+<section class="teacher-only" id="quellen">
+<h2>5. Quellen- und Kennzeichnungsverzeichnis</h2>
+<ul class="source-list"><li><b>Aus dem Klassenprofil übernommen:</b> Klasse 11BC, Bildungsgang D28, Fachbereich Wirtschaft und Verwaltung, international-kaufmännische Kontexte, heterogene Lerngruppe, Standardausstattung und Ausschluss generativer KI für Lernende.</li><li><b>Aus dem Halbjahresskript übernommen:</b> Kapitel „Ganzrationale Funktionen“, Woche 7 „Von linear zu quadratisch und höhergradig“; ganzrationale Funktionen erkennen, Grad, Leitkoeffizient und Grundform beschreiben sowie lineare, quadratische und kubische Verläufe unterscheiden.</li><li><b>Aus den vorangegangenen Wochen weitergeführt beziehungsweise abgeleitet:</b> Wertepaare, Datenqualität, Funktionsbegriff, Eingabe/Ausgabe, Funktionswerte, Definitionsbereich, Darstellungswechsel, lineare Regression, Modellgrenzen und betriebliche Freigabelogik. Technisch fortgeführt wurden Layout, Farbkonzept, Karten-, Tabellen-, Ansichts-, Hilfe- und Drucklogik.</li><li><b>Aus der älteren didaktischen Jahresplanung abgeleitet:</b> Themenfeld „Ganzrationale Funktionen ersten, zweiten und höheren Grades“ und der übergeordnete CAS-Bezug. Angaben zu SH, D23 oder anderen Bildungsgängen wurden nicht übernommen.</li><li><b>Aus einer Übung abgeleitet:</b> Die Skriptaufgaben zur Bestimmung von Grad und Leitkoeffizient sowie zur wirtschaftlichen Begründung nichtlinearer Kosten wurden in eine betriebliche Modellprüfung überführt.</li><li><b>Extern recherchiert:</b> GeoGebra Manual, „Slider Tool“ und „Slider Command“ (GeoGebra, Abruf 22.07.2026): didaktische Absicherung lokaler Schieberegler mit festgelegtem Intervall und Inkrement. GeoGebra Manual, „Polynomial Command“ und „Degree Command“ (Abruf 22.07.2026): fachliche Absicherung der Darstellung von Polynomen sowie der Bestimmung ihres Grades. OpenStax, „College Algebra 2e“, Abschnitt 5.2 „Power Functions and Polynomial Functions“ (Abruf 22.07.2026): fachliche Absicherung der Begriffe Grad, führender Term und Leitkoeffizient. Keine externen Daten, Medien oder Programmressourcen wurden übernommen.</li><li><b>Didaktisch ergänzt:</b> Go-live-Board, Ein-Punkt-Fehltest, Mehrpunktprüfung, Modellklassen-Vorprüfbogen, aufgabennahe Hilfen, Produktkriterien, Fehlerdiagnosen und Freigabeprotokoll.</li><li><b>Didaktisch konstruierte Daten:</b> EuroTrade Distribution GmbH, Abteilung, Kostenmodul MK-07, Pilotdaten, Kandidatenterme, Kapazitätsgrenze und alle betrieblichen Bedingungen.</li><li><b>Technische Kennzeichnung:</b> Einzelne UTF-8-HTML-Datei mit restriktiver CSP, vollständig eingebettetem CSS und JavaScript, Inline-SVG und lokaler Unicode/HTML-Formeldarstellung. Keine externe oder benachbarte Ressource, kein Online-Fallback, kein anklickbarer externer Link und keine Browserspeicher-Abhängigkeit. Die drei Simulationen verwenden ausschließlich lokales JavaScript und dynamisch erzeugte Inline-SVG-Elemente; es werden keine GeoGebra-Applets oder Netzressourcen eingebettet.</li></ul>
+</section>
+</main>
+
+<script id="week7-controls-and-simulations">
+(function(){
+'use strict';
+var openedForPrint=[];
+var views=['all','student','simulations','teacher','solution'];
+var hintModes=['hide','show'];
+function setView(view){
+  if(views.indexOf(view)===-1){view='all';}
+  document.body.dataset.view=view;
+  document.querySelectorAll('.viewbtn').forEach(function(button){var active=button.dataset.target===view;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));});
+}
+function setPrintHints(mode){
+  if(hintModes.indexOf(mode)===-1){mode='hide';}
+  document.body.dataset.printHints=mode;
+  document.querySelectorAll('.hintprintbtn').forEach(function(button){var active=button.dataset.hintTarget===mode;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));});
+}
+function preparePrintHints(){openedForPrint=[];if(document.body.dataset.view==='student'&&document.body.dataset.printHints==='show'){document.querySelectorAll('.student-material .inline-hints details').forEach(function(detail){openedForPrint.push({element:detail,wasOpen:detail.open});detail.open=true;});}}
+function restorePrintHints(){openedForPrint.forEach(function(item){item.element.open=item.wasOpen;});openedForPrint=[];}
+document.querySelectorAll('.viewbtn').forEach(function(button){button.addEventListener('click',function(){setView(button.dataset.target);});});
+document.querySelectorAll('.hintprintbtn').forEach(function(button){button.addEventListener('click',function(){setPrintHints(button.dataset.hintTarget);});});
+document.getElementById('print-document').addEventListener('click',function(){preparePrintHints();window.print();});
+window.addEventListener('beforeprint',preparePrintHints);window.addEventListener('afterprint',restorePrintHints);
+document.querySelectorAll('[data-sim-target]').forEach(function(button){button.addEventListener('click',function(){setView('simulations');var target=document.getElementById(button.dataset.simTarget);if(target){window.requestAnimationFrame(function(){target.scrollIntoView({behavior:'smooth',block:'start'});});}});});
+
+var NS='http://www.w3.org/2000/svg';
+function de(v,d){d=(d===undefined?1:d);var n=Math.abs(v)<Math.pow(10,-d)/2?0:v;return n.toFixed(d).replace('.',',');}
+function nearly(a,b,tol){return Math.abs(a-b)<=(tol===undefined?0.011:tol);}
+function setFeedback(id,msg,kind){var el=document.getElementById(id);el.className='sim-feedback'+(kind?' '+kind:'');el.textContent=msg;}
+function svgEl(name,attrs,text){var el=document.createElementNS(NS,name);Object.keys(attrs||{}).forEach(function(k){el.setAttribute(k,String(attrs[k]));});if(text!==undefined){el.textContent=text;}return el;}
+function clearSvg(svg,title,desc){while(svg.firstChild){svg.removeChild(svg.firstChild);}svg.appendChild(svgEl('title',{},title));svg.appendChild(svgEl('desc',{},desc));}
+function polyValue(coeff,x){return coeff[0]*x*x*x+coeff[1]*x*x+coeff[2]*x+coeff[3];}
+function A(x){return 5*x+12;}function B(x){return x*x+2*x+12;}function C(x){return x*x*x-3*x*x+5*x+12;}
+var pilots=[12,15,20,27,36];
+function candidateValue(key,x){return key==='A'?A(x):key==='B'?B(x):C(x);}
+function pathFor(fn,xMin,xMax,step,X,Y,yMin,yMax){var d='',started=false;for(var x=xMin;x<=xMax+1e-9;x+=step){var y=fn(x);if(!Number.isFinite(y)||y<yMin-5*(yMax-yMin)||y>yMax+5*(yMax-yMin)){started=false;continue;}var cmd=(started?'L':'M')+X(x).toFixed(1)+' '+Y(y).toFixed(1);d+=cmd+' ';started=true;}return d.trim();}
+function drawAxes(svg,opts){var W=opts.W||780,H=opts.H||400,left=68,right=W-28,top=25,bottom=H-55,xMin=opts.xMin,xMax=opts.xMax,yMin=opts.yMin,yMax=opts.yMax;function X(x){return left+(x-xMin)/(xMax-xMin)*(right-left);}function Y(y){return bottom-(y-yMin)/(yMax-yMin)*(bottom-top);}clearSvg(svg,opts.title,opts.desc);svg.appendChild(svgEl('rect',{x:0,y:0,width:W,height:H,fill:'#fff'}));(opts.xTicks||[]).forEach(function(x){svg.appendChild(svgEl('line',{x1:X(x),y1:top,x2:X(x),y2:bottom,stroke:'#edf1f4'}));svg.appendChild(svgEl('text',{x:X(x),y:bottom+21,'text-anchor':'middle','font-size':'12',fill:'#526079'},de(x,0)));});(opts.yTicks||[]).forEach(function(y){svg.appendChild(svgEl('line',{x1:left,y1:Y(y),x2:right,y2:Y(y),stroke:'#dce4ea'}));svg.appendChild(svgEl('text',{x:left-9,y:Y(y)+4,'text-anchor':'end','font-size':'12',fill:'#526079'},de(y,0)));});if(yMin<=0&&yMax>=0){svg.appendChild(svgEl('line',{x1:left,y1:Y(0),x2:right,y2:Y(0),stroke:'#263746','stroke-width':'2'}));}if(xMin<=0&&xMax>=0){svg.appendChild(svgEl('line',{x1:X(0),y1:top,x2:X(0),y2:bottom,stroke:'#263746','stroke-width':'2'}));}svg.appendChild(svgEl('text',{x:(left+right)/2,y:H-12,'text-anchor':'middle','font-size':'13','font-weight':'700',fill:'#263746'},opts.xLabel||'x'));svg.appendChild(svgEl('text',{x:17,y:(top+bottom)/2,transform:'rotate(-90 17 '+((top+bottom)/2)+')','text-anchor':'middle','font-size':'13','font-weight':'700',fill:'#263746'},opts.yLabel||'f(x)'));return{X:X,Y:Y,left:left,right:right,top:top,bottom:bottom};}
+
+// 1. Degree laboratory
+var degreeData={
+ A:{fun:true,poly:true,degree:1,lead:5,term:'A(x) = 5x + 12',fn:A},
+ B:{fun:true,poly:true,degree:2,lead:1,term:'B(x) = x² + 2x + 12',fn:B},
+ C:{fun:true,poly:true,degree:3,lead:1,term:'C(x) = x³ − 3x² + 5x + 12',fn:C},
+ D:{fun:true,poly:false,degree:null,lead:null,term:'D(x) = 12 + 4/x',fn:function(x){return 12+4/x;}},
+ E:{fun:true,poly:true,degree:2,lead:2,term:'E(x) = 0x³ + 2x² + 0x + 7',fn:function(x){return 2*x*x+7;}},
+ M:{fun:false,poly:false,degree:null,lead:null,term:'x = 3 erhält 25, 27 oder 29',fn:null}
+};
+var degreeReveal=false;
+function lockDegree(){degreeReveal=false;['degreeFunctionStat','degreePolyStat','degreeDegreeStat','degreeLeadStat'].forEach(function(id){var el=document.getElementById(id);el.textContent='noch nicht freigegeben';el.className='sim-lock';});drawDegreeGraph();}
+function drawDegreeGraph(){var svg=document.getElementById('degreeGraph'),key=document.getElementById('degreeCandidate').value,d=degreeData[key],g=drawAxes(svg,{W:780,H:400,xMin:-2,xMax:5,yMin:-10,yMax:55,xTicks:[-2,-1,0,1,2,3,4,5],yTicks:[0,10,20,30,40,50],title:'Graph der ausgewählten Regel',desc:'Graph erscheint nach korrekter Klassifikation.',xLabel:'x',yLabel:'Ausgabe'});if(!degreeReveal){svg.appendChild(svgEl('text',{x:390,y:190,'text-anchor':'middle','font-size':'16','font-weight':'700',fill:'#6b7280'},'Graph nach passender Klassifikation'));return;}if(key==='M'){svg.appendChild(svgEl('text',{x:390,y:170,'text-anchor':'middle','font-size':'17','font-weight':'700',fill:'#b74343'},'Keine eindeutige Funktion'));svg.appendChild(svgEl('text',{x:390,y:205,'text-anchor':'middle','font-size':'14',fill:'#526079'},'Derselben Eingabe x = 3 sind mehrere Ausgaben zugeordnet.'));return;}if(key==='D'){var p1=pathFor(d.fn,-2,-0.08,.03,g.X,g.Y,-10,55),p2=pathFor(d.fn,.08,5,.03,g.X,g.Y,-10,55);svg.appendChild(svgEl('path',{d:p1,fill:'none',stroke:'#0b6b8a','stroke-width':'4'}));svg.appendChild(svgEl('path',{d:p2,fill:'none',stroke:'#0b6b8a','stroke-width':'4'}));svg.appendChild(svgEl('line',{x1:g.X(0),y1:g.top,x2:g.X(0),y2:g.bottom,stroke:'#b74343','stroke-dasharray':'6 5'}));return;}var path=pathFor(d.fn,-2,5,.025,g.X,g.Y,-10,55);svg.appendChild(svgEl('path',{d:path,fill:'none',stroke:'#0b6b8a','stroke-width':'4'}));}
+document.getElementById('degreeCandidate').addEventListener('change',function(){document.getElementById('degreeFunction').value='';document.getElementById('degreePolynomial').value='';document.getElementById('degreeOwn').value='';document.getElementById('degreeLead').value='';setFeedback('degreeFeedback','Neue Regel: Prüfe zuerst Eindeutigkeit, dann die Exponenten.','');lockDegree();});
+document.getElementById('degreeCheck').addEventListener('click',function(){var key=document.getElementById('degreeCandidate').value,d=degreeData[key],fun=document.getElementById('degreeFunction').value,poly=document.getElementById('degreePolynomial').value,deg=document.getElementById('degreeOwn').value,lead=document.getElementById('degreeLead').value;var okFun=fun===(d.fun?'yes':'no'),okPoly=poly===(d.poly?'yes':'no');if(!fun||!poly){setFeedback('degreeFeedback','Wähle zuerst beide Ja/Nein-Angaben.','warn');return;}if(!okFun){setFeedback('degreeFeedback','Die Funktionseigenschaft passt noch nicht. Prüfe, ob jede zulässige Eingabe genau eine Ausgabe erhält.','bad');return;}if(!okPoly){setFeedback('degreeFeedback','Die Polynomklasse passt noch nicht. Prüfe, ob nur nichtnegative ganzzahlige Exponenten vorkommen und ob die Regel überhaupt eine Funktion ist.','bad');return;}if(d.poly){if(deg===''||Number(deg)!==d.degree){setFeedback('degreeFeedback','Der Grad passt noch nicht. Streiche Terme mit Koeffizient 0 und suche dann die höchste verbleibende Potenz.','bad');return;}if(lead===''||!nearly(Number(lead),d.lead)){setFeedback('degreeFeedback','Der Leitkoeffizient passt noch nicht. Nimm den Koeffizienten der höchsten tatsächlich vorkommenden Potenz.','bad');return;}}degreeReveal=true;var stat=function(id,text){var el=document.getElementById(id);el.textContent=text;el.className='';};stat('degreeFunctionStat',d.fun?'ja':'nein');stat('degreePolyStat',d.poly?'ja':'nein');stat('degreeDegreeStat',d.poly?String(d.degree):'nicht definiert');stat('degreeLeadStat',d.poly?de(d.lead,0):'nicht definiert');setFeedback('degreeFeedback','Passend klassifiziert. Vergleiche nun Termprofil und Graph, ohne daraus schon eine betriebliche Modellfreigabe abzuleiten.','ok');drawDegreeGraph();});
+document.getElementById('degreeReset').addEventListener('click',function(){document.getElementById('degreeFunction').value='';document.getElementById('degreePolynomial').value='';document.getElementById('degreeOwn').value='';document.getElementById('degreeLead').value='';setFeedback('degreeFeedback','Prüfe zuerst Eindeutigkeit, dann die Exponenten und erst danach Grad und Leitkoeffizient.','');lockDegree();});
+
+var coefIds=['coefA3','coefA2','coefA1','coefA0'];
+function coeffDegree(c){for(var i=0;i<4;i++){if(c[i]!==0){return 3-i;}}return null;}
+function coeffLead(c){for(var i=0;i<4;i++){if(c[i]!==0){return c[i];}}return null;}
+function signedTerm(a,power,first){if(a===0){return '';}var abs=Math.abs(a),part=(abs===1&&power>0?'':String(abs))+(power===3?'x³':power===2?'x²':power===1?'x':'');if(power===0){part=String(abs);}if(first){return(a<0?'−':'')+part;}return(a<0?' − ':' + ')+part;}
+function updateCoefficients(){var c=coefIds.map(function(id){return Number(document.getElementById(id).value);});coefIds.forEach(function(id,i){document.getElementById(id+'Out').textContent=String(c[i]);});var powers=[3,2,1,0],term='',first=true;c.forEach(function(a,i){var s=signedTerm(a,powers[i],first);if(s){term+=s;first=false;}});if(!term){term='0';}document.getElementById('coefTerm').textContent='F(x) = '+term;var cd=coeffDegree(c),cl=coeffLead(c);document.getElementById('coefDegree').textContent=cd===null?'nicht definiert':String(cd);document.getElementById('coefLead').textContent=cl===null?'kein Leitkoeffizient':String(cl);var svg=document.getElementById('coefGraph'),g=drawAxes(svg,{W:780,H:400,xMin:-3,xMax:3,yMin:-35,yMax:35,xTicks:[-3,-2,-1,0,1,2,3],yTicks:[-30,-20,-10,0,10,20,30],title:'Polynom mit veränderbaren Koeffizienten',desc:'Graph des Polynoms für die aktuellen Schieberegler.',xLabel:'x',yLabel:'F(x)'});var path=pathFor(function(x){return polyValue(c,x);},-3,3,.02,g.X,g.Y,-35,35);svg.appendChild(svgEl('path',{d:path,fill:'none',stroke:'#7c3aed','stroke-width':'4'}));}
+coefIds.forEach(function(id){document.getElementById(id).addEventListener('input',updateCoefficients);});
+
+// 2. Multi-point laboratory
+var compareReveal=false;
+function compareCurrent(){var key=document.getElementById('compareCandidate').value,x=Number(document.getElementById('compareX').value);return{key:key,x:x,y:candidateValue(key,x)};}
+function drawCompareGraph(){var svg=document.getElementById('compareGraph'),g=drawAxes(svg,{W:780,H:430,xMin:0,xMax:4,yMin:8,yMax:52,xTicks:[0,1,2,3,4],yTicks:[10,20,30,40,50],title:'Kandidatengraph und Pilotdaten',desc:'Pilotpunkte und ausgewählte Kandidatenkurven.',xLabel:'x in 100 Paketen',yLabel:'Kosten in 100 €'});pilots.forEach(function(y,x){svg.appendChild(svgEl('circle',{cx:g.X(x),cy:g.Y(y),r:'6',fill:'#b3263e',stroke:'#fff','stroke-width':'2'}));svg.appendChild(svgEl('text',{x:g.X(x)+7,y:g.Y(y)-8,'font-size':'11',fill:'#8d1e32'},'P'+x));});if(!compareReveal){svg.appendChild(svgEl('text',{x:390,y:195,'text-anchor':'middle','font-size':'16','font-weight':'700',fill:'#6b7280'},'Kandidatengraph nach eigener Wertkontrolle'));return;}var keys=document.getElementById('compareAll').checked?['A','B','C']:[document.getElementById('compareCandidate').value],colors={A:'#0b6b8a',B:'#2f8b56',C:'#7c3aed'};keys.forEach(function(k){var path=pathFor(function(x){return candidateValue(k,x);},0,4,.02,g.X,g.Y,8,52);svg.appendChild(svgEl('path',{d:path,fill:'none',stroke:colors[k],'stroke-width':k===document.getElementById('compareCandidate').value?'4':'2.5','stroke-dasharray':k==='A'?'none':k==='B'?'8 4':'3 4'}));svg.appendChild(svgEl('text',{x:g.X(3.75),y:g.Y(candidateValue(k,3.75))-7,'font-size':'12','font-weight':'700',fill:colors[k]},k));});var cur=compareCurrent();svg.appendChild(svgEl('circle',{cx:g.X(cur.x),cy:g.Y(cur.y),r:'8',fill:'#d69a00',stroke:'#fff','stroke-width':'2'}));}
+function updateCompareLabels(){var x=Number(document.getElementById('compareX').value);document.getElementById('compareXOut').textContent=de(x,1);document.getElementById('comparePieces').textContent=de(x*100,0);}
+function lockCompare(){compareReveal=false;document.getElementById('compareChanges').checked=false;document.getElementById('compareChanges').disabled=true;document.getElementById('changePanel').hidden=true;['compareInputStat','compareValueStat','compareEuroStat','comparePilotStat'].forEach(function(id){var el=document.getElementById(id);el.textContent='noch nicht freigegeben';el.className='sim-lock';});drawCompareGraph();}
+function updateChangePanel(){var key=document.getElementById('compareCandidate').value,vals=[];for(var x=0;x<=4;x++){vals.push(candidateValue(key,x));document.getElementById('v'+x).textContent=de(vals[x],2);}for(var i=1;i<=4;i++){document.getElementById('d'+i).textContent=(vals[i]-vals[i-1]>=0?'+':'')+de(vals[i]-vals[i-1],2);}var ds=[];for(var j=1;j<=4;j++){ds.push(vals[j]-vals[j-1]);}var constant=ds.every(function(v){return nearly(v,ds[0]);});document.getElementById('changeInterpretation').textContent=constant?'Die Änderungen bei gleichen x-Schritten sind konstant: Der Verlauf ist linear.':'Die Änderungen bei gleichen x-Schritten sind nicht konstant: Der Verlauf ist nicht linear und der Graph ist gekrümmt.';document.getElementById('changePanel').hidden=!document.getElementById('compareChanges').checked;}
+document.getElementById('compareCandidate').addEventListener('change',function(){document.getElementById('compareOwn').value='';setFeedback('compareFeedback','Neuer Kandidat: Setze den Testwert zuerst selbst ein.','');lockCompare();});
+document.getElementById('compareX').addEventListener('input',function(){updateCompareLabels();document.getElementById('compareOwn').value='';setFeedback('compareFeedback','Neuer Testwert: eigene Rechnung vor der grafischen Kontrolle.','');lockCompare();});
+document.getElementById('compareCheck').addEventListener('click',function(){var cur=compareCurrent(),own=Number(document.getElementById('compareOwn').value);if(!Number.isFinite(own)){setFeedback('compareFeedback','Trage zuerst deinen Funktionswert in 100 € ein.','warn');return;}if(!nearly(own,cur.y,.011)){setFeedback('compareFeedback','Noch nicht passend. Setze x mit Klammern in alle Potenzen ein und rechne Potenzen vor Multiplikationen.','bad');return;}compareReveal=true;document.getElementById('compareChanges').disabled=false;var stat=function(id,text){var el=document.getElementById(id);el.textContent=text;el.className='';};stat('compareInputStat',de(cur.x,1)+' = '+de(cur.x*100,0)+' Pakete');stat('compareValueStat',de(cur.y,2)+' in 100 €');stat('compareEuroStat',de(cur.y*100,0)+' €');var nearest=Math.round(cur.x),pilot=(nearly(cur.x,nearest)&&nearest>=0&&nearest<=4)?pilots[nearest]:null;stat('comparePilotStat',pilot===null?'kein tabellierter Pilotwert':nearly(cur.y,pilot)?'stimmt am Pilotpunkt überein':'weicht am Pilotpunkt um '+de(cur.y-pilot,2)+' ab');setFeedback('compareFeedback','Richtig gerechnet. Nutze nun Graph und Änderungsmuster zur Kontrolle mehrerer Punkte.','ok');drawCompareGraph();updateChangePanel();});
+document.getElementById('compareAll').addEventListener('change',drawCompareGraph);document.getElementById('compareChanges').addEventListener('change',updateChangePanel);
+document.getElementById('compareReset').addEventListener('click',function(){document.getElementById('compareOwn').value='';document.getElementById('compareAll').checked=false;setFeedback('compareFeedback','Setze den ausgewählten x-Wert zuerst selbst in den Term ein. Beachte beide Skalierungen.','');lockCompare();});
+document.getElementById('fitCheck').addEventListener('click',function(){var choice=document.getElementById('fitChoice').value;if(!choice){setFeedback('fitFeedback','Wähle zuerst A, B oder C.','warn');return;}if(choice==='B'){setFeedback('fitFeedback','Passend: B stimmt an allen fünf Pilotpunkten überein. Begründe dies im Arbeitsblatt mit mehreren Tabellenwerten und der Graphform.','ok');}else{setFeedback('fitFeedback','Ein Treffer bei x = 3 reicht nicht. Vergleiche mindestens x = 1, x = 2 und x = 4 mit den Pilotdaten.','bad');}});
+
+// 3. Release laboratory
+var releaseX=document.getElementById('releaseX');
+function setCondition(id,ok){var el=document.getElementById(id);el.classList.remove('ok','no');el.classList.add(ok?'ok':'no');}
+function releaseReaction(x){if(x<0){return 'Eingabe ablehnen: negative Menge';}if(x<=4){return 'automatische Modellschätzung';}if(x<=4.5){return 'manuelle Prüfung außerhalb der Pilotdaten';}return 'sperren: Kapazität überschritten';}
+function drawReleaseGraph(x){var svg=document.getElementById('releaseGraph'),W=780,H=350,left=140,right=748,top=50,row=58;clearSvg(svg,'Bereichsebenen des Kostenmodells','Zahlenstrahlen für ökonomischen, Pilot-, Kapazitäts- und automatischen Bereich.');function X(v){return left+(v+0.5)/6*(right-left);}var rows=[{label:'ökonomisch: x ≥ 0',a:0,b:5.5,color:'#5b8f6a'},{label:'Pilotdaten: 0 ≤ x ≤ 4',a:0,b:4,color:'#0b6b8a'},{label:'Kapazität: x ≤ 4,5',a:-0.5,b:4.5,color:'#7c3aed'},{label:'automatisch: 0 ≤ x ≤ 4',a:0,b:4,color:'#2f8b56'}];for(var tick=0;tick<=5;tick++){svg.appendChild(svgEl('line',{x1:X(tick),y1:top-17,x2:X(tick),y2:top+row*rows.length-10,stroke:'#edf1f4'}));svg.appendChild(svgEl('text',{x:X(tick),y:top-24,'text-anchor':'middle','font-size':'11',fill:'#526079'},String(tick)));}rows.forEach(function(r,i){var y=top+i*row;svg.appendChild(svgEl('text',{x:left-12,y:y+5,'text-anchor':'end','font-size':'12','font-weight':'700',fill:'#263746'},r.label));svg.appendChild(svgEl('line',{x1:left,y1:y,x2:right,y2:y,stroke:'#b8c3cc','stroke-width':'2'}));svg.appendChild(svgEl('line',{x1:X(r.a),y1:y,x2:X(r.b),y2:y,stroke:r.color,'stroke-width':'10','stroke-linecap':'round'}));svg.appendChild(svgEl('circle',{cx:X(x),cy:y,r:'7',fill:(x>=r.a&&x<=r.b)?'#2f8b56':'#b74343',stroke:'#fff','stroke-width':'2'}));});svg.appendChild(svgEl('text',{x:(left+right)/2,y:H-15,'text-anchor':'middle','font-size':'13','font-weight':'700',fill:'#263746'},'x in Hunderten Paketen · Testwert '+de(x,1)));}
+function updateRelease(){var x=Number(releaseX.value),cost=B(x),economic=x>=0,pilot=x>=0&&x<=4,capacity=x<=4.5,increment=nearly(x*10,Math.round(x*10),.0001),auto=economic&&pilot&&capacity&&increment;document.getElementById('releaseXOut').textContent=de(x,1);document.getElementById('releasePieces').textContent=de(x*100,0);document.getElementById('releaseCost').textContent=de(cost,2)+' · 100 € = '+de(cost*100,0)+' €';document.getElementById('releaseMath').textContent='für diesen reellen Wert berechenbar';document.getElementById('releaseAuto').textContent=auto?'ja':'nein';document.getElementById('releaseReaction').textContent=releaseReaction(x);setCondition('condMath',true);setCondition('condEconomic',economic);setCondition('condPilot7',pilot);setCondition('condCapacity7',capacity);setCondition('condIncrement',increment);setCondition('condAuto7',auto);drawReleaseGraph(x);document.getElementById('releaseProtoInput').textContent='Eingabe: '+de(x*100,0)+' Pakete';document.getElementById('releaseProtoOutput').textContent='Garantierte Kosten: '+de(cost*100,0)+' €';}
+releaseX.addEventListener('input',updateRelease);document.querySelectorAll('[data-release-x]').forEach(function(btn){btn.addEventListener('click',function(){releaseX.value=btn.dataset.releaseX;updateRelease();});});
+document.getElementById('ruleTest').addEventListener('click',function(){var min=Number(document.getElementById('ruleMin').value),max=Number(document.getElementById('ruleMax').value),buffer=document.getElementById('ruleBuffer').value,above=document.getElementById('ruleAbove').value,word=document.getElementById('ruleWording').value,x=Number(releaseX.value),inside=Number.isFinite(min)&&Number.isFinite(max)&&x>=min&&x<=max; if(!Number.isFinite(min)||!Number.isFinite(max)||min>max){setFeedback('ruleFeedback','Die Automatikgrenzen sind nicht sinnvoll geordnet.','bad');return;}document.getElementById('releaseConfigInput').textContent='Eingabe: '+de(x*100,0)+' Pakete';var label=word==='estimate'?'Modellschätzung: ungefähr ':word==='guarantee'?'Garantierte Kosten: ':'Kosten: ';if(x<0){document.getElementById('releaseConfigOutput').textContent='Ungültige Eingabe';document.getElementById('releaseConfigNote').textContent='Negative Paketmenge wird abgelehnt.';}else if(inside){document.getElementById('releaseConfigOutput').textContent=label+de(B(x)*100,0)+' €';document.getElementById('releaseConfigNote').textContent='Eingabe liegt im eingestellten Automatikbereich.';}else if(x<=4.5){if(buffer==='manual'){document.getElementById('releaseConfigOutput').textContent='Keine automatische Ausgabe';document.getElementById('releaseConfigNote').textContent='Manuelle Prüfung: außerhalb der Pilotdaten, aber innerhalb der Kapazität.';}else if(buffer==='block'){document.getElementById('releaseConfigOutput').textContent='Eingabe gesperrt';document.getElementById('releaseConfigNote').textContent='Pufferbereich wird vollständig blockiert.';}else{document.getElementById('releaseConfigOutput').textContent=label+de(B(x)*100,0)+' €';document.getElementById('releaseConfigNote').textContent='Außerhalb der Pilotdaten wird trotzdem automatisch ausgegeben.';}}else{if(above==='block'){document.getElementById('releaseConfigOutput').textContent='Kapazitätsfehler';document.getElementById('releaseConfigNote').textContent='Eingabe über 450 Paketen wird gesperrt.';}else if(above==='manual'){document.getElementById('releaseConfigOutput').textContent='Manuelle Prüfung';document.getElementById('releaseConfigNote').textContent='Kapazitätsüberschreitung wird nicht hart gesperrt.';}else{document.getElementById('releaseConfigOutput').textContent=label+de(B(x)*100,0)+' €';document.getElementById('releaseConfigNote').textContent='Trotz Kapazitätsüberschreitung wird automatisch ausgegeben.';}}var missing=[];if(!nearly(min,0)||!nearly(max,4)){missing.push('Automatikbereich 0 bis 4');}if(buffer!=='manual'){missing.push('manuelle Prüfung für 410–450 Pakete');}if(above!=='block'){missing.push('Kapazitätssperre über 450 Paketen');}if(word!=='estimate'){missing.push('Näherungswortlaut');}if(missing.length===0){setFeedback('ruleFeedback','Alle vier Schutzbausteine sind konfiguriert. Teste nun je einen Wert in jedem Reaktionsbereich und übertrage die Regel in MK-07.','ok');}else{setFeedback('ruleFeedback','Noch zu prüfen: '+missing.join('; ')+'. Die abschließende Freigabeentscheidung bleibt eure Begründungsaufgabe.','warn');}});
+document.getElementById('ruleReset').addEventListener('click',function(){document.getElementById('ruleMin').value='-0.5';document.getElementById('ruleMax').value='5.5';document.getElementById('ruleBuffer').value='auto';document.getElementById('ruleAbove').value='auto';document.getElementById('ruleWording').value='guarantee';document.getElementById('releaseConfigInput').textContent='Noch nicht getestet';document.getElementById('releaseConfigOutput').textContent='—';document.getElementById('releaseConfigNote').textContent='Konfiguration ausführen, dann fachlich prüfen.';setFeedback('ruleFeedback','Prüfe automatische Grenze, manuellen Pufferbereich, Kapazitätssperre und Näherungswortlaut.','');});
+function releaseChecked(){return Array.from(document.querySelectorAll('#releaseChecks input')).filter(function(c){return c.checked;}).length;}
+document.getElementById('releaseComplete').addEventListener('click',function(){var n=releaseChecked();if(n===6){setFeedback('releaseCompleteFeedback','Alle sechs Bausteine sind markiert. Prüft jetzt gegenseitig Einheiten, Datenbeleg, Bereichslogik und Qualität der Entscheidung.','ok');}else if(n>=4){setFeedback('releaseCompleteFeedback',n+' von 6 Bausteinen sind markiert. Ergänzt die fehlenden Teile des Protokolls.','warn');}else{setFeedback('releaseCompleteFeedback',n+' von 6 Bausteinen sind markiert. Arbeitet die acht Felder von MK-07 systematisch durch.','bad');}});
+document.getElementById('releaseChecksReset').addEventListener('click',function(){document.querySelectorAll('#releaseChecks input').forEach(function(c){c.checked=false;});setFeedback('releaseCompleteFeedback','Die Checkliste zählt Bausteine, bewertet aber nicht die Qualität eurer Begründung.','');});
+
+// Initialisation
+var params=new URLSearchParams(window.location.search);setView(params.get('view')||'all');setPrintHints(params.get('hints')||'hide');lockDegree();updateCoefficients();updateCompareLabels();lockCompare();updateRelease();
+})();
+</script>
+
+</body>
+</html>
