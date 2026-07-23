@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta content="default-src 'none'; script-src 'unsafe-inline'; script-src-attr 'none'; style-src 'unsafe-inline'; img-src data:; font-src 'none'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; child-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'" http-equiv="Content-Security-Policy"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>11BC · Mathematik · Woche 6 · Lineare Preisabsatzfunktion · Offline-Simulationen</title>
+<style>
+:root{--ink:#172033;--muted:#526079;--paper:#fff;--soft:#eef5f8;--soft2:#f8fafc;--accent:#0b6b8a;--accent2:#8b4a1f;--line:#bcc9d4;--good:#e8f6ee;--warn:#fff5d9;--teacher:#f3effb;--solution:#eef8f3;--danger:#b3263e;--radius:14px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#e9eef3;color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.48;font-size:16px}
+button{font:inherit}
+.appbar{position:sticky;top:0;z-index:20;background:#162434;color:#fff;border-bottom:4px solid var(--accent);box-shadow:0 2px 12px #0003}
+.appbar .inner{max-width:1180px;margin:auto;padding:.7rem 1rem;display:flex;align-items:center;gap:.55rem;flex-wrap:wrap}
+.brand{font-weight:800;margin-right:auto}
+.viewbtn,.printbtn,.hintprintbtn{border:1px solid #ffffff66;background:#ffffff12;color:#fff;border-radius:999px;padding:.48rem .75rem;cursor:pointer}
+.viewbtn.active,.hintprintbtn.active{background:#fff;color:#162434}
+.control-label{font-size:.82rem;color:#dce8ee;margin-left:.35rem}
+main{max-width:1180px;margin:1.3rem auto 3rem;background:var(--paper);box-shadow:0 12px 35px #1f293733;border-radius:18px;overflow:hidden}
+.hero{padding:2rem 2.2rem;background:linear-gradient(135deg,#0b6b8a,#193a53);color:#fff}
+.hero h1{margin:.15rem 0 .55rem;font-size:clamp(1.8rem,4vw,3rem);line-height:1.08}
+.hero p{max-width:930px;margin:.4rem 0}
+.meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7rem;margin-top:1.2rem}
+.meta div{background:#ffffff18;border:1px solid #ffffff33;border-radius:12px;padding:.65rem}
+.meta b{display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:#d9edf4}
+section{padding:1.55rem 2.2rem;border-bottom:1px solid #dde5ec}
+h2{font-size:1.55rem;margin:.1rem 0 1rem;color:#183b52}
+h3{font-size:1.18rem;margin:1rem 0 .55rem}
+h4{margin:.8rem 0 .35rem}
+p{margin:.45rem 0}
+ul,ol{margin:.45rem 0 .8rem;padding-left:1.3rem}
+li{margin:.22rem 0}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.card{border:1px solid var(--line);border-radius:var(--radius);padding:1rem;background:#fff;page-break-inside:avoid}
+.card.soft{background:var(--soft2)}
+.card.problem{border-left:7px solid var(--accent);background:#f4fbfd}
+.card.teacher{background:var(--teacher);border-color:#cabde5}
+.card.solution{background:var(--solution);border-color:#a9d4bd}
+.note{padding:.75rem .9rem;border-radius:10px;background:var(--warn);border-left:5px solid #d69a00}
+.good{padding:.75rem .9rem;border-radius:10px;background:var(--good);border-left:5px solid #2f8b56}
+.tag{display:inline-block;padding:.17rem .5rem;border-radius:999px;background:#e3eef3;color:#173e52;font-size:.78rem;font-weight:700;margin:.1rem .12rem .1rem 0}
+.formula{display:inline-block;font-family:"Times New Roman",serif;font-size:1.06em;white-space:nowrap}
+table{width:100%;border-collapse:collapse;margin:.7rem 0 1rem;page-break-inside:auto}
+th,td{border:1px solid #aebbc7;padding:.48rem .55rem;vertical-align:top}
+th{background:#e7f0f4;text-align:left}
+tr{page-break-inside:avoid}
+.timeline th:nth-child(1){width:7%}.timeline th:nth-child(2){width:12%}.timeline th:nth-child(5){width:10%}.timeline th:nth-child(6){width:12%}
+.compact th,.compact td{padding:.34rem .42rem;font-size:.93rem}
+.material{border:2px solid #29475d;border-radius:12px;padding:1rem;background:#fff;page-break-inside:avoid}
+.ticket-head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;border-bottom:2px solid #29475d;padding-bottom:.55rem;margin-bottom:.7rem}
+.status{display:inline-block;border:2px solid #b56a00;color:#7c4b00;background:#fff8e8;border-radius:8px;padding:.28rem .55rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.status.danger{border-color:var(--danger);color:#8d1e32;background:#fff0f3}
+.task-with-hints{border:1px solid var(--line);border-left:5px solid var(--accent2);border-radius:12px;padding:.85rem 1rem;margin:1rem 0;background:#fffaf6;page-break-inside:auto}
+.task-head{display:flex;gap:.7rem;justify-content:space-between;align-items:flex-start}
+.task-head h3{margin:.05rem 0 .45rem}
+.afb{font-size:.76rem;font-weight:700;background:#efe8df;color:#6d3b19;border-radius:999px;padding:.15rem .42rem;white-space:nowrap}
+.answerline{border-bottom:1px solid #5f6b76;height:1.25rem;margin:.25rem 0}
+.answerbox{border:1px dashed #73808c;min-height:3.5rem;margin:.45rem 0;background:#fff}
+.answerbox.tall{min-height:6.3rem}
+.inline-hints{margin:.55rem 0 .2rem;padding:.25rem .55rem .35rem;border-left:3px solid #d69a00;background:#fffdf5;border-radius:0 10px 10px 0}
+details{border:1px solid var(--line);border-radius:10px;margin:.45rem 0;background:#fff;page-break-inside:avoid}
+summary{cursor:pointer;font-weight:700;padding:.62rem .78rem}
+details>div{padding:0 .78rem .75rem}
+.inline-hints details{background:#fff9e8;border-color:#d2b977}
+.inline-hints summary{color:#5f4512}
+.teacher-inline-note{margin:.55rem 0 0;padding:.62rem .75rem;background:var(--teacher);border:1px solid #cabde5;border-radius:9px;font-size:.9rem}
+.small{font-size:.9rem;color:var(--muted)}
+.kicker{font-size:.82rem;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:#c7e7f1}
+.callout{display:grid;grid-template-columns:auto 1fr;gap:.65rem;align-items:start;background:#eef6fa;border-radius:12px;padding:.8rem}
+.callout .icon{font-size:1.4rem}
+.board{background:#1c2c2b;color:#f5fff9;border:9px solid #8b6a45;border-radius:8px;padding:1rem 1.2rem;box-shadow:inset 0 0 0 2px #5d4530;page-break-inside:avoid}
+.board h3{color:#fff;margin-top:0}
+.pagebreak{break-before:page;page-break-before:always}
+.source-list li{margin:.45rem 0}
+.assumptions{font-size:.92rem}
+.worksheet-page{background:#fff}
+.worksheet-title{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;border-bottom:2px solid #29475d;padding-bottom:.5rem;margin-bottom:.75rem}
+.worksheet-title h2{margin:0;color:#183b52}
+.worksheet-title p{margin:.15rem 0}
+.prototype{border:2px solid #182d40;background:#f8fbfd;border-radius:14px;padding:.85rem;page-break-inside:avoid}
+.prototype-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:.8rem;align-items:stretch}
+.screen{background:#172536;color:#f7fbff;border-radius:12px;padding:.8rem;min-height:100%}
+.screen h4{color:#fff;margin-top:0}
+.screen-row{display:grid;grid-template-columns:1fr auto;gap:.6rem;border-bottom:1px solid #ffffff2e;padding:.38rem 0}
+.screen-row:last-child{border-bottom:0}
+.screen-output{font-size:1.25rem;font-weight:800;color:#ffd6dc}
+.facts-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem}
+.fact{border:1px solid #aebbc7;border-radius:10px;padding:.58rem;background:#fff}
+.fact b{display:block;color:#183b52}
+.model-graph{width:100%;height:auto;border:1px solid #c2ccd5;background:#fff;margin:.55rem 0;page-break-inside:avoid}
+.interim-product{border:2px solid #0b6b8a;background:#eef8fb;border-radius:12px;padding:.72rem .85rem;margin:.8rem 0;page-break-inside:avoid}
+.profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45rem}
+.profile-cell{border:1px solid #aebbc7;background:#fff;border-radius:9px;padding:.48rem}
+.restriction-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.55rem;margin:.6rem 0}
+.restriction{border:1px solid #aebbc7;border-radius:10px;padding:.58rem;background:#fff;page-break-inside:avoid}
+.restriction b{display:block;color:#183b52}
+.release-card{border:3px double #29475d;border-radius:12px;padding:.85rem;background:#fff;page-break-inside:avoid}
+.release-card th{width:34%}.release-card td{width:66%}
+.release-head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;border-bottom:2px solid #29475d;padding-bottom:.55rem;margin-bottom:.65rem}
+.criteria li{margin:.3rem 0}
+.decision-stamp{display:inline-block;border:2px solid #2f8b56;color:#1e6f43;background:#effaf3;border-radius:8px;padding:.3rem .55rem;font-weight:800;text-transform:uppercase;letter-spacing:.03em}
+.sentence-starters{background:#eef6fa;border-left:5px solid var(--accent);padding:.72rem;border-radius:10px}
+.math-check{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem;margin:.6rem 0}
+.math-check>div{border:1px solid #aebbc7;border-radius:10px;padding:.6rem;background:#fff}
+[data-view="student"] .teacher-only,[data-view="student"] .solution-only{display:none!important}
+[data-view="teacher"] .solution-only{display:none!important}
+[data-view="solution"] .teacher-only,[data-view="solution"] .student-material{display:none!important}
+.view-note{font-size:.84rem;color:#dce8ee}
+@media(max-width:850px){.meta,.grid2,.grid3,.prototype-grid,.facts-grid,.profile-grid,.restriction-grid,.math-check{grid-template-columns:1fr}.appbar .inner{align-items:flex-start}main{margin:0;border-radius:0}section,.hero{padding:1.2rem}.timeline{font-size:.88rem;display:block;overflow-x:auto}.release-head,.worksheet-title{display:block}}
+@page{size:A4;margin:14mm}
+@media print{
+  body{background:#fff;font-size:9.6pt}
+  .appbar{display:none!important}
+  main{max-width:none;margin:0;box-shadow:none;border-radius:0}
+  .hero{background:#fff;color:#111;padding:0 0 5mm;border-bottom:2px solid #111}
+  .hero .kicker,.hero .view-note{color:#333}
+  .meta div{background:#fff;border:1px solid #999}
+  .meta b{color:#333}
+  section{padding:5mm 0;border-bottom:0}
+  h2{color:#111}
+  .card,.material,.task-with-hints,details{box-shadow:none}
+  .no-print{display:none!important}
+  .model-graph{max-height:80mm}
+  .worksheet-page{padding:0}
+  
+  body[data-view="student"] .hero{display:none!important}
+  body[data-view="student"] .worksheet-page{display:block}
+  body[data-view="student"][data-print-hints="hide"] .inline-hints{display:none!important}
+  body[data-view="student"][data-print-hints="show"] .inline-hints{display:block!important}
+  body[data-view="student"][data-print-hints="show"] .inline-hints details{break-inside:auto}
+  body[data-view="student"] .teacher-only,body[data-view="student"] .solution-only{display:none!important}
+  body[data-view="teacher"] .solution-only{display:none!important}
+  body[data-view="solution"] .teacher-only,body[data-view="solution"] .student-material{display:none!important}
+  .answerbox{min-height:14mm}
+  .answerbox.tall{min-height:25mm}
+  .compact th,.compact td{font-size:8.8pt;padding:1.7mm 2mm}
+}
+@media print{
+  body[data-view="student"]{font-size:8.35pt;line-height:1.32}
+  body[data-view="student"] section{padding:2.2mm 0}
+  body[data-view="student"] h2{font-size:16pt;margin:0 0 2mm}
+  body[data-view="student"] h3{font-size:12.1pt;margin:1.8mm 0 1.2mm}
+  body[data-view="student"] h4{margin:1mm 0}
+  body[data-view="student"] p,body[data-view="student"] ul,body[data-view="student"] ol{margin:1mm 0}
+  body[data-view="student"] li{margin:.5mm 0}
+  body[data-view="student"] .worksheet-title{padding-bottom:1.8mm;margin-bottom:2.2mm}
+  body[data-view="student"] .material,body[data-view="student"] .prototype{padding:2.6mm}
+  body[data-view="student"] .ticket-head{padding-bottom:1.7mm;margin-bottom:1.7mm}
+  body[data-view="student"] table{margin:1.7mm 0}
+  body[data-view="student"] .compact th,body[data-view="student"] .compact td{font-size:7.65pt;padding:1.15mm 1.4mm}
+  body[data-view="student"] .task-with-hints{padding:2.5mm 2.8mm;margin:2.4mm 0}
+  body[data-view="student"] .task-head h3{margin:0 0 1.2mm}
+  body[data-view="student"] .answerbox{min-height:8mm;margin:1.2mm 0}
+  body[data-view="student"] .answerbox.tall{min-height:17mm}
+  body[data-view="student"] .model-graph{max-height:48mm;margin:1.6mm 0}
+  body[data-view="student"] .interim-product{padding:1.8mm 2.2mm;margin:1.8mm 0}
+  body[data-view="student"] .profile-grid,body[data-view="student"] .restriction-grid,body[data-view="student"] .facts-grid,body[data-view="student"] .math-check{gap:1.5mm}
+  body[data-view="student"] .profile-cell,body[data-view="student"] .restriction,body[data-view="student"] .fact,body[data-view="student"] .math-check>div{padding:1.5mm}
+  body[data-view="student"] .release-card{padding:2mm;break-inside:auto;page-break-inside:auto}
+  body[data-view="student"] .release-head{padding-bottom:1.4mm;margin-bottom:1.4mm}
+  body[data-view="student"] .release-card table{margin:1mm 0}
+  body[data-view="student"] .release-card .compact th,body[data-view="student"] .release-card .compact td{padding:.9mm 1.2mm}
+  body[data-view="student"] .release-card td{height:5.5mm}
+  body[data-view="student"] #arbeitsblatt-seite-1{display:grid;grid-template-columns:.9fr 1.1fr;gap:1.8mm 2mm;align-items:start}
+  body[data-view="student"] #arbeitsblatt-seite-1>.worksheet-title,body[data-view="student"] #arbeitsblatt-seite-1>.prototype,body[data-view="student"] #arbeitsblatt-seite-1>.callout,body[data-view="student"] #arbeitsblatt-seite-1>.interim-product{grid-column:1/-1}
+  body[data-view="student"] #aufgabe-1,body[data-view="student"] #aufgabe-2{margin:0}
+  body[data-view="student"] #aufgabe-1 .answerbox{min-height:5mm}
+  body[data-view="student"] #aufgabe-2 .model-graph{max-height:37mm}
+  body[data-view="student"] #arbeitsblatt-seite-1 .compact th,body[data-view="student"] #arbeitsblatt-seite-1 .compact td{font-size:7pt;padding:.8mm 1mm}
+  body[data-view="student"] #arbeitsblatt-seite-1 .interim-product{margin-top:0;padding:1.2mm 1.5mm}
+  body[data-view="student"] #arbeitsblatt-seite-1 .interim-product h3{font-size:9.2pt;margin:0 0 .8mm}
+  body[data-view="student"] #arbeitsblatt-seite-1 .profile-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:1mm}
+  body[data-view="student"] #arbeitsblatt-seite-1 .profile-cell{font-size:6.8pt;padding:1mm;min-height:7mm}
+  body[data-view="student"] #arbeitsblatt-seite-3{page-break-before:always}
+}
+</style>
+<style id="week6-simulation-styles">
+/* Interaktive, vollständig lokale Aufgabenhilfen – Woche 6 */
+.simulation-only{display:none}
+[data-view="all"] .simulation-only,[data-view="simulations"] .simulation-only{display:block}
+[data-view="simulations"] main>section:not(.simulation-only){display:none!important}
+.sim-intro{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin:1rem 0}
+.sim-card{border:1px solid var(--line);border-radius:var(--radius);background:#f8fbfd;padding:1rem;page-break-inside:avoid}
+.sim-card h3{margin-top:.1rem;color:#183b52}.sim-tag{display:inline-block;padding:.18rem .52rem;border-radius:999px;background:#dceef4;color:#16465d;font-size:.78rem;font-weight:800;margin-bottom:.45rem}
+.sim-panel{border:1px solid #aebdca;border-radius:14px;background:#fff;padding:1rem;margin:1rem 0;box-shadow:0 6px 18px #1f293710;scroll-margin-top:92px}
+.sim-panel h3{margin-top:.05rem;color:#183b52}.sim-panel h4{color:#183b52}
+.sim-controls{display:flex;flex-wrap:wrap;align-items:end;gap:.7rem;margin:.75rem 0}
+.sim-controls label{display:grid;gap:.3rem;font-weight:700;color:#34495e;min-width:185px}
+.sim-controls select,.sim-controls input{font:inherit;border:1px solid #8797a6;border-radius:9px;padding:.5rem .6rem;background:#fff;color:#172033;max-width:100%}
+.sim-controls input[type="range"]{padding:0;min-width:220px}
+.sim-button,.sim-link{font:inherit;border:1px solid #0b6b8a;background:#0b6b8a;color:#fff;border-radius:999px;padding:.5rem .8rem;cursor:pointer;font-weight:700;text-decoration:none;display:inline-block}
+.sim-button.secondary{background:#fff;color:#0b6b8a}.sim-button.tertiary{background:#eef8fb;color:#17445a}
+.sim-feedback{min-height:3.2rem;border-left:5px solid #78909c;background:#f3f7f9;border-radius:9px;padding:.65rem .8rem;margin:.65rem 0;color:#253546}
+.sim-feedback.ok{border-left-color:#2f8b56;background:#e8f6ee}.sim-feedback.warn{border-left-color:#d69a00;background:#fff5d9}.sim-feedback.bad{border-left-color:#b74343;background:#fff0f0}
+.sim-task-note{margin:.55rem 0 .85rem;padding:.65rem .78rem;border-left:4px solid #0b6b8a;background:#eef8fb;border-radius:8px;color:#24475b;page-break-inside:avoid}
+.sim-task-note .sim-link{margin:.45rem .35rem 0 0}
+.sim-graph{display:block;width:100%;height:auto;border:1px solid #aebbc7;border-radius:12px;background:#fff;touch-action:manipulation;margin:.75rem 0}
+.sim-row{display:grid;grid-template-columns:1.2fr .8fr;gap:1rem;margin:.7rem 0}
+.sim-subpanel{border:1px solid #ccd7df;border-radius:12px;background:#fafcfd;padding:.8rem}
+.sim-stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.65rem;margin:.75rem 0}
+.sim-stat{border:1px solid #aebbc7;border-radius:10px;background:#fbfdff;padding:.65rem;min-height:82px}
+.sim-stat b{display:block;color:#183b52;margin-bottom:.25rem}.sim-stat output,.sim-stat .big{display:block;font-size:1.06rem;font-weight:800;color:#172033}
+.sim-note{border-left:4px solid #0b6b8a;background:#eef8fb;padding:.65rem .8rem;border-radius:8px;margin:.6rem 0}
+.sim-output{display:inline-block;min-width:2.6em;text-align:center;font-weight:800;color:#183b52}
+.sim-toggle-row{display:flex;flex-wrap:wrap;gap:.8rem;margin:.55rem 0}.sim-toggle-row label{display:flex;align-items:center;gap:.35rem;font-weight:700}
+.sim-condition-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.55rem;margin:.75rem 0}
+.sim-condition{border:1px solid #cbd5dd;border-radius:10px;background:#fff;padding:.62rem;min-height:88px}
+.sim-condition b{display:block;color:#183b52}.sim-condition .lamp{display:inline-block;width:.85rem;height:.85rem;border-radius:50%;background:#9aa8b4;margin-right:.35rem;vertical-align:-.05rem}
+.sim-condition.ok{background:#eff9f3;border-color:#9ac8ac}.sim-condition.ok .lamp{background:#2f8b56}.sim-condition.no{background:#fff3f3;border-color:#d6a8a8}.sim-condition.no .lamp{background:#b74343}
+.sim-dashboard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem;margin:.75rem 0}
+.sim-screen{border:2px solid #263746;border-radius:12px;background:#172536;color:#f7fbff;padding:.8rem;min-height:170px}.sim-screen h4{color:#fff;margin-top:0}.sim-screen .screen-output{color:#ffe2a8}
+.sim-checklist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45rem .8rem;margin:.7rem 0}.sim-checklist label{display:flex;gap:.5rem;align-items:flex-start;border:1px solid #d4dde4;border-radius:9px;padding:.55rem;background:#fff}
+.sim-mode-panel[hidden]{display:none!important}.sim-badge{display:inline-block;border-radius:999px;padding:.2rem .55rem;font-size:.8rem;font-weight:800;background:#e8f1f5;color:#29475d}
+@media(max-width:900px){.sim-intro,.sim-row,.sim-dashboard-grid{grid-template-columns:1fr}.sim-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sim-condition-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.sim-stat-grid,.sim-condition-grid,.sim-checklist{grid-template-columns:1fr}.sim-controls label{min-width:100%}.sim-controls input[type="range"]{min-width:100%}}
+@media print{.simulation-only,.sim-task-note{display:none!important}}
+</style></head>
+<body data-print-hints="hide" data-view="all">
+<div class="appbar no-print"><div class="inner">
+<div class="brand">11BC · Mathematik · Woche 6</div>
+<button aria-pressed="true" class="viewbtn active" data-target="all" type="button">Gesamt</button>
+<button aria-pressed="false" class="viewbtn" data-target="student" type="button">Schülerarbeitsblatt</button><button aria-pressed="false" class="viewbtn" data-target="simulations" type="button">Simulationen</button>
+<button aria-pressed="false" class="viewbtn" data-target="teacher" type="button">Lehrkraftfassung</button>
+<button aria-pressed="false" class="viewbtn" data-target="solution" type="button">Musterlösung</button>
+<span class="control-label">Druck-Hilfen:</span>
+<button aria-pressed="true" class="hintprintbtn active" data-hint-target="hide" type="button">ohne Hilfen</button>
+<button aria-pressed="false" class="hintprintbtn" data-hint-target="show" type="button">mit Hilfen</button>
+<button class="printbtn" id="print-document" type="button">Drucken</button>
+</div></div>
+<main>
+<header class="hero">
+<div class="kicker">Unterrichtswoche 6 · Von Daten zu Funktionen I</div>
+<h1>Lineare Preisabsatzfunktion prüfen und freigeben</h1>
+<p>Zwei problem- und handlungsorientierte Mathematikstunden für die Klasse 11BC im Bildungsgang Allgemeine Hochschulreife mit International Business Communication.</p>
+<p class="view-note">Die Datei ist eine einzelne, vollständig lokal bedienbare HTML-Datei. Ansichten, aufgabennahe Hilfen, drei interaktive Simulationen, Druckvarianten und Grafiken benötigen keine weitere Ressource.</p>
+<div class="meta"><div><b>Zeitraum</b>6. Unterrichtswoche · Datum einzutragen</div><div><b>Stundenlage</b>2 × 45 Minuten</div><div><b>Planungsmodus</b>Gemeinsamer Dashboard-Audit · Freigabekarte</div><div><b>Werkzeuge</b> Arbeitsblatt, Beamer, Taschenrechner; GeoGebra optional und drei lokale Simulationen zur Kontrolle</div></div>
+</header>
+<section class="teacher-only" id="planung">
+<h2>1. Knappe Planungsübersicht</h2>
+<div class="grid2">
+<div class="card problem"><h3>Berufliche Problemsituation</h3><p>Die Abteilung <b>European Pricing &amp; Market Development</b> der didaktisch konstruierten EuroTrade Accessories GmbH bereitet den Benelux-Start der Produktlinie „FlexCase Pro“ vor. Ein Dashboard soll aus einer geplanten monatlichen Absatzmenge automatisch einen marktgerechten Netto-Stückpreis schätzen. Der Prototyp berechnet zwar mit dem aus Pilotdaten gewonnenen Modell <span class="formula">p(x) = 42 − 2,5x</span>, akzeptiert aber auch Mengen außerhalb des untersuchten Bereichs, unterschreitet die Preisuntergrenze und bezeichnet Modellwerte als „garantiert“.</p></div>
+<div class="card"><h3>Untersuchungsfrage</h3><p>Wie sind Eingabe, Ausgabe und negative Steigung der Preisabsatzfunktion zu deuten, welcher sachliche Definitionsbereich ist zulässig und unter welchen Prüfregeln darf das Dashboard begrenzt automatisiert werden?</p><h3>Handlungsprodukt</h3><p>Eine <b>Preisabsatz- und Freigabekarte PA-06</b> mit Modell-Steckbrief, Beispielwerten, begründetem Freigabebereich, automatischer Eingabeprüfung, Warnhinweisen und Freigabeentscheidung.</p></div>
+</div>
+<div class="good"><b>Fachlich nächster Schritt:</b> Die in Woche 5 gesicherte Regressionsgerade wird nun als lineares ökonomisches Modell genutzt. Die Lernenden untersuchen die Richtung der Zuordnung, deuten eine negative Steigung, berechnen und interpretieren Funktionswerte und begrenzen den Definitionsbereich durch Datenlage und betriebliche Bedingungen.</div>
+<h3>Einordnung in das Halbjahresskript und Rückblick</h3>
+<table><tr><th>Aspekt</th><th>Planung</th></tr>
+<tr><td>Kapitel / Woche</td><td>Kapitel „Regression und Trendgerade“, Woche 6 „Preisabsatzfunktion als ökonomisches Modell“.</td></tr>
+<tr><td>Rückblick Woche 1</td><td>Ökonomische Wertepaare wurden gelesen, geordnet und im Koordinatensystem dargestellt; Einfluss- und Ergebnisgröße wurden unterschieden.</td></tr>
+<tr><td>Rückblick Woche 2</td><td>Trends, Ausreißer, Datenqualität und Grenzen von Aussagen wurden kritisch geprüft.</td></tr>
+<tr><td>Rückblick Woche 3</td><td>Funktionen wurden als eindeutige Zuordnungen erkannt; Eingabe, Ausgabe, Funktionswert und Definitionsbereich wurden im Kontext gedeutet.</td></tr>
+<tr><td>Rückblick Woche 4</td><td>Tabelle, Graph, Term und Sprache wurden konsistent ineinander überführt und zweckbezogen ausgewählt.</td></tr>
+<tr><td>Rückblick Woche 5</td><td>Eine lineare Regressionsgerade wurde anhand von Residuen ausgewählt; Steigung, Achsenabschnitt, Näherungscharakter und Modellgrenzen wurden interpretiert.</td></tr>
+<tr><td>Neuer Kern</td><td>Lineare Preisabsatzfunktion erkennen; negative Steigung ökonomisch deuten; Funktionswerte und Preis-Mengen-Aussagen interpretieren; mathematischen, ökonomischen und betrieblich freigegebenen Bereich unterscheiden.</td></tr>
+<tr><td>Bewusste Grenze</td><td>Keine Erlös- oder Gewinnfunktion, keine quadratischen Modelle, keine Optimierung und keine systematische Untersuchung ganzrationaler Funktionen. Diese Inhalte bleiben späteren Skriptabschnitten vorbehalten.</td></tr>
+<tr><td>Didaktische Brücke</td><td>Das Regressionsmodell aus Woche 5 wird als vorgegebenes Marktmodell übernommen. Die Algebra dient nicht der erneuten Regression, sondern der sachlichen Prüfung eines automatisierten Preiswerkzeugs.</td></tr>
+</table>
+<h3>Lernvoraussetzungen und Lernziele</h3>
+<div class="grid2"><div class="card"><h4>Lernvoraussetzungen</h4><ul><li>Funktion als eindeutige Zuordnung prüfen.</li><li>Eingabe, Ausgabe, Funktionswert und Definitionsbereich benennen.</li><li>Lineare Terme auswerten und Geraden aus Tabelle beziehungsweise Term beschreiben.</li><li>Steigung und Achsenabschnitt im Sachkontext deuten.</li><li>Modellwert, Datenbereich und Extrapolation unterscheiden.</li></ul></div><div class="card"><h4>Lernziele</h4><ul><li><b>Erkennen:</b> <span class="formula">p(x)=42−2,5x</span> als lineare Preisabsatzfunktion mit eindeutiger Zuordnung.</li><li><b>Interpretieren:</b> negative Steigung, Achsenabschnitt und Funktionswerte mit Einheiten und Näherungscharakter.</li><li><b>Darstellen:</b> ausgewählte Werte in Tabelle und Graph übertragen.</li><li><b>Begrenzen:</b> mathematischen, ökonomisch plausiblen und betrieblich freigegebenen Definitionsbereich unterscheiden.</li><li><b>Beurteilen:</b> Eignung für eine begrenzte Automatisierung prüfen und eine Freigabe begründen.</li></ul></div></div>
+<h3>Problemstruktur und Produktlogik</h3>
+<table><tr><th>Stunde</th><th>Ungelöstes Teilproblem</th><th>Sichtbares Ergebnis</th><th>Bezug zum Gesamtprodukt</th></tr>
+<tr><td>1</td><td>Die Modellrichtung, die Bedeutung der Parameter und die Preis-Mengen-Beziehung sind im Prototyp nicht verständlich dokumentiert.</td><td>Modell-Vorprüfbogen: Eingabe/Ausgabe, Funktionseigenschaft, Wertetabelle, Graph und Parameterdeutung.</td><td>Liefert den fachlichen Modell-Steckbrief für PA-06.</td></tr>
+<tr><td>2</td><td>Der Prototyp rechnet auch außerhalb der Pilotdaten und verletzt betriebliche Grenzen.</td><td>Preisabsatz- und Freigabekarte: Beispielwerte, zulässiger Bereich, Prüfregeln, Warntext und Entscheidung.</td><td>Abschließendes Handlungsprodukt für European Pricing &amp; Market Development.</td></tr>
+</table>
+<h3>AFB, Lernwege und Hilfekonzept</h3>
+<div class="grid3"><div class="card"><h4>Basisweg</h4><p>Aufgabe 1 mit Begriffshilfe; Aufgabe 2 mit teilweise vorbereiteter Wertetabelle und Koordinatensystem; Aufgaben 3–4 mit Satzstartern und Einschränkungskarten; Aufgabe 5 mit strukturierter Produktkarte.</p></div><div class="card"><h4>Standardweg</h4><p>Alle Aufgaben selbstständig beziehungsweise in Partnerarbeit; Schwerpunkt AFB II: Darstellungen auswerten, Funktionswerte interpretieren, Definitionsbereiche schneiden und Parameter im Kontext deuten.</p></div><div class="card"><h4>Erweiterung</h4><p>Die inverse Darstellung <span class="formula">x(p)=16,8−0,4p</span> wird auf Eingabe, Ausgabe und betrieblichen Zweck geprüft, ohne eine allgemeine Theorie inverser Funktionen einzuführen.</p></div></div>
+<table><tr><th>AFB</th><th>Tatsächliche Denkleistung</th><th>Stellen der Planung</th></tr>
+<tr><td>AFB I</td><td>Informationen entnehmen, Eingabe und Ausgabe kennzeichnen, bekannte Werte in den Funktionsterm einsetzen.</td><td>Aufgabe 1; Teilrechnungen in Aufgabe 2 und 3.</td></tr>
+<tr><td>AFB II</td><td>Funktionseigenschaft prüfen, Darstellungen wechseln, negative Steigung und Funktionswerte interpretieren, Bedingungen in einen sachlichen Definitionsbereich überführen.</td><td>Kern in Aufgaben 2–4.</td></tr>
+<tr><td>AFB III</td><td>Grenzen gegeneinander abwägen, Eignung für betriebliche Automatisierung beurteilen und eine begrenzte Freigabe begründen.</td><td>Aufgabe 5 und Erweiterung.</td></tr>
+</table>
+<p><b>Aufgabennahe Hilfen:</b> Jede Hilfe steht ausschließlich im Aufgabencontainer. Hilfe 1 orientiert, Hilfe 2 strukturiert fachlich oder sprachlich, Hilfe 3 eröffnet einen konkreten ersten Schritt. Die vollständige AFB-III-Entscheidung bleibt bei den Lernenden.</p><p><b>Simulationseinsatz:</b> Das Preis-Mengen- und Richtungs-Labor unterstützt die Aufgaben 2 und 3 beim Wechsel zwischen Menge, Preis, Graph und Term. Das Freigabebereich-Labor macht in Aufgabe 4 die einzelnen Bedingungen und ihre Schnittmenge sichtbar. Das Dashboard-Freigabe-Labor erprobt in Aufgabe 5 lokale Prüfregeln, Sperrverhalten und einen fachlich korrekten Ausgabetext. Alle Werkzeuge werden erst nach einem eigenen Ansatz genutzt, geben keine vollständige AFB-III-Entscheidung vor und ersetzen weder Rechnung noch Begründung.</p>
+<p><b>Technische Fortführung:</b> Grundlayout, Farbkonzept, Karten-, Tabellen-, Ansichts- und Drucklogik der Vorwochen werden übernommen. Ergänzt wurden ein lokaler Reiter „Simulationen“, aufgabennahe Sprungschaltflächen und dynamisch erzeugte Inline-SVG-Grafiken. Formeln bleiben lokal mit Unicode/HTML dargestellt; es gibt keinen Bibliotheksloader, keine Speicherabhängigkeit, keinen externen Link und keinen Netzpfad. Die Druckauswahl „ohne Hilfen / mit Hilfen“ bleibt lokal erhalten.</p>
+<h3>Unvermeidbare Annahmen</h3>
+<ul class="assumptions"><li>Schule, konkretes Datum, Anwesenheit und aktuelle Schwierigkeiten wurden nicht angegeben; es gilt das Klassenprofil mit heterogener Jahrgangsstufe 11.</li><li>Die beiden Stunden liegen getrennt und dauern jeweils 45 Minuten; Stunde 2 reaktiviert den Vorprüfbogen kurz.</li><li>Unternehmen, Abteilung, Produkt, Dashboard und sämtliche Daten sind didaktisch konstruiert.</li><li><span class="formula">x</span> bezeichnet die geplante Monatsmenge in Hunderten von Stück; <span class="formula">p(x)</span> ist der modellierte Netto-Stückpreis in Euro.</li><li>Das Marktmodell beruht auf Pilotdaten von 200 bis 800 Stück. Lagerkapazität sind 900 Stück; unter 20 Euro ist kein automatisches Angebot zulässig.</li><li>GeoGebra ist nur eine optionale Kontrolle des selbst erstellten Graphen; Berechnungen und Interpretation bleiben auf dem Arbeitsblatt sichtbar.</li><li>Die lokalen Simulationen sind optionale Verständigungs- und Kontrollhilfen. Sie werden in der Druckfassung ausgeblendet und ersetzen weder die handschriftliche Bearbeitung noch die fachliche Freigabebegründung.</li></ul>
+</section>
+<section class="teacher-only" id="verlauf">
+<h2>2. Verlaufsplan für beide Stunden</h2>
+<h3>Stunde 1: Was beschreibt die Preisabsatzfunktion?</h3>
+<table class="timeline"><tr><th>Zeit</th><th>Phase</th><th>Lehrkrafthandeln</th><th>Lernendenhandeln</th><th>Sozialform</th><th>Material</th><th>Erwartetes Zwischenergebnis / Produktbezug</th></tr>
+<tr><td>0–6</td><td>Problemöffnung</td><td>Projiziert die Launch-Review-Tafel mit dem Prototypwert „1.000 Stück → garantierte 17,00 €“. Fragt nach möglichen betrieblichen Risiken.</td><td>Benennen Preis-, Kapazitäts- und Vertrauensrisiken; erkennen, dass rechnerische Ausgabe und fachliche Freigabe nicht identisch sind.</td><td>Plenum</td><td>Einstiegstafel</td><td>Entscheidungsbedarf und Arbeitsauftrag sind verstanden.</td></tr>
+<tr><td>6–14</td><td>Modellrichtung klären</td><td>Sichert Untersuchungsfrage und Produkt. Reaktiviert Funktion, Eingabe und Ausgabe.</td><td>Bearbeiten Aufgabe 1: Größen, Einheiten, Eindeutigkeit und Richtung der Zuordnung.</td><td>EA → kurzer Abgleich</td><td>Aufgabe 1</td><td>Modellrichtung ist eindeutig dokumentiert.</td></tr>
+<tr><td>14–29</td><td>Darstellungen aufbauen</td><td>Fordert zunächst eigene Rechnungen; gibt bei Bedarf gestufte Hilfen. Optional anschließend GeoGebra-Kontrolle des Graphen.</td><td>Berechnen Wertetabelle, tragen Punkte ein und verbinden sie zur Modellgeraden.</td><td>EA → PA</td><td>Aufgabe 2, Rechner, optional iPad</td><td>Konsistente Tabelle und Graphdarstellung.</td></tr>
+<tr><td>29–39</td><td>Parameter deuten</td><td>Lenkt auf Einheiten und das negative Vorzeichen; kontrastiert Modellwert bei <span class="formula">x=0</span> mit beobachtetem Bereich.</td><td>Deuten Steigung und Achsenabschnitt; prüfen die manuelle Mehrfachzuordnung.</td><td>Partnerarbeit</td><td>Aufgabe 2</td><td>Fachlich formulierter Parameter- und Funktionscheck.</td></tr>
+<tr><td>39–45</td><td>Zwischensicherung</td><td>Lässt den Modell-Vorprüfbogen abschließen und eine offene Freigabefrage markieren.</td><td>Dokumentieren Formel, Größen, negative Steigung, Graph und offene Bereichsfrage.</td><td>Einzelarbeit</td><td>Zwischenprodukt</td><td>Stundenprodukt: geprüfter Modell-Steckbrief.</td></tr>
+</table>
+<h3>Stunde 2: Unter welchen Regeln darf das Dashboard rechnen?</h3>
+<table class="timeline"><tr><th>Zeit</th><th>Phase</th><th>Lehrkrafthandeln</th><th>Lernendenhandeln</th><th>Sozialform</th><th>Material</th><th>Erwartetes Zwischenergebnis / Produktbezug</th></tr>
+<tr><td>0–5</td><td>Reaktivierung</td><td>Zeigt Steigung <span class="formula">−2,5</span> und Prototypausgabe 17,00 €. Fragt: „Was kann der Term berechnen, was darf das Unternehmen freigeben?“</td><td>Reaktivieren Modellcharakter, Einheiten und offene Bereichsfrage.</td><td>Think–Pair–Share kurz</td><td>Vorprüfbogen</td><td>Unterscheidung Rechenbarkeit / Gültigkeit ist aktiviert.</td></tr>
+<tr><td>5–16</td><td>Funktionswerte deuten</td><td>Besteht auf Rechenweg, Einheit und sprachlicher Kontextdeutung.</td><td>Berechnen und interpretieren Preis- beziehungsweise Mengenaussagen in Aufgabe 3.</td><td>EA → PA</td><td>Aufgabe 3, Rechner</td><td>Kontextgerechte Modellwerte und Plausibilitätsurteil.</td></tr>
+<tr><td>16–29</td><td>Bereiche prüfen</td><td>Gibt die drei Bedingungskarten frei; fordert die Schnittmenge statt einer Einzelgrenze.</td><td>Unterscheiden mathematischen, ökonomischen und freigegebenen Bereich; begründen den zulässigen Bereich.</td><td>Partnerarbeit</td><td>Aufgabe 4</td><td>Begründeter Dashboard-Bereich mit Sperrgrenzen.</td></tr>
+<tr><td>29–40</td><td>Freigabeprodukt</td><td>Moderiert eine strukturierte Entscheidungsphase; fordert Datenbeleg, Modellgrenze und konkrete Prüfregel.</td><td>Füllen die Preisabsatz- und Freigabekarte aus und treffen eine begrenzte Freigabeentscheidung.</td><td>PA → Vergleich zweier Paare</td><td>Aufgabe 5</td><td>Vollständiges Handlungsprodukt PA-06.</td></tr>
+<tr><td>40–45</td><td>Ergebnissicherung</td><td>Sichert Merksatz und Freigaberegel an der Tafel; trennt Modellwert, Preisuntergrenze und Datenbereich.</td><td>Vergleichen Entscheidungen, korrigieren Produkt und formulieren einen Warnhinweis.</td><td>Plenum</td><td>Tafelbild</td><td>Gemeinsame fachliche Freigabelogik.</td></tr>
+</table>
+<h3>Vollständiges Einstiegsmaterial: Launch-Review-Tafel</h3>
+<div class="prototype"><div class="ticket-head"><div><b>EuroTrade Accessories GmbH</b><br/><span class="small">European Pricing &amp; Market Development · Benelux-Launch „FlexCase Pro“</span></div><span class="status danger">Freigabe offen</span></div><div class="prototype-grid"><div class="screen"><h4>Pricing Assistant PA-06 · Prototyp</h4><div class="screen-row"><span>Eingabe</span><b>1.000 Stück</b></div><div class="screen-row"><span>Rechenregel</span><b>p(x) = 42 − 2,5x</b></div><div class="screen-row"><span>Ausgabe</span><span class="screen-output">Garantierter Preis: 17,00 €</span></div><div class="screen-row"><span>Status</span><b>Automatisches Angebot möglich</b></div></div><div class="facts-grid"><div class="fact"><b>Pilotdaten</b>200–800 Stück</div><div class="fact"><b>Lagergrenze</b>höchstens 900 Stück</div><div class="fact"><b>Preisuntergrenze</b>mindestens 20,00 € netto</div><div class="fact"><b>Modellgröße</b>x in Hunderten Stück</div></div></div><p class="note"><b>Arbeitsauftrag:</b> Prüft die Preisabsatzfunktion fachlich und erstellt eine Freigabekarte. Das Dashboard darf nur dann automatisieren, wenn Eingabe, Ausgabe, Modellbereich und Warnhinweise eindeutig festgelegt sind.</p></div>
+</section>
+<section class="student-material worksheet-page" id="arbeitsblatt-seite-1">
+<div class="worksheet-title"><div><h2>Preisabsatz-Dashboard PA-06 prüfen</h2><p>Schülerarbeitsblatt · Seite 1 von 3 · Stunde 1</p></div><div>Name: ____________________</div></div>
+<div class="prototype"><div class="ticket-head"><div><b>Launch-Review-Tafel</b><br/><span class="small">European Pricing &amp; Market Development · „FlexCase Pro“</span></div><span class="status danger">Freigabe offen</span></div><div class="prototype-grid"><div class="screen"><h4>Pricing Assistant PA-06</h4><div class="screen-row"><span>Eingabe</span><b>1.000 Stück</b></div><div class="screen-row"><span>Modell</span><b>p(x) = 42 − 2,5x</b></div><div class="screen-row"><span>Ausgabe</span><span class="screen-output">Garantierter Preis: 17,00 €</span></div></div><div class="facts-grid"><div class="fact"><b>Pilotbereich</b>200–800 Stück</div><div class="fact"><b>Lagergrenze</b>900 Stück</div><div class="fact"><b>Preisuntergrenze</b>20,00 €</div><div class="fact"><b>Einheit</b>x in Hunderten Stück</div></div></div></div>
+<div class="callout"><div class="icon">?</div><div><b>Untersuchungsfrage:</b> Was beschreibt das Modell, wo ist es sachlich gültig und unter welchen Regeln darf das Dashboard automatisiert Angebote vorbereiten?</div></div>
+<section class="task-with-hints" id="aufgabe-1">
+<div class="task-head"><h3>Aufgabe 1 · Größen und Funktion prüfen</h3><span class="afb">AFB I / II</span></div>
+<ol><li>Kennzeichne Eingabe, Ausgabe und Einheiten der Zuordnung <span class="formula">p(x)=42−2,5x</span>.</li><li>Erkläre, warum die Modellregel eine Funktion ist.</li><li>Die manuelle Regel „Für <span class="formula">x=5</span> darf der Vertrieb 28 €, 30 € oder 31 € ausgeben“ soll stattdessen automatisiert werden. Begründe, warum diese Regel keine eindeutige Funktion <span class="formula">p(x)</span> festlegt.</li></ol>
+<table class="compact"><tr><th>Größe</th><th>Bedeutung</th><th>Einheit</th></tr><tr><td><span class="formula">x</span></td><td></td><td></td></tr><tr><td><span class="formula">p(x)</span></td><td></td><td></td></tr></table>
+<div class="answerbox"></div>
+<div aria-label="Hilfen zu Aufgabe 1" class="inline-hints"><details><summary>Hilfe 1 zu Aufgabe 1: Denkimpuls</summary><div><p>Welche Zahl gibt der Vertrieb in das Dashboard ein, und welche Zahl soll das Dashboard ausgeben?</p></div></details><details><summary>Hilfe 2 zu Aufgabe 1: Begriffshilfe</summary><div><p>Eine Zuordnung ist eine Funktion, wenn jeder zulässigen Eingabe genau eine Ausgabe zugeordnet wird. Satzstarter: „Die Modellregel ist eindeutig, weil …“</p></div></details></div>
+<div class="teacher-only teacher-inline-note"><b>Lehrkrafthinweis:</b> Basisweg: Hilfe 1 früh öffnen lassen. Hilfe 2 unterstützt fachsprachlich. Eine weitere Hilfestufe ist nötig, wenn Lernende „mehrere mögliche Preise“ mit einer eindeutigen Ausgabe verwechseln oder die Einheiten nicht nennen.</div>
+</section>
+<section class="task-with-hints" id="aufgabe-2">
+<div class="task-head"><h3>Aufgabe 2 · Wertetabelle, Graph und Parameterdeutung</h3><span class="afb">AFB I / II</span></div>
+<ol><li>Berechne die Modellpreise und vervollständige die Tabelle.</li><li>Trage mindestens vier Punkte in das Koordinatensystem ein und zeichne die Modellgerade.</li><li>Deute die Steigung <span class="formula">−2,5</span> und den Achsenabschnitt <span class="formula">42</span> im Sachkontext. Prüfe dabei, ob <span class="formula">x=0</span> im Pilotbereich liegt.</li></ol>
+<table class="compact"><tr><th><span class="formula">x</span> in 100 Stück</th><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td></tr><tr><th><span class="formula">p(x)</span> in €</th><td></td><td>34,50</td><td></td><td>29,50</td><td></td><td>24,50</td><td></td></tr></table>
+<svg aria-label="Leeres Koordinatensystem für Absatzmenge x und Netto-Stückpreis p von x gleich 0 bis 10 und p gleich 0 bis 45" class="model-graph" role="img" viewbox="0 0 760 280">
+<rect fill="#ffffff" height="280" width="760" x="0" y="0"></rect>
+<g stroke="#dde5ec" stroke-width="1"><line x1="70" x2="710" y1="235" y2="235"></line><line x1="70" x2="710" y1="192" y2="192"></line><line x1="70" x2="710" y1="149" y2="149"></line><line x1="70" x2="710" y1="106" y2="106"></line><line x1="70" x2="710" y1="63" y2="63"></line><line x1="70" x2="710" y1="20" y2="20"></line><line x1="70" x2="70" y1="20" y2="235"></line><line x1="198" x2="198" y1="20" y2="235"></line><line x1="326" x2="326" y1="20" y2="235"></line><line x1="454" x2="454" y1="20" y2="235"></line><line x1="582" x2="582" y1="20" y2="235"></line><line x1="710" x2="710" y1="20" y2="235"></line></g>
+<g stroke="#22384a" stroke-width="2"><line x1="70" x2="725" y1="235" y2="235"></line><line x1="70" x2="70" y1="250" y2="12"></line><path d="M725 235 l-10 -5 v10 z" fill="#22384a"></path><path d="M70 12 l-5 10 h10 z" fill="#22384a"></path></g>
+<g fill="#34495e" font-family="Arial" font-size="13"><text x="62" y="254">0</text><text x="192" y="254">2</text><text x="320" y="254">4</text><text x="448" y="254">6</text><text x="576" y="254">8</text><text x="699" y="254">10</text><text x="47" y="240">0</text><text x="39" y="197">10</text><text x="39" y="154">20</text><text x="39" y="111">30</text><text x="39" y="68">40</text><text x="39" y="25">50</text><text x="590" y="272">x in 100 Stück</text><text x="8" y="17">p in €</text></g>
+</svg>
+<div class="sim-task-note no-print"><b>Optionale Offline-Hilfe zu Aufgabe 2:</b> Berechne zuerst mindestens zwei Tabellenwerte und zeichne eigene Punkte. Im <b>Preis-Mengen-Labor</b> kannst du danach Funktionswerte prüfen, den zugehörigen Punkt anzeigen und mit einem Steigungsdreieck die Änderung je 100 Stück sichtbar machen.<br/><button class="sim-link" data-sim-target="sim-price" type="button">Preis-Mengen-Labor öffnen</button></div><div aria-label="Hilfen zu Aufgabe 2" class="inline-hints"><details><summary>Hilfe 1 zu Aufgabe 2: Denkimpuls</summary><div><p>Eine Eingabe von <span class="formula">x=4</span> bedeutet 400 Stück. Setze die Zahl 4 in den Term ein.</p></div></details><details><summary>Hilfe 2 zu Aufgabe 2: Strukturhilfe</summary><div><p>Rechenschema: <span class="formula">p(x)=42−2,5·x</span>. Zur Steigung: „Wenn die geplante Menge um 100 Stück steigt, dann …“</p></div></details><details><summary>Hilfe 3 zu Aufgabe 2: erster Zwischenschritt</summary><div><p>Beginne beispielsweise mit <span class="formula">p(2)=42−2,5·2</span>. Trage danach den Punkt <span class="formula">(2|p(2))</span> ein.</p></div></details></div>
+<div class="teacher-only teacher-inline-note"><b>Lehrkrafthinweis:</b> Basisweg: Hilfe 1 und die vorgegebenen Tabellenwerte nutzen. Hilfe 2 ist sprachlich und fachlich, Hilfe 3 rechnerisch. Öffnen, wenn Einheiten fehlen, der Faktor <span class="formula">−2,5</span> ohne <span class="formula">x</span> gerechnet wird oder die Punkte vertauscht werden.</div>
+</section>
+<div class="interim-product"><h3>Zwischenergebnis Stunde 1 · Modell-Vorprüfbogen</h3><div class="profile-grid"><div class="profile-cell"><b>Modell:</b> __________________________</div><div class="profile-cell"><b>Eingabe / Ausgabe:</b> __________________________</div><div class="profile-cell"><b>Steigung im Kontext:</b> __________________________</div><div class="profile-cell"><b>Offene Freigabefrage:</b> __________________________</div></div></div>
+</section>
+<section class="student-material worksheet-page" id="arbeitsblatt-seite-2">
+<div class="worksheet-title"><div><h2>Modellwerte und Freigabebereich</h2><p>Schülerarbeitsblatt · Seite 2 von 3 · Stunde 2</p></div><div>Team: ____________________</div></div>
+<section class="task-with-hints" id="aufgabe-3">
+<div class="task-head"><h3>Aufgabe 3 · Funktionswerte berechnen und deuten</h3><span class="afb">AFB I / II</span></div>
+<ol><li>Berechne <span class="formula">p(4,5)</span> und deute das Ergebnis vollständig im Kontext.</li><li>Bei welcher geplanten Monatsmenge liefert das Modell einen Preis von 27,00 €? Stelle eine Gleichung auf und löse sie.</li><li>Der Prototyp berechnet für 1.000 Stück 17,00 €. Prüfe die Rechnung und beurteile zunächst nur, ob der Wert im Modell rechnerisch korrekt ist. Die Freigabe folgt erst in Aufgabe 5.</li></ol>
+<div class="math-check"><div><b>450 Stück</b><div class="answerbox"></div></div><div><b>Preis 27,00 €</b><div class="answerbox"></div></div></div>
+<div class="answerbox"></div>
+<div class="sim-task-note no-print"><b>Optionale Offline-Hilfe zu Aufgabe 3:</b> Nutze das <b>Preis-Mengen- und Richtungs-Labor</b> erst nach deinem eigenen Rechenansatz. Wechsle zwischen „Menge → Preis“ und „Preis → Menge“, um Funktionswert, Gleichungslösung und Eingabe-/Ausgaberichtung zu kontrollieren.<br/><button class="sim-link" data-sim-target="sim-price" type="button">Richtungs-Labor öffnen</button></div><div aria-label="Hilfen zu Aufgabe 3" class="inline-hints"><details><summary>Hilfe 1 zu Aufgabe 3: Denkimpuls</summary><div><p>Trenne drei Schritte: Wert berechnen, Einheit nennen, Ergebnis als Modellschätzung versprachlichen.</p></div></details><details><summary>Hilfe 2 zu Aufgabe 3: Satzstarter</summary><div><p>„Bei einer geplanten Monatsmenge von … Stück schätzt das Modell einen Netto-Stückpreis von ungefähr … €.“</p></div></details><details><summary>Hilfe 3 zu Aufgabe 3: erster Rechenschritt</summary><div><p><span class="formula">p(4,5)=42−2,5·4,5</span>. Für den zweiten Teil beginne mit <span class="formula">42−2,5x=27</span>.</p></div></details></div>
+<div class="teacher-only teacher-inline-note"><b>Lehrkrafthinweis:</b> Hilfe 2 unterstützt Sprache, Hilfe 3 die Algebra. Eine weitere Stufe ist erforderlich, wenn 450 für <span class="formula">x</span> eingesetzt wird oder rechnerische Korrektheit sofort mit betrieblicher Zulässigkeit gleichgesetzt wird.</div>
+</section>
+<section class="task-with-hints" id="aufgabe-4">
+<div class="task-head"><h3>Aufgabe 4 · Definitionsbereiche unterscheiden</h3><span class="afb">AFB II</span></div>
+<p>Prüfe die drei Ebenen und bestimme anschließend den <b>betrieblich freigegebenen Bereich</b> als Schnittmenge der Bedingungen.</p>
+<div class="restriction-grid"><div class="restriction"><b>A · Term mathematisch</b>Für welche reellen Zahlen kann der Term grundsätzlich berechnet werden? Berechne außerdem die Menge, bei der das Modell den Preis 0 € liefert.</div><div class="restriction"><b>B · Ökonomisch plausibel</b>Mengen und Preise dürfen nicht negativ sein.</div><div class="restriction"><b>C · Betriebliche Freigabe</b>Pilotdaten: <span class="formula">2≤x≤8</span>; Kapazität: <span class="formula">x≤9</span>; Preisuntergrenze: <span class="formula">p(x)≥20</span>.</div></div>
+<table class="compact"><tr><th>Bereich</th><th>Ergebnis</th><th>Begründung</th></tr><tr><td>Mathematischer Termbereich</td><td></td><td></td></tr><tr><td>Ökonomisch plausibler Bereich</td><td></td><td></td></tr><tr><td>Für das Dashboard freigegeben</td><td></td><td></td></tr></table>
+<div class="sim-task-note no-print"><b>Optionale Offline-Hilfe zu Aufgabe 4:</b> Im <b>Freigabebereich-Labor</b> kannst du einzelne Mengen testen. Prüfe nacheinander Pilotdaten, Kapazität, Preisuntergrenze und ökonomische Plausibilität und leite daraus selbst die gemeinsame Schnittmenge ab.<br/><button class="sim-link" data-sim-target="sim-domain" type="button">Freigabebereich-Labor öffnen</button></div><div aria-label="Hilfen zu Aufgabe 4" class="inline-hints"><details><summary>Hilfe 1 zu Aufgabe 4: Denkimpuls</summary><div><p>Der größte rechnerisch mögliche Bereich ist nicht automatisch der freigegebene Bereich. Welche Bedingung ist jeweils am strengsten?</p></div></details><details><summary>Hilfe 2 zu Aufgabe 4: Strukturhilfe</summary><div><p>Schreibe jede Bedingung als Bereich und bilde die gemeinsame Schnittmenge: Pilotbereich ∩ Kapazitätsbereich ∩ Preisbereich.</p></div></details><details><summary>Hilfe 3 zu Aufgabe 4: erster Zwischenschritt</summary><div><p>Für die Preisuntergrenze beginne mit <span class="formula">42−2,5x≥20</span>. Beim Umformen einer Ungleichung mit einer negativen Zahl muss sich das Vergleichszeichen umkehren.</p></div></details></div>
+<div class="teacher-only teacher-inline-note"><b>Lehrkrafthinweis:</b> Basisweg: Hilfe 2 und die drei Karten. Hilfe 3 fachlich erst öffnen, wenn die Preisuntergrenze nicht algebraisch bearbeitet wird. Weiterer Unterstützungsbedarf zeigt sich, wenn nur die Nullstelle oder nur die Lagergrenze genannt wird statt der Schnittmenge.</div>
+</section>
+<div class="sentence-starters"><b>Begriffshilfe:</b> <b>mathematisch berechenbar</b> = der Term ist definiert; <b>ökonomisch plausibel</b> = Menge und Preis passen grundsätzlich zum Sachkontext; <b>betrieblich freigegeben</b> = zusätzlich durch Datenlage und Unternehmensregeln abgesichert.</div>
+</section>
+<section class="student-material worksheet-page" id="arbeitsblatt-seite-3">
+<div class="worksheet-title"><div><h2>Handlungsprodukt: Preisabsatz- und Freigabekarte PA-06</h2><p>Schülerarbeitsblatt · Seite 3 von 3</p></div><div>Datum: __________</div></div>
+<section class="task-with-hints" id="aufgabe-5">
+<div class="task-head"><h3>Aufgabe 5 · Automatisierung beurteilen und freigeben</h3><span class="afb">AFB III</span></div>
+<p>Füllt die Freigabekarte aus. Entscheidet zwischen <b>Freigabe</b>, <b>begrenzter Freigabe</b> und <b>keiner Freigabe</b>. Begründet mit Modell, Bereich, Beispiel und konkreter Systemregel.</p>
+<div class="release-card"><div class="release-head"><div><h3>PA-06 · Freigabekarte</h3><p>European Pricing &amp; Market Development</p></div><span class="status">Entscheidung offen</span></div><table class="compact"><tr><th>1. Modell und Richtung</th><td></td></tr><tr><th>2. Steigung / Achsenabschnitt</th><td></td></tr><tr><th>3. Beispielausgabe</th><td></td></tr><tr><th>4. Freigegebener Bereich</th><td></td></tr><tr><th>5. Automatische Prüfregel</th><td></td></tr><tr><th>6. Wortlaut der Ausgabe</th><td></td></tr><tr><th>7. Entscheidung und Begründung</th><td style="height:18mm"></td></tr></table></div>
+<div class="sim-task-note no-print"><b>Optionale Offline-Hilfe zu Aufgabe 5:</b> Konfiguriere im <b>Dashboard-Freigabe-Labor</b> Eingabegrenzen, Sperrverhalten, Einheit und Ausgabetext. Teste anschließend zulässige und unzulässige Mengen. Das Labor prüft Schutzbausteine, entscheidet aber nicht über eure Freigabebegründung.<br/><button class="sim-link" data-sim-target="sim-dashboard" type="button">Dashboard-Freigabe-Labor öffnen</button></div><div aria-label="Hilfen zu Aufgabe 5" class="inline-hints"><details><summary>Hilfe 1 zu Aufgabe 5: Denkimpuls</summary><div><p>Eine Freigabe braucht mehr als eine korrekte Formel: Eingabebereich, Preisuntergrenze, Näherungshinweis und Verhalten bei unzulässigen Eingaben müssen geregelt sein.</p></div></details><details><summary>Hilfe 2 zu Aufgabe 5: Begründungsstruktur</summary><div><p>Satzstarter: „Wir empfehlen …, weil … . Zulässig sind nur … . Das System muss … und darf nicht … .“</p></div></details><details><summary>Hilfe 3 zu Aufgabe 5: Prüffragen</summary><div><p>Ist der Pilotbereich eingehalten? Wird „ungefähr“ statt „garantiert“ angezeigt? Werden Eingaben außerhalb des Bereichs gesperrt oder an eine manuelle Prüfung gegeben? Ist die Einheit eindeutig?</p></div></details></div>
+<div class="teacher-only teacher-inline-note"><b>Lehrkrafthinweis:</b> Hilfe 1 ist fachlich, Hilfe 2 sprachlich, Hilfe 3 strukturell. Öffnen, wenn die Entscheidung nur mit „Formel stimmt“ begründet wird. Die eigentliche Freigabeoption und vollständige Begründung dürfen nicht vorgegeben werden.</div>
+</section>
+<h3>Transparente Produktkriterien</h3>
+<ul class="criteria"><li>Modell, Eingabe und Ausgabe sind korrekt und mit Einheiten angegeben.</li><li>Negative Steigung und Achsenabschnitt werden sachgerecht gedeutet.</li><li>Mindestens eine Modellrechnung wird korrekt und als Näherung interpretiert.</li><li>Der freigegebene Bereich wird aus allen Bedingungen begründet.</li><li>Die Systemregel beschreibt zulässige Eingaben und das Verhalten außerhalb des Bereichs.</li><li>Die Entscheidung ist fachlich nachvollziehbar und unterscheidet Modellwert von Garantie.</li></ul>
+<section class="task-with-hints" id="erweiterung">
+<div class="task-head"><h3>Erweiterung · Welche Richtung braucht das Dashboard?</h3><span class="afb">AFB III</span></div>
+<p>Ein zweites Team schreibt das gleiche lineare Modell als <span class="formula">x(p)=16,8−0,4p</span>. Vergleiche Eingabe und Ausgabe beider Terme. Beurteile, welches Modell besser zu einem Tool passt, in das der Vertrieb einen Preis eingibt, und welches zu einem Tool, in das eine Zielmenge eingegeben wird.</p>
+<div class="answerbox tall"></div>
+<div class="sim-task-note no-print"><b>Optionale Offline-Hilfe zur Erweiterung:</b> Im <b>Richtungs-Labor</b> kannst du denselben Punkt einmal über eine eingegebene Menge und einmal über einen eingegebenen Preis bestimmen. Vergleiche dabei bewusst, welche Größe Eingabe und welche Ausgabe ist.<br/><button class="sim-link" data-sim-target="sim-price" type="button">Richtung wechseln</button></div><div aria-label="Hilfen zur Erweiterung" class="inline-hints"><details><summary>Hilfe 1 zur Erweiterung: Denkimpuls</summary><div><p>Setze in beiden Schreibweisen probeweise einen bekannten zusammengehörigen Preis-Mengen-Wert ein. Achte darauf, welche Größe links vom Funktionsterm steht.</p></div></details><details><summary>Hilfe 2 zur Erweiterung: Satzstarter</summary><div><p>„Die Darstellung <span class="formula">p(x)</span> passt zum Zweck …, weil die Eingabe … ist. Die Darstellung <span class="formula">x(p)</span> passt dagegen …“</p></div></details></div>
+</section>
+</section>
+<section aria-labelledby="simulation-title" class="simulation-only" id="simulationen">
+<h2 id="simulation-title">Interaktive Offline-Simulationen als Aufgabenhilfe</h2>
+<div class="note"><b>Arbeitsprinzip:</b> Beginne jeweils im Schülerarbeitsblatt. Die Simulationen dienen anschließend zum Sichtbarmachen, Kontrollieren und Interpretieren. Sie verwenden ausschließlich das feste Modell <span class="formula">p(x) = 42 − 2,5x</span> und die didaktisch konstruierten Betriebsbedingungen. Alle Berechnungen, Grafiken und Rückmeldungen laufen lokal in dieser Datei.</div>
+<div class="sim-intro">
+<div class="sim-card"><span class="sim-tag">Aufgaben 2, 3 und Erweiterung</span><h3>Preis-Mengen- und Richtungs-Labor</h3><p>Kontrolliert Funktionswerte, visualisiert die negative Steigung und wechselt zwischen Menge → Preis und Preis → Menge.</p><button class="sim-link" data-sim-target="sim-price" type="button">Zum Preis-Mengen-Labor</button></div>
+<div class="sim-card"><span class="sim-tag">Aufgabe 4</span><h3>Freigabebereich-Labor</h3><p>Testet Mengen an allen Bedingungen und macht sichtbar, warum mathematische Berechenbarkeit, ökonomische Plausibilität und betriebliche Freigabe verschieden sind.</p><button class="sim-link" data-sim-target="sim-domain" type="button">Zum Bereichs-Labor</button></div>
+<div class="sim-card"><span class="sim-tag">Aufgabe 5</span><h3>Dashboard-Freigabe-Labor</h3><p>Konfiguriert Grenzen, Sperrverhalten, Einheiten und Ausgabetext und erprobt die Regel an zulässigen und unzulässigen Eingaben.</p><button class="sim-link" data-sim-target="sim-dashboard" type="button">Zum Dashboard-Labor</button></div>
+</div>
+<article aria-labelledby="sim-price-title" class="sim-panel" id="sim-price">
+<h3 id="sim-price-title">1. Preis-Mengen- und Richtungs-Labor</h3>
+<p><b>Auftrag:</b> Wähle die Eingaberichtung, berechne den gesuchten Wert zuerst selbst und gib ihn ein. Nach richtiger Eingabe werden Punkt, Einheiten, Modellbereich und – im Mengenmodus – ein Steigungsdreieck freigegeben.</p>
+<div class="sim-controls">
+<label>Richtung<select id="priceMode"><option value="x-to-p">Menge x → Preis p(x)</option><option value="p-to-x">Preis p → Menge x(p)</option></select></label>
+</div>
+<div class="sim-mode-panel" id="modeXPanel">
+<div class="sim-controls">
+<label>Monatsmenge x in 100 Stück<input id="priceX" max="18" min="0" step="0.5" type="range" value="4.5"/><span>x = <output class="sim-output" id="priceXOut">4,5</output> = <output id="pricePieces">450</output> Stück</span></label>
+<label>Mein Modellpreis in €<input id="priceOwnP" inputmode="decimal" step="0.25" type="number"/></label>
+<button class="sim-button tertiary" data-price-x="2" type="button">Tabellenwert x = 2</button>
+<button class="sim-button tertiary" data-price-x="4.5" type="button">Aufgabe 3: x = 4,5</button>
+<button class="sim-button tertiary" data-price-x="10" type="button">Prototyp: x = 10</button>
+</div>
+</div>
+<div class="sim-mode-panel" hidden="" id="modePPanel">
+<div class="sim-controls">
+<label>Vorgegebener Preis p in €<input id="priceP" max="42" min="0" step="0.5" type="range" value="27"/><span>p = <output class="sim-output" id="pricePOut">27,0</output> €</span></label>
+<label>Meine Menge x in 100 Stück<input id="priceOwnX" inputmode="decimal" step="0.1" type="number"/></label>
+<button class="sim-button tertiary" data-price-p="27" type="button">Aufgabe 3: p = 27 €</button>
+<button class="sim-button tertiary" data-price-p="20" type="button">Preisuntergrenze 20 €</button>
+<button class="sim-button tertiary" data-price-p="0" type="button">Nullpreis 0 €</button>
+</div>
+</div>
+<div class="sim-controls"><button class="sim-button" id="priceCheck" type="button">Eigene Rechnung prüfen</button><button class="sim-button secondary" id="priceReset" type="button">Eingabe löschen</button></div>
+<div class="sim-toggle-row"><label><input checked="" id="priceTriangle" type="checkbox"/> Steigungsdreieck im Mengenmodus anzeigen</label><span class="sim-badge">Eine x-Einheit = 100 Stück</span></div>
+<div aria-live="polite" class="sim-feedback" id="priceFeedback">Die negative Steigung beschreibt eine Preisänderung je zusätzlicher Mengeneinheit. Rechne zuerst selbst.</div>
+<div class="sim-stat-grid">
+<div class="sim-stat"><b>Eingabe</b><output id="priceInputStat">noch nicht freigegeben</output></div>
+<div class="sim-stat"><b>Ausgabe</b><output id="priceOutputStat">noch nicht freigegeben</output></div>
+<div class="sim-stat"><b>Punkt der Geraden</b><output id="pricePointStat">noch nicht freigegeben</output></div>
+<div class="sim-stat"><b>Sachliche Einordnung</b><output id="priceZoneStat">noch nicht freigegeben</output></div>
+</div>
+<svg aria-labelledby="priceGraphTitle priceGraphDesc" class="sim-graph" id="priceGraph" role="img" viewbox="0 0 780 430"><title id="priceGraphTitle">Preisabsatzfunktion mit ausgewähltem Punkt</title><desc id="priceGraphDesc">Die fallende Gerade p von x gleich 42 minus 2 Komma 5 x. Pilotbereich, Preisuntergrenze und Kapazitätsgrenze sind markiert.</desc></svg>
+<div class="sim-note"><b>Prüffrage:</b> Warum kann ein Term rechnerisch einen Preis liefern, obwohl das Dashboard die Eingabe nicht automatisch freigeben darf?</div>
+</article>
+<article aria-labelledby="sim-domain-title" class="sim-panel" id="sim-domain">
+<h3 id="sim-domain-title">2. Freigabebereich-Labor: Bedingungen als Schnittmenge</h3>
+<p><b>Auftrag:</b> Bewege die Testmenge. Beobachte jede Bedingung getrennt und leite daraus den gemeinsamen Bereich ab. Die farbigen Karten zeigen nicht nur das Endergebnis, sondern welche Regel eine Eingabe akzeptiert oder ablehnt.</p>
+<div class="sim-controls">
+<label>Testmenge x in 100 Stück<input id="domainX" max="18" min="-1" step="0.1" type="range" value="8.5"/><span>x = <output class="sim-output" id="domainXOut">8,5</output> = <output id="domainPieces">850</output> Stück</span></label>
+<button class="sim-button tertiary" data-domain-x="-0.5" type="button">negative Menge testen</button>
+<button class="sim-button tertiary" data-domain-x="8" type="button">Pilotgrenze testen</button>
+<button class="sim-button tertiary" data-domain-x="8.8" type="button">Preisgrenze testen</button>
+<button class="sim-button tertiary" data-domain-x="10" type="button">Prototyp x = 10</button>
+</div>
+<div class="sim-stat-grid">
+<div class="sim-stat"><b>Modellpreis</b><output id="domainPrice">20,75 €</output></div>
+<div class="sim-stat"><b>Term</b><output id="domainTerm">berechenbar</output></div>
+<div class="sim-stat"><b>Ökonomische Ebene</b><output id="domainEconomy">wird geprüft</output></div>
+<div class="sim-stat"><b>Automatische Freigabe</b><output id="domainRelease">wird geprüft</output></div>
+</div>
+<div class="sim-condition-grid" id="domainConditions">
+<div class="sim-condition" id="condQuantity"><b><span class="lamp"></span>Menge nicht negativ</b><span>0 ≤ x</span></div>
+<div class="sim-condition" id="condPrice"><b><span class="lamp"></span>Preis nicht negativ</b><span>p(x) ≥ 0</span></div>
+<div class="sim-condition" id="condPilot"><b><span class="lamp"></span>Pilotdaten</b><span>2 ≤ x ≤ 8</span></div>
+<div class="sim-condition" id="condCapacity"><b><span class="lamp"></span>Lagerkapazität</b><span>x ≤ 9</span></div>
+<div class="sim-condition" id="condFloor"><b><span class="lamp"></span>Preisuntergrenze</b><span>p(x) ≥ 20</span></div>
+<div class="sim-condition" id="condAll"><b><span class="lamp"></span>Alle Freigaberegeln</b><span>gemeinsame Schnittmenge</span></div>
+</div>
+<svg aria-labelledby="domainGraphTitle domainGraphDesc" class="sim-graph" id="domainGraph" role="img" viewbox="0 0 780 360"><title id="domainGraphTitle">Bedingungen für den Definitions- und Freigabebereich</title><desc id="domainGraphDesc">Mehrere Zahlenstrahlen zeigen ökonomische Plausibilität, Pilotbereich, Kapazität, Preisuntergrenze und die Testmenge.</desc></svg>
+<div class="sim-subpanel">
+<h4>Meinen endgültigen Freigabebereich prüfen</h4>
+<div class="sim-controls"><label>untere Grenze x<input id="domainOwnMin" inputmode="decimal" step="0.1" type="number"/></label><label>obere Grenze x<input id="domainOwnMax" inputmode="decimal" step="0.1" type="number"/></label><button class="sim-button" id="domainCheck" type="button">Schnittmenge prüfen</button><button class="sim-button secondary" id="domainReset" type="button">Felder löschen</button></div>
+<div aria-live="polite" class="sim-feedback" id="domainFeedback">Vergleiche die Bedingungen: Die gemeinsame Schnittmenge kann nur dort liegen, wo alle Karten grün sind.</div>
+</div>
+</article>
+<article aria-labelledby="sim-dashboard-title" class="sim-panel" id="sim-dashboard">
+<h3 id="sim-dashboard-title">3. Dashboard-Freigabe-Labor: Schutzregeln testen</h3>
+<p><b>Auftrag:</b> Konfiguriere das Dashboard so, dass es nur fachlich abgesicherte Eingaben automatisch verarbeitet. Teste anschließend mindestens eine Menge innerhalb und eine außerhalb deines Bereichs.</p>
+<div class="sim-controls">
+<label>untere automatische Grenze x<input id="dashMin" inputmode="decimal" step="0.1" type="number" value="0"/></label>
+<label>obere automatische Grenze x<input id="dashMax" inputmode="decimal" step="0.1" type="number" value="18"/></label>
+<label>Ausgabetext<select id="dashWording"><option value="guaranteed">Garantierter Preis</option><option value="plain">Preis</option><option value="approx">Modellschätzung: ungefähr</option></select></label>
+<label>Außerhalb des Bereichs<select id="dashOutside"><option value="calculate">trotzdem berechnen</option><option value="warn">Warnung, aber Angebot erzeugen</option><option value="block">sperren und manuell prüfen</option></select></label>
+<label><span>Einheit sichtbar</span><span><input id="dashUnit" type="checkbox"/> „x in 100 Stück“ und „€ je Stück“ anzeigen</span></label>
+</div>
+<div class="sim-controls">
+<label>Testmenge x<input id="dashX" max="18" min="0" step="0.5" type="range" value="4.5"/><span>x = <output class="sim-output" id="dashXOut">4,5</output> = <output id="dashPieces">450</output> Stück</span></label>
+<button class="sim-button tertiary" data-dash-x="4.5" type="button">zulässigen Fall testen</button>
+<button class="sim-button tertiary" data-dash-x="10" type="button">1.000 Stück testen</button>
+<button class="sim-button tertiary" data-dash-x="1" type="button">100 Stück testen</button>
+<button class="sim-button" id="dashTest" type="button">Konfiguration ausführen</button>
+<button class="sim-button secondary" id="dashReset" type="button">Prototyp zurücksetzen</button>
+</div>
+<div class="sim-dashboard-grid">
+<div class="sim-screen"><h4>Ungeprüfter Prototyp</h4><p>Eingabe: <span id="protoInput">450 Stück</span></p><p class="screen-output" id="protoOutput">Garantierter Preis: 30,75 €</p><p id="protoNote">Keine Bereichsprüfung; Modellwert wird als Garantie ausgegeben.</p></div>
+<div class="sim-screen"><h4>Eure Konfiguration</h4><p id="configUnitLine">Einheit: nicht eingeblendet</p><p class="screen-output" id="configOutput">Noch nicht getestet</p><p id="configNote">Konfiguration ausführen, dann fachlich prüfen.</p></div>
+</div>
+<div aria-live="polite" class="sim-feedback" id="dashFeedback">Vier Schutzbausteine sind zu prüfen: sachlicher Eingabebereich, Sperrverhalten, Näherungswortlaut und sichtbare Einheiten.</div>
+<div class="sim-subpanel">
+<h4>Vollständigkeitscheck der Preisabsatz- und Freigabekarte</h4>
+<p>Setze nur Häkchen für Bausteine, die tatsächlich in eurem Handlungsprodukt stehen. Der Check zählt Inhalte, bewertet aber nicht die fachliche Qualität der Begründung.</p>
+<div class="sim-checklist" id="dashChecks">
+<label><input type="checkbox"/> Modell mit Eingabe, Ausgabe und Einheiten</label>
+<label><input type="checkbox"/> Steigung und Achsenabschnitt mit Kontextgrenze</label>
+<label><input type="checkbox"/> Beispielwert als Modellschätzung</label>
+<label><input type="checkbox"/> begründeter automatischer Freigabebereich</label>
+<label><input type="checkbox"/> Prüfregel und Verhalten außerhalb des Bereichs</label>
+<label><input type="checkbox"/> eindeutige, begründete Freigabeentscheidung</label>
+</div>
+<button class="sim-button" id="dashComplete" type="button">Vollständigkeit prüfen</button><button class="sim-button secondary" id="dashChecksReset" type="button">Häkchen löschen</button>
+<div aria-live="polite" class="sim-feedback" id="dashCompleteFeedback">Eine vollständige Karte enthält alle sechs Bausteine. Prüft danach eure Begründungen gegenseitig.</div>
+</div>
+</article>
+</section><section class="solution-only" id="musterloesung">
+<h2>3. Vollständige Musterlösung</h2>
+<h3>Aufgabe 1</h3>
+<div class="card solution"><ul><li><span class="formula">x</span>: geplante monatliche Absatzmenge in Hunderten von Stück. Beispiel: <span class="formula">x=5</span> bedeutet 500 Stück.</li><li><span class="formula">p(x)</span>: modellierter Netto-Stückpreis in Euro für die Menge <span class="formula">x</span>.</li><li>Die Regel <span class="formula">p(x)=42−2,5x</span> ist eine Funktion, weil jeder zulässigen Eingabe <span class="formula">x</span> durch den Term genau ein Preiswert zugeordnet wird.</li><li>Die manuelle Regel ist keine eindeutige Funktion, weil derselben Eingabe <span class="formula">x=5</span> mehrere mögliche Ausgaben zugeordnet werden. Ein automatisiertes System hätte keine eindeutige Auswahlregel.</li></ul></div>
+<h3>Aufgabe 2</h3>
+<div class="card solution"><table class="compact"><tr><th><span class="formula">x</span> in 100 Stück</th><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td></tr><tr><th><span class="formula">p(x)</span> in €</th><td>37,00</td><td>34,50</td><td>32,00</td><td>29,50</td><td>27,00</td><td>24,50</td><td>22,00</td></tr></table><p>Die Punkte liegen auf einer fallenden Geraden, beispielsweise <span class="formula">(2|37)</span>, <span class="formula">(4|32)</span>, <span class="formula">(6|27)</span> und <span class="formula">(8|22)</span>.</p><ul><li><b>Steigung <span class="formula">−2,5</span>:</b> Wenn die geplante Monatsmenge im Modell um 100 Stück steigt, sinkt der modellierte Netto-Stückpreis um 2,50 € je Stück.</li><li><b>Achsenabschnitt 42:</b> Rechnerisch liefert das Modell bei <span class="formula">x=0</span> einen Preis von 42 €. Dieser Wert ist kein abgesicherter Marktpreis, weil 0 Stück außerhalb des Pilotbereichs 200–800 Stück liegt.</li></ul><svg aria-label="Lösungsgraph der fallenden Preisabsatzgeraden p von x gleich 42 minus 2 Komma 5 x" class="model-graph" role="img" viewbox="0 0 760 280"><rect fill="#ffffff" height="280" width="760" x="0" y="0"></rect><g stroke="#dde5ec" stroke-width="1"><line x1="70" x2="710" y1="235" y2="235"></line><line x1="70" x2="710" y1="192" y2="192"></line><line x1="70" x2="710" y1="149" y2="149"></line><line x1="70" x2="710" y1="106" y2="106"></line><line x1="70" x2="710" y1="63" y2="63"></line><line x1="70" x2="710" y1="20" y2="20"></line><line x1="70" x2="70" y1="20" y2="235"></line><line x1="198" x2="198" y1="20" y2="235"></line><line x1="326" x2="326" y1="20" y2="235"></line><line x1="454" x2="454" y1="20" y2="235"></line><line x1="582" x2="582" y1="20" y2="235"></line><line x1="710" x2="710" y1="20" y2="235"></line></g><g stroke="#22384a" stroke-width="2"><line x1="70" x2="725" y1="235" y2="235"></line><line x1="70" x2="70" y1="250" y2="12"></line></g><line stroke="#0b6b8a" stroke-width="5" x1="198" x2="582" y1="76" y2="140"></line><g fill="#b3263e"><circle cx="198" cy="76" r="5"></circle><circle cx="262" cy="87" r="5"></circle><circle cx="326" cy="97" r="5"></circle><circle cx="390" cy="108" r="5"></circle><circle cx="454" cy="119" r="5"></circle><circle cx="518" cy="130" r="5"></circle><circle cx="582" cy="140" r="5"></circle></g><g fill="#34495e" font-family="Arial" font-size="13"><text x="62" y="254">0</text><text x="192" y="254">2</text><text x="320" y="254">4</text><text x="448" y="254">6</text><text x="576" y="254">8</text><text x="699" y="254">10</text><text x="47" y="240">0</text><text x="39" y="197">10</text><text x="39" y="154">20</text><text x="39" y="111">30</text><text x="39" y="68">40</text><text x="39" y="25">50</text><text x="590" y="272">x in 100 Stück</text><text x="8" y="17">p in €</text></g></svg></div>
+<h3>Aufgabe 3</h3>
+<div class="card solution"><ol><li><span class="formula">p(4,5)=42−2,5·4,5=42−11,25=30,75</span>. Bei einer geplanten Monatsmenge von 450 Stück schätzt das Modell einen Netto-Stückpreis von ungefähr 30,75 €.</li><li><span class="formula">42−2,5x=27</span> ⇒ <span class="formula">−2,5x=−15</span> ⇒ <span class="formula">x=6</span>. Ein Modellpreis von 27,00 € gehört zu einer geplanten Menge von 600 Stück.</li><li>Für 1.000 Stück gilt <span class="formula">x=10</span>: <span class="formula">p(10)=42−25=17</span>. Die Prototyprechnung ist im Term rechnerisch korrekt. Ob sie betrieblich zulässig ist, hängt vom freigegebenen Bereich und den Unternehmensbedingungen ab; diese Prüfung ergibt in Aufgabe 4 und 5 eine Ablehnung dieser Eingabe.</li></ol></div>
+<h3>Aufgabe 4</h3>
+<div class="card solution"><ul><li><b>Mathematischer Termbereich:</b> Der lineare Term ist für alle reellen Zahlen berechenbar, also <span class="formula">D=ℝ</span>. Der Nullpreis entsteht bei <span class="formula">42−2,5x=0</span>, also <span class="formula">x=16,8</span> beziehungsweise 1.680 Stück.</li><li><b>Ökonomisch plausibler Bereich:</b> Ohne negative Menge und ohne negativen Preis gilt <span class="formula">0≤x≤16,8</span>.</li><li><b>Preisuntergrenze:</b> <span class="formula">42−2,5x≥20</span> ⇒ <span class="formula">−2,5x≥−22</span> ⇒ <span class="formula">x≤8,8</span>.</li><li><b>Betriebliche Schnittmenge:</b> Pilot <span class="formula">2≤x≤8</span>, Kapazität <span class="formula">x≤9</span> und Preisregel <span class="formula">x≤8,8</span>. Die strengste gemeinsame Grenze ist daher <span class="formula">2≤x≤8</span>, entsprechend 200 bis 800 Stück.</li></ul><p>Der Pilotbereich ist enger als Kapazitäts- und Preisgrenze und begrenzt deshalb die automatische Freigabe.</p></div>
+<h3>Aufgabe 5 · Ausgefüllte Preisabsatz- und Freigabekarte</h3>
+<div class="release-card card solution"><div class="release-head"><div><h3>PA-06 · Freigabekarte</h3><p>European Pricing &amp; Market Development</p></div><span class="decision-stamp">Begrenzt freigegeben</span></div><table class="compact"><tr><th>1. Modell und Richtung</th><td><span class="formula">p(x)=42−2,5x</span>; Eingabe ist die geplante Monatsmenge <span class="formula">x</span> in Hunderten Stück, Ausgabe der modellierte Netto-Stückpreis in Euro.</td></tr><tr><th>2. Steigung / Achsenabschnitt</th><td>Je weitere 100 Stück sinkt der Modellpreis um 2,50 €. Der Wert 42 € bei <span class="formula">x=0</span> ist außerhalb der Pilotdaten und nicht als garantierter Marktpreis zu verwenden.</td></tr><tr><th>3. Beispielausgabe</th><td>450 Stück: <span class="formula">p(4,5)=30,75</span>; Ausgabe „geschätzter Netto-Stückpreis: ungefähr 30,75 €“.</td></tr><tr><th>4. Freigegebener Bereich</th><td><span class="formula">2≤x≤8</span>, also 200 bis 800 Stück.</td></tr><tr><th>5. Automatische Prüfregel</th><td>Nur Eingaben von 200 bis 800 Stück werden automatisch berechnet. Andere Eingaben werden gesperrt und an die manuelle Preisprüfung weitergeleitet.</td></tr><tr><th>6. Wortlaut der Ausgabe</th><td>„Modellschätzung / ungefähr“ statt „garantierter Preis“; Einheit und Pilotbereich sichtbar anzeigen.</td></tr><tr><th>7. Entscheidung und Begründung</th><td>Begrenzte Freigabe: Das Modell ist im Pilotbereich konsistent und für interne Angebotsvorbereitung nutzbar. Außerhalb 200–800 Stück fehlen abgesicherte Daten; 1.000 Stück überschreiten zusätzlich die Lagergrenze und führen zu einem Preis unter 20 €. Das System darf daher außerhalb des Freigabebereichs kein automatisches Angebot erzeugen.</td></tr></table></div>
+<h3>Erweiterung</h3>
+<div class="card solution"><p>Aus <span class="formula">p(x)=42−2,5x</span> folgt durch Umstellen <span class="formula">x(p)=16,8−0,4p</span>. Beide Terme beschreiben dieselbe Modellgerade, aber mit vertauschter Eingabe- und Ausgaberichtung.</p><ul><li><span class="formula">p(x)</span> passt zu einem Tool, in das eine Zielmenge eingegeben wird und das einen passenden Modellpreis ausgibt.</li><li><span class="formula">x(p)</span> passt zu einem Tool, in das ein Preis eingegeben wird und das die erwartete Menge ausgibt.</li></ul><p>Für beide Richtungen bleiben Datenbereich, Näherungscharakter und betriebliche Grenzen zu prüfen.</p></div>
+</section>
+<section class="teacher-only" id="sicherung">
+<h2>4. Ergebnissicherung / Tafelbild</h2>
+<div class="board"><h3>Lineare Preisabsatzfunktion: rechnen, deuten, begrenzen</h3><p><b>Richtung:</b> <span class="formula">x</span> = Absatzmenge; <span class="formula">p(x)</span> = modellierter Preis. Jede zulässige Menge erhält genau einen Modellpreis.</p><p><b>Modell:</b> <span class="formula">p(x)=42−2,5x</span>.</p><p><b>Negative Steigung:</b> +100 Stück ⇒ Modellpreis −2,50 € je Stück.</p><p><b>Drei Bereiche:</b> Term mathematisch berechenbar → ökonomisch plausibel → durch Daten und Unternehmen freigegeben.</p><p><b>Freigabebereich PA-06:</b> <span class="formula">2≤x≤8</span> beziehungsweise 200–800 Stück.</p><p><b>Automatisierungsregel:</b> Bereich prüfen → Näherung kennzeichnen → außerhalb sperren / manuell prüfen.</p><p><b>Merksatz:</b> Ein berechenbarer Modellwert ist noch keine betriebliche Freigabe.</p></div>
+<h3>Differenzierung und sprachliche Unterstützung</h3>
+<div class="grid2"><div class="card"><h4>Fachliche Differenzierung</h4><ul><li><b>Basis:</b> teilweise gefüllte Wertetabelle, Koordinatensystem, Bedingungskarten und strukturierte Freigabekarte.</li><li><b>Standard:</b> vollständige Berechnungen, Graph, Parameterdeutung und Schnittmenge der Bedingungen.</li><li><b>Erweiterung:</b> Eingabe-/Ausgaberichtung von <span class="formula">p(x)</span> und <span class="formula">x(p)</span> zweckbezogen vergleichen.</li><li>Schnelle Lernende formulieren eine Pseudoregel: „Wenn <span class="formula">2≤x≤8</span>, dann berechnen; sonst manuelle Prüfung.“</li></ul></div><div class="card"><h4>Sprachliche Unterstützung</h4><ul><li>Begriffspaare: Eingabe ↔ Ausgabe; Menge ↔ Preis; berechenbar ↔ freigegeben; Modellschätzung ↔ Garantie.</li><li>Satzstarter direkt in Aufgaben 2, 3 und 5.</li><li>Begründungsstruktur: Modell – Rechnung – Kontextdeutung – Grenze – Entscheidung.</li><li>Einheiten konsequent: „pro 100 Stück“, „Euro je Stück“, „monatliche Absatzmenge“.</li></ul></div></div>
+<h3>Typische Fehler und mögliche Reaktionen</h3>
+<table><tr><th>Typischer Fehler</th><th>Mögliche Lehrkraftreaktion</th></tr>
+<tr><td><span class="formula">x</span> wird als Preis und <span class="formula">p(x)</span> als Menge verstanden.</td><td>Eingabefeld des Prototyps und Einheiten markieren lassen; die Zuordnung in einem vollständigen Satz aussprechen.</td></tr>
+<tr><td>Bei <span class="formula">x=4,5</span> werden 4,5 Stück statt 450 Stück genannt.</td><td>Einheit der x-Achse reaktivieren: eine x-Einheit entspricht 100 Stück.</td></tr>
+<tr><td>Die negative Steigung wird als „Absatz sinkt“ gedeutet.</td><td>Fragen, welche Größe die Ausgabe ist: Hier sinkt der Modellpreis bei größerer Menge.</td></tr>
+<tr><td>Der Achsenabschnitt 42 € wird als garantierter Höchstpreis bezeichnet.</td><td>Prüfen lassen, ob <span class="formula">x=0</span> im Pilotbereich liegt und ob Modellwert und Garantie dasselbe sind.</td></tr>
+<tr><td>Als Definitionsbereich wird nur <span class="formula">ℝ</span> angegeben.</td><td>Die drei Ebenen mathematisch, ökonomisch und betrieblich in getrennte Zeilen schreiben lassen.</td></tr>
+<tr><td>Die Nullstelle <span class="formula">x=16,8</span> wird als Freigabegrenze genutzt.</td><td>Pilot-, Kapazitäts- und Preisuntergrenze als Schnittmenge vergleichen.</td></tr>
+<tr><td>Beim Lösen der Ungleichung bleibt das Vergleichszeichen unverändert.</td><td>Die Division durch eine negative Zahl farblich markieren und mit einem Probe-Wert kontrollieren.</td></tr>
+<tr><td>1.000 Stück werden freigegeben, weil der Term 17 € berechnet.</td><td>Rechenbarkeit, Datenbereich, Lagergrenze und Preisuntergrenze in einer Vier-Spalten-Prüfung gegenüberstellen.</td></tr>
+<tr><td>Die Ausgabe wird als „garantiert“ formuliert.</td><td>Näherungscharakter der Regression aus Woche 5 reaktivieren und eine sachgerechte Bildschirmformulierung verlangen.</td></tr>
+</table>
+<h3>Übergang zur separaten Übungsstunde</h3>
+<p>Die separate Übungsstunde kann weitere lineare Preisabsatzmodelle mit wechselnden Einheiten verwenden: Funktionswerte berechnen, negative Steigungen deuten, Nullpreis und sachliche Bereiche unterscheiden sowie einfache Dashboard-Regeln formulieren. Danach kann das Halbjahresskript mit dem Übergang von linearen zu quadratischen und höhergradigen Funktionen fortfahren.</p>
+</section>
+<section class="teacher-only" id="quellen">
+<h2>5. Quellen- und Kennzeichnungsverzeichnis</h2>
+<ul class="source-list"><li><b>Aus dem Klassenprofil übernommen:</b> Klasse 11BC, Bildungsgang D28, Fachbereich Wirtschaft und Verwaltung, international-kaufmännische Kontexte, heterogene Lerngruppe, Standardausstattung und Ausschluss generativer KI für Lernende.</li><li><b>Aus dem Halbjahresskript übernommen:</b> Kapitel „Regression und Trendgerade“, Woche 6 „Preisabsatzfunktion als ökonomisches Modell“; lineare Preisabsatzfunktionen erkennen, negative Steigungen ökonomisch interpretieren und Werte auf sachliche Sinnhaftigkeit prüfen.</li><li><b>Aus den vorangegangenen Wochen weitergeführt beziehungsweise abgeleitet:</b> Wertepaare und Koordinatensystem, Daten- und Modellgrenzen, Funktionsbegriff, Eingabe/Ausgabe, Funktionswerte, Definitionsbereich, Darstellungswechsel sowie lineare Regression und Näherungscharakter. Technisch fortgeführt wurden Layout, Farbkonzept, Karten-, Tabellen-, Ansichts-, Hilfe- und Drucklogik.</li><li><b>Aus der älteren didaktischen Jahresplanung abgeleitet:</b> „Trendgerade anhand von Beispielen aus der Preistheorie (lineare Preisabsatzfunktion)“ sowie der übergeordnete CAS-Bezug. Angaben zu SH, D23 oder anderen Bildungsgängen wurden nicht übernommen.</li><li><b>Aus einer Übung abgeleitet:</b> Die Skriptaufgaben zu <span class="formula">p(x)=18−0,4x</span>, Nullpreis und ökonomischer Begrenzung wurden fachlich weiterentwickelt und in eine betriebliche Dashboard-Freigabe übertragen.</li><li><b>Extern recherchiert:</b> GeoGebra Manual, „Slider Tool“ und „Slider Command“ (GeoGebra, Abruf 22.07.2026): didaktische Absicherung der lokalen Schieberegler zur dynamischen Untersuchung linearer Funktionen. GeoGebra Help Center, „GeoGebra Tools and Features: An Overview“ (Abruf 22.07.2026): fachliche Orientierung für interaktives Plotten und Parametererkundung. OpenStax, „Principles of Economics 3e“, Abschnitt 3.1 „Demand, Supply, and Equilibrium in Markets for Goods and Services“ (Abruf 22.07.2026): fachliche Absicherung des fallenden Zusammenhangs zwischen Preis und nachgefragter Menge. Keine externen Daten oder Programmressourcen übernommen.</li><li><b>Didaktisch ergänzt:</b> Launch-Review-Tafel, fehlerhafter Pricing-Prototyp, dreistufige Bereichsprüfung, Modell-Vorprüfbogen, aufgabennahe Hilfen, Produktkriterien, Fehlerdiagnosen und Freigabeentscheidung.</li><li><b>Didaktisch konstruierte Daten:</b> EuroTrade Accessories GmbH, Abteilung, Produkt „FlexCase Pro“, Dashboard PA-06, Funktion <span class="formula">p(x)=42−2,5x</span>, Pilotbereich, Lager- und Preisgrenze sowie alle betrieblichen Bedingungen.</li><li><b>Technische Kennzeichnung:</b> Einzelne UTF-8-HTML-Datei mit restriktiver CSP, vollständig eingebettetem CSS und JavaScript, Inline-SVG und lokaler Unicode/HTML-Formeldarstellung. Keine externe oder benachbarte Ressource, kein Online-Fallback, kein anklickbarer externer Link und keine Browserspeicher-Abhängigkeit. Die drei Simulationen verwenden ausschließlich lokales JavaScript und dynamisch erzeugte Inline-SVG-Elemente; es werden keine GeoGebra-Applets oder Netzressourcen eingebettet.</li></ul>
+</section>
+</main>
+<script id="week6-controls-and-simulations">
+(function(){
+'use strict';
+var openedForPrint=[];
+var views=['all','student','simulations','teacher','solution'];
+var hintModes=['hide','show'];
+function setView(view){
+  if(views.indexOf(view)===-1){view='all';}
+  document.body.dataset.view=view;
+  document.querySelectorAll('.viewbtn').forEach(function(button){
+    var active=button.dataset.target===view; button.classList.toggle('active',active); button.setAttribute('aria-pressed',String(active));
+  });
+}
+function setPrintHints(mode){
+  if(hintModes.indexOf(mode)===-1){mode='hide';}
+  document.body.dataset.printHints=mode;
+  document.querySelectorAll('.hintprintbtn').forEach(function(button){
+    var active=button.dataset.hintTarget===mode; button.classList.toggle('active',active); button.setAttribute('aria-pressed',String(active));
+  });
+}
+function preparePrintHints(){
+  openedForPrint=[];
+  if(document.body.dataset.view==='student' && document.body.dataset.printHints==='show'){
+    document.querySelectorAll('.student-material .inline-hints details').forEach(function(detail){openedForPrint.push({element:detail,wasOpen:detail.open});detail.open=true;});
+  }
+}
+function restorePrintHints(){openedForPrint.forEach(function(item){item.element.open=item.wasOpen;});openedForPrint=[];}
+document.querySelectorAll('.viewbtn').forEach(function(button){button.addEventListener('click',function(){setView(button.dataset.target);});});
+document.querySelectorAll('.hintprintbtn').forEach(function(button){button.addEventListener('click',function(){setPrintHints(button.dataset.hintTarget);});});
+document.getElementById('print-document').addEventListener('click',function(){preparePrintHints();window.print();});
+window.addEventListener('beforeprint',preparePrintHints);window.addEventListener('afterprint',restorePrintHints);
+document.querySelectorAll('[data-sim-target]').forEach(function(button){button.addEventListener('click',function(){setView('simulations');var target=document.getElementById(button.dataset.simTarget);if(target){window.requestAnimationFrame(function(){target.scrollIntoView({behavior:'smooth',block:'start'});});}});});
+
+var NS='http://www.w3.org/2000/svg';
+function price(x){return 42-2.5*x;}
+function invPrice(p){return (42-p)/2.5;}
+function de(v,d){d=(d===undefined?1:d);var n=Math.abs(v)<Math.pow(10,-d)/2?0:v;return n.toFixed(d).replace('.',',');}
+function nearly(a,b,t){return Math.abs(a-b)<=(t===undefined?0.01:t);}
+function setFeedback(id,msg,kind){var el=document.getElementById(id);if(!el)return;el.className='sim-feedback'+(kind?' '+kind:'');el.textContent=msg;}
+function svgEl(name,attrs,text){var el=document.createElementNS(NS,name);Object.keys(attrs||{}).forEach(function(k){el.setAttribute(k,String(attrs[k]));});if(text!==undefined)el.textContent=text;return el;}
+function clearSvg(svg,title,desc){while(svg.firstChild)svg.removeChild(svg.firstChild);svg.appendChild(svgEl('title',{},title));svg.appendChild(svgEl('desc',{},desc));}
+function graphScale(W,H){var left=70,right=W-30,top=28,bottom=H-62;return{left:left,right:right,top:top,bottom:bottom,X:function(x){return left+(x/18)*(right-left);},Y:function(y){return bottom-(y/45)*(bottom-top);}};}
+function drawPriceGraph(opts){
+  opts=opts||{};var svg=document.getElementById('priceGraph'),W=780,H=430,g=graphScale(W,H);clearSvg(svg,'Preisabsatzfunktion','Fallende Preisabsatzgerade mit Pilotbereich und betrieblichen Grenzen.');
+  svg.appendChild(svgEl('rect',{x:g.X(2),y:g.top,width:g.X(8)-g.X(2),height:g.bottom-g.top,fill:'#eaf6ef'}));
+  svg.appendChild(svgEl('text',{x:(g.X(2)+g.X(8))/2,y:g.top+17,'text-anchor':'middle',fill:'#2f6f4e','font-size':'13','font-weight':'700'},'Pilotbereich 2 ≤ x ≤ 8'));
+  for(var y=0;y<=45;y+=5){svg.appendChild(svgEl('line',{x1:g.left,y1:g.Y(y),x2:g.right,y2:g.Y(y),stroke:'#dce4ea'}));svg.appendChild(svgEl('text',{x:g.left-10,y:g.Y(y)+4,'text-anchor':'end',fill:'#526079','font-size':'12'},String(y)));}
+  for(var x=0;x<=18;x+=2){svg.appendChild(svgEl('line',{x1:g.X(x),y1:g.top,x2:g.X(x),y2:g.bottom,stroke:'#edf1f4'}));svg.appendChild(svgEl('text',{x:g.X(x),y:g.bottom+22,'text-anchor':'middle',fill:'#526079','font-size':'12'},String(x)));}
+  svg.appendChild(svgEl('line',{x1:g.left,y1:g.bottom,x2:g.right,y2:g.bottom,stroke:'#263746','stroke-width':'2'}));svg.appendChild(svgEl('line',{x1:g.left,y1:g.top,x2:g.left,y2:g.bottom,stroke:'#263746','stroke-width':'2'}));
+  svg.appendChild(svgEl('line',{x1:g.X(0),y1:g.Y(42),x2:g.X(16.8),y2:g.Y(0),stroke:'#0b6b8a','stroke-width':'4'}));
+  svg.appendChild(svgEl('line',{x1:g.left,y1:g.Y(20),x2:g.right,y2:g.Y(20),stroke:'#b56a00','stroke-width':'2','stroke-dasharray':'8 5'}));
+  svg.appendChild(svgEl('text',{x:g.right-5,y:g.Y(20)-7,'text-anchor':'end',fill:'#8b5200','font-size':'12','font-weight':'700'},'Preisuntergrenze 20 €'));
+  svg.appendChild(svgEl('line',{x1:g.X(9),y1:g.top,x2:g.X(9),y2:g.bottom,stroke:'#7c3aed','stroke-width':'2','stroke-dasharray':'6 5'}));
+  svg.appendChild(svgEl('text',{x:g.X(9)+6,y:g.top+36,fill:'#5b21b6','font-size':'12','font-weight':'700'},'Kapazität x = 9'));
+  svg.appendChild(svgEl('text',{x:(g.left+g.right)/2,y:H-15,'text-anchor':'middle',fill:'#263746','font-size':'13','font-weight':'700'},'Monatsmenge x in Hunderten Stück'));
+  svg.appendChild(svgEl('text',{x:18,y:(g.top+g.bottom)/2,transform:'rotate(-90 18 '+((g.top+g.bottom)/2)+')','text-anchor':'middle',fill:'#263746','font-size':'13','font-weight':'700'},'Netto-Stückpreis p(x) in €'));
+  if(opts.reveal){var x=opts.x,p=price(x);svg.appendChild(svgEl('line',{x1:g.X(x),y1:g.bottom,x2:g.X(x),y2:g.Y(p),stroke:'#7c3aed','stroke-width':'2','stroke-dasharray':'5 4'}));svg.appendChild(svgEl('line',{x1:g.left,y1:g.Y(p),x2:g.X(x),y2:g.Y(p),stroke:'#7c3aed','stroke-width':'2','stroke-dasharray':'5 4'}));svg.appendChild(svgEl('circle',{cx:g.X(x),cy:g.Y(p),r:'8',fill:'#7c3aed',stroke:'#fff','stroke-width':'2'}));svg.appendChild(svgEl('text',{x:g.X(x)+10,y:g.Y(p)-10,fill:'#5b21b6','font-size':'13','font-weight':'700'},'('+de(x,1)+' | '+de(p,2)+')'));
+    if(opts.triangle && x<=15.8){var x2=x+1,p2=price(x2);svg.appendChild(svgEl('line',{x1:g.X(x),y1:g.Y(p),x2:g.X(x2),y2:g.Y(p),stroke:'#d69a00','stroke-width':'4'}));svg.appendChild(svgEl('line',{x1:g.X(x2),y1:g.Y(p),x2:g.X(x2),y2:g.Y(p2),stroke:'#d69a00','stroke-width':'4'}));svg.appendChild(svgEl('text',{x:(g.X(x)+g.X(x2))/2,y:g.Y(p)-7,'text-anchor':'middle',fill:'#8b5200','font-size':'12','font-weight':'700'},'+1 = +100 Stück'));svg.appendChild(svgEl('text',{x:g.X(x2)+8,y:(g.Y(p)+g.Y(p2))/2,fill:'#8b5200','font-size':'12','font-weight':'700'},'−2,50 €'));}
+  }
+}
+function zoneText(x){var p=price(x);if(x>=2&&x<=8)return 'im Pilot- und Freigabebereich';if(x<0)return 'negative Menge: ökonomisch unzulässig';if(p<0)return 'negativer Modellpreis: ökonomisch unzulässig';if(x>8)return 'außerhalb der Pilotdaten; keine automatische Freigabe';return 'außerhalb der Pilotdaten; keine automatische Freigabe';}
+
+// Preis-Mengen-Labor
+var priceMode=document.getElementById('priceMode'),priceX=document.getElementById('priceX'),priceP=document.getElementById('priceP'),priceReveal=false,priceRevealX=4.5;
+function updatePriceControls(){var mode=priceMode.value;document.getElementById('modeXPanel').hidden=mode!=='x-to-p';document.getElementById('modePPanel').hidden=mode!=='p-to-x';document.getElementById('priceXOut').textContent=de(Number(priceX.value),1);document.getElementById('pricePieces').textContent=de(Number(priceX.value)*100,0);document.getElementById('pricePOut').textContent=de(Number(priceP.value),1);drawPriceGraph({reveal:priceReveal,x:priceRevealX,triangle:document.getElementById('priceTriangle').checked && mode==='x-to-p'});}
+function clearPriceReveal(msg){priceReveal=false;['priceInputStat','priceOutputStat','pricePointStat','priceZoneStat'].forEach(function(id){document.getElementById(id).textContent='noch nicht freigegeben';});setFeedback('priceFeedback',msg||'Berechne zuerst selbst und achte auf Eingabe, Ausgabe und Einheiten.','');updatePriceControls();}
+priceMode.addEventListener('change',function(){clearPriceReveal('Die Richtung wurde gewechselt. Welche Größe ist jetzt Eingabe, welche Ausgabe?');});
+priceX.addEventListener('input',function(){clearPriceReveal();});priceP.addEventListener('input',function(){clearPriceReveal();});document.getElementById('priceTriangle').addEventListener('change',updatePriceControls);
+document.querySelectorAll('[data-price-x]').forEach(function(btn){btn.addEventListener('click',function(){priceMode.value='x-to-p';priceX.value=btn.dataset.priceX;document.getElementById('priceOwnP').value='';clearPriceReveal();});});
+document.querySelectorAll('[data-price-p]').forEach(function(btn){btn.addEventListener('click',function(){priceMode.value='p-to-x';priceP.value=btn.dataset.priceP;document.getElementById('priceOwnX').value='';clearPriceReveal();});});
+document.getElementById('priceCheck').addEventListener('click',function(){var mode=priceMode.value,x,p,own;
+  if(mode==='x-to-p'){x=Number(priceX.value);p=price(x);own=Number(document.getElementById('priceOwnP').value);if(!Number.isFinite(own)){setFeedback('priceFeedback','Trage zuerst deinen berechneten Modellpreis ein.','warn');return;}if(!nearly(own,p,.011)){setFeedback('priceFeedback','Noch nicht passend. Setze x in p(x) = 42 − 2,5x ein und rechne die Multiplikation zuerst.','bad');return;}document.getElementById('priceInputStat').textContent=de(x,1)+' = '+de(x*100,0)+' Stück';document.getElementById('priceOutputStat').textContent='ungefähr '+de(p,2)+' € je Stück';}
+  else{p=Number(priceP.value);x=invPrice(p);own=Number(document.getElementById('priceOwnX').value);if(!Number.isFinite(own)){setFeedback('priceFeedback','Trage zuerst deine berechnete Menge x ein.','warn');return;}if(!nearly(own,x,.011)){setFeedback('priceFeedback','Noch nicht passend. Stelle 42 − 2,5x = p nach x um.','bad');return;}document.getElementById('priceInputStat').textContent=de(p,2)+' € je Stück';document.getElementById('priceOutputStat').textContent=de(x,2)+' = ungefähr '+de(x*100,0)+' Stück';}
+  priceReveal=true;priceRevealX=x;document.getElementById('pricePointStat').textContent='('+de(x,2)+' | '+de(p,2)+')';document.getElementById('priceZoneStat').textContent=zoneText(x);setFeedback('priceFeedback','Richtig. Derselbe Punkt kann je nach Toolrichtung als Menge → Preis oder Preis → Menge gelesen werden. Die sachliche Freigabe bleibt zusätzlich zu prüfen.',x>=2&&x<=8?'ok':'warn');updatePriceControls();
+});
+document.getElementById('priceReset').addEventListener('click',function(){document.getElementById('priceOwnP').value='';document.getElementById('priceOwnX').value='';clearPriceReveal();});
+
+// Bereichslabor
+var domainX=document.getElementById('domainX');
+function setCondition(id,ok){var el=document.getElementById(id);el.classList.remove('ok','no');el.classList.add(ok?'ok':'no');}
+function drawDomainGraph(x){var svg=document.getElementById('domainGraph'),W=780,H=360,left=135,right=750,top=40,row=55;clearSvg(svg,'Freigabebedingungen','Zahlenstrahlen für ökonomische Plausibilität, Pilotbereich, Kapazität und Preisuntergrenze.');function X(v){return left+((v+1)/19)*(right-left);}var rows=[{label:'ökonomisch: 0 ≤ x ≤ 16,8',a:0,b:16.8,color:'#5b8f6a'},{label:'Pilot: 2 ≤ x ≤ 8',a:2,b:8,color:'#0b6b8a'},{label:'Kapazität: x ≤ 9',a:-1,b:9,color:'#7c3aed'},{label:'Preis ≥ 20 €: x ≤ 8,8',a:-1,b:8.8,color:'#b56a00'},{label:'alle betrieblichen Regeln',a:2,b:8,color:'#2f8b56'}];
+  for(var t=0;t<=18;t+=2){svg.appendChild(svgEl('line',{x1:X(t),y1:top-15,x2:X(t),y2:top+row*rows.length-10,stroke:'#edf1f4'}));svg.appendChild(svgEl('text',{x:X(t),y:top-22,'text-anchor':'middle','font-size':'11',fill:'#526079'},String(t)));}
+  rows.forEach(function(r,i){var y=top+i*row;svg.appendChild(svgEl('text',{x:left-12,y:y+5,'text-anchor':'end','font-size':'12','font-weight':'700',fill:'#263746'},r.label));svg.appendChild(svgEl('line',{x1:left,y1:y,x2:right,y2:y,stroke:'#b8c3cc','stroke-width':'2'}));svg.appendChild(svgEl('line',{x1:X(r.a),y1:y,x2:X(r.b),y2:y,stroke:r.color,'stroke-width':'10','stroke-linecap':'round'}));svg.appendChild(svgEl('circle',{cx:X(x),cy:y,r:'7',fill:(x>=r.a&&x<=r.b)?'#2f8b56':'#b74343',stroke:'#fff','stroke-width':'2'}));});
+  svg.appendChild(svgEl('text',{x:(left+right)/2,y:H-16,'text-anchor':'middle','font-size':'13','font-weight':'700',fill:'#263746'},'x in Hunderten Stück · Testwert '+de(x,1)));
+}
+function updateDomain(){var x=Number(domainX.value),p=price(x),q=x>=0,pr=p>=0,pilot=x>=2&&x<=8,cap=x<=9,floor=p>=20,all=q&&pr&&pilot&&cap&&floor;document.getElementById('domainXOut').textContent=de(x,1);document.getElementById('domainPieces').textContent=de(x*100,0);document.getElementById('domainPrice').textContent=de(p,2)+' €';document.getElementById('domainTerm').textContent='für diesen reellen x-Wert berechenbar';document.getElementById('domainEconomy').textContent=q&&pr?'plausibel':'nicht plausibel';document.getElementById('domainRelease').textContent=all?'automatisch zulässig':'nicht automatisch zulässig';setCondition('condQuantity',q);setCondition('condPrice',pr);setCondition('condPilot',pilot);setCondition('condCapacity',cap);setCondition('condFloor',floor);setCondition('condAll',all);drawDomainGraph(x);}
+domainX.addEventListener('input',updateDomain);document.querySelectorAll('[data-domain-x]').forEach(function(btn){btn.addEventListener('click',function(){domainX.value=btn.dataset.domainX;updateDomain();});});
+document.getElementById('domainCheck').addEventListener('click',function(){var a=Number(document.getElementById('domainOwnMin').value),b=Number(document.getElementById('domainOwnMax').value);if(!Number.isFinite(a)||!Number.isFinite(b)){setFeedback('domainFeedback','Trage beide Grenzen in x-Einheiten ein.','warn');return;}if(nearly(a,2,.011)&&nearly(b,8,.011)){setFeedback('domainFeedback','Richtig: Alle betrieblichen Bedingungen sind gemeinsam für 2 ≤ x ≤ 8 erfüllt. Das entspricht 200 bis 800 Stück.','ok');}else if(a<2){setFeedback('domainFeedback','Die untere Grenze ist zu klein. Prüfe, ab welcher Menge überhaupt Pilotdaten vorliegen.','bad');}else if(a>2){setFeedback('domainFeedback','Die untere Grenze ist zu groß. Prüfe den Start des Pilotbereichs.','warn');}else if(b>8){setFeedback('domainFeedback','Die obere Grenze ist zu groß. Vergleiche Pilotbereich, Kapazität und Preisregel: Welche Grenze ist am strengsten?','bad');}else{setFeedback('domainFeedback','Die obere Grenze ist enger als nötig. Prüfe, bis wohin alle Bedingungen gleichzeitig erfüllt sind.','warn');}});
+document.getElementById('domainReset').addEventListener('click',function(){document.getElementById('domainOwnMin').value='';document.getElementById('domainOwnMax').value='';setFeedback('domainFeedback','Vergleiche die Bedingungen: Die gemeinsame Schnittmenge kann nur dort liegen, wo alle Karten grün sind.','');});
+
+// Dashboard-Labor
+var dashX=document.getElementById('dashX');
+function updateDashX(){var x=Number(dashX.value);document.getElementById('dashXOut').textContent=de(x,1);document.getElementById('dashPieces').textContent=de(x*100,0);document.getElementById('protoInput').textContent=de(x*100,0)+' Stück';document.getElementById('protoOutput').textContent='Garantierter Preis: '+de(price(x),2)+' €';document.getElementById('protoNote').textContent='Keine Bereichsprüfung; Modellwert wird als Garantie ausgegeben.';}
+dashX.addEventListener('input',updateDashX);document.querySelectorAll('[data-dash-x]').forEach(function(btn){btn.addEventListener('click',function(){dashX.value=btn.dataset.dashX;updateDashX();});});
+document.getElementById('dashTest').addEventListener('click',function(){var min=Number(document.getElementById('dashMin').value),max=Number(document.getElementById('dashMax').value),word=document.getElementById('dashWording').value,outside=document.getElementById('dashOutside').value,unit=document.getElementById('dashUnit').checked,x=Number(dashX.value),inside=Number.isFinite(min)&&Number.isFinite(max)&&x>=min&&x<=max,p=price(x);if(!Number.isFinite(min)||!Number.isFinite(max)||min>max){setFeedback('dashFeedback','Die Eingabegrenzen sind nicht sinnvoll geordnet.','bad');return;}
+  document.getElementById('configUnitLine').textContent=unit?'Einheit: x in 100 Stück; Ausgabe in € je Stück':'Einheit: nicht eingeblendet';
+  if(inside){var label=word==='approx'?'Modellschätzung: ungefähr ':word==='guaranteed'?'Garantierter Preis: ':'Preis: ';document.getElementById('configOutput').textContent=label+de(p,2)+' €';document.getElementById('configNote').textContent='Eingabe liegt im eingestellten automatischen Bereich.';}
+  else if(outside==='block'){document.getElementById('configOutput').textContent='Keine automatische Ausgabe';document.getElementById('configNote').textContent='Eingabe gesperrt und an manuelle Preisprüfung weitergeleitet.';}
+  else{var label2=word==='approx'?'Modellschätzung: ungefähr ':word==='guaranteed'?'Garantierter Preis: ':'Preis: ';document.getElementById('configOutput').textContent=label2+de(p,2)+' €';document.getElementById('configNote').textContent=outside==='warn'?'Warnhinweis, aber Angebot würde trotzdem erzeugt.':'Außerhalb des Bereichs wird trotzdem gerechnet.';}
+  var correctRange=nearly(min,2,.011)&&nearly(max,8,.011),correctWord=word==='approx',correctOutside=outside==='block';var missing=[];if(!correctRange)missing.push('fachlich begründete Grenzen 2 bis 8');if(!correctOutside)missing.push('Sperre mit manueller Prüfung');if(!correctWord)missing.push('Näherungswortlaut statt Garantie');if(!unit)missing.push('sichtbare Einheiten');if(missing.length===0){setFeedback('dashFeedback','Alle vier Schutzbausteine sind konfiguriert. Teste nun x = 4,5 sowie mindestens einen Wert außerhalb des Bereichs und übertrage die Beobachtung in eure eigene Begründung.','ok');}else{setFeedback('dashFeedback','Noch zu prüfen: '+missing.join('; ')+'. Das Labor bewertet nicht eure abschließende Freigabeentscheidung.','warn');}
+});
+document.getElementById('dashReset').addEventListener('click',function(){document.getElementById('dashMin').value='0';document.getElementById('dashMax').value='18';document.getElementById('dashWording').value='guaranteed';document.getElementById('dashOutside').value='calculate';document.getElementById('dashUnit').checked=false;dashX.value='4.5';document.getElementById('configUnitLine').textContent='Einheit: nicht eingeblendet';document.getElementById('configOutput').textContent='Noch nicht getestet';document.getElementById('configNote').textContent='Konfiguration ausführen, dann fachlich prüfen.';setFeedback('dashFeedback','Vier Schutzbausteine sind zu prüfen: sachlicher Eingabebereich, Sperrverhalten, Näherungswortlaut und sichtbare Einheiten.','');updateDashX();});
+function checkedCount(){return Array.from(document.querySelectorAll('#dashChecks input')).filter(function(c){return c.checked;}).length;}
+document.getElementById('dashComplete').addEventListener('click',function(){var n=checkedCount();if(n===6)setFeedback('dashCompleteFeedback','Alle sechs Bausteine sind markiert. Prüft jetzt gegenseitig Einheiten, Näherungscharakter, Bereichsbegründung und Qualität der Entscheidung.','ok');else if(n>=4)setFeedback('dashCompleteFeedback',n+' von 6 Bausteinen sind markiert. Ergänzt die fehlenden Teile, ohne die Begründung durch bloße Schlagwörter zu ersetzen.','warn');else setFeedback('dashCompleteFeedback',n+' von 6 Bausteinen sind markiert. Nutzt die sieben Felder der Freigabekarte und arbeitet systematisch.','bad');});
+document.getElementById('dashChecksReset').addEventListener('click',function(){document.querySelectorAll('#dashChecks input').forEach(function(c){c.checked=false;});setFeedback('dashCompleteFeedback','Eine vollständige Karte enthält alle sechs Bausteine. Prüft danach eure Begründungen gegenseitig.','');});
+
+// Initialisierung
+var params=new URLSearchParams(window.location.search);setView(params.get('view')||'all');setPrintHints(params.get('hints')||'hide');updatePriceControls();updateDomain();updateDashX();
+})();
+</script>
+</body>
+</html>
