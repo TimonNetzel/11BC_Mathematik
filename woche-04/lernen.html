@@ -2038,472 +2038,529 @@ const CONFIG={
   title:'Welche Gerade passt besser?',
   org:'EuroTrade Solutions · Analyse-Team',
   mission:'Mission: Fact Sheet FS-04',
-  missionText:'Mia und Jonas streiten, wessen Gerade besser passt. Findet eine faire Regel und zeigt, wie weit man einer Geraden trauen darf. Schaffst du alle Etappen und überzeugst die Gegner?',
+  missionText:'Mia und Jonas streiten, wessen Gerade besser passt. Findet eine faire Regel und zeigt, wie weit man einer Geraden trauen darf. Schaffst du alle Etappen und besiegst die Gegner?',
   person:{name:'Frau Janssen',role:'Leitung Vertrieb Benelux',ava:'👩‍💼'},
   defaultName:'Analyst', startEmoji:'📏📊', nameQuestion:'Du bist wieder im Analyse-Team von EuroTrade Solutions. Wie heißt du?',
   certTitle:'Analyse-Ausweis', certSub:'Regression, Residuen und Modellgüte · Fact Sheet FS-04', certButton:'Meinen Analyse-Ausweis zeigen',
-  nextTime:'Als Nächstes geht es um Funktionen allgemein: Wie beschreibt man Zusammenhänge, die keine Geraden sind? 📈',
+  nextTime:'Als Nächstes geht es um Funktionen allgemein: Wie beschreibt man Zusammenhänge mit Formeln? 📈',
   minuten:90,
-  key:'sim-residuen-11bc-w04-v1', code:'RESID11',
+  key:'sim-residuen-11bc-w04-v2', code:'CODE11',
   board:{wer:'Das Analyse-Team von EuroTrade Solutions (eure Klasse). Wir schlichten den Streit zwischen Mia und Jonas.',
          ziel:'Ein Fact Sheet „Welche Gerade passt besser?“ für das Vertriebsteam: Skizze, faire Regel, ein berechneter Abstand und eine Warnung.',
-         wie:'Abstände der Punkte zur Linie messen → Die Abstände quadrieren und zusammenzählen → Prüfen, ob die Abstände ein Muster zeigen → Klären, wo die Linie Preise schätzen darf → Fact Sheet schreiben.'},
-  karte:{vorlage:'stadt',symbole:{0:'💬',1:'📏',2:'🧐',3:'🔍',4:'🤝',5:'🤨',6:'📄',7:'🎯'}},
-  ziele:[{t:'Abstände von Punkten zu einer Linie ausrechnen und zwei Linien fair vergleichen.',level:[1,2]},
-         {t:'an den Abständen erkennen, ob eine gerade Linie überhaupt zu den Daten passt.',level:[3,5]},
-         {t:'begründen, warum Schätzungen weit außerhalb der Daten unsicher sind.',level:[3,4,5]}],
-  ws:{fach:'Mathematik Jg. 11',untertitel:'Regression, Residuen und Modellgüte',dauer:'2 Lernstunden à 45 min',fusszeile:'Mission FS-04 · Welche Gerade passt besser?'},
-  rankText:{1:'<br>Du prüfst ab jetzt Geraden für das ganze Team.',2:'<br>Du entscheidest, für welche Mengen EuroTrade Preise nennt.',3:'<br>Dein Fact Sheet geht an das ganze Vertriebsteam.'}
+         wie:'Die Abstände der Punkte zur Linie messen → Die Abstände quadrieren und zusammenzählen → Prüfen, ob die Abstände ein Muster bilden → Klären, wo die Linie Preise schätzen darf → Fact Sheet schreiben.'},
+  karte:{vorlage:'stadt',symbole:{0:'💬',1:'📏',2:'🧮',3:'🧐',4:'🔍',5:'🤝',6:'🤨',7:'📄',8:'🎯'}},
+  ziele:[{t:'Abstände der Punkte zu einer Linie ausrechnen und mit Vorzeichen angeben.',level:[1]},
+         {t:'zwei Linien mit einer fairen Regel vergleichen und die am besten passende Linie finden.',level:[2,3]},
+         {t:'erkennen, wann eine gerade Linie schlecht passt und wo man ihr beim Schätzen nicht trauen darf.',level:[4,5,6]}],
+  ws:{fach:'Mathematik 11BC',untertitel:'Regression, Residuen und Modellgüte',dauer:'2 Lernstunden à 45 min',fusszeile:'Mission FS-04 · Welche Gerade passt besser?'},
+  rankText:{1:'<br>Du darfst im Team Geraden prüfen und vergleichen.',2:'<br>Du beurteilst Prognosen für den Vertrieb.',3:'<br>Du stellst das Fact Sheet im Vertriebsteam vor.'}
 };
-const RANKS=['Junior-Analyst','Analyst','Senior-Analyst','Leitender Analyst'];
+const RANKS=['Praktikant','Junior-Analyst','Analyst','Senior-Analyst'];
 
-/* ---------- Daten (Markttest Transportbox aus Woche 3) ---------- */
-const W4_D=[['A',1,32],['B',2,31],['C',3,27],['D',4,27],['E',5,23],['F',6,23],['G',7,19],['H',8,18]];
-const W4_P=W4_D.map(([n,x,y])=>({x,y,label:n}));
-const W4_MIA={m:-2,b:34,color:'#5b3fc4'}, W4_JON={m:-1,b:29.5,color:'#c2410c'}, W4_BEN={m:-2.5,b:36,color:'#17607a'};
-const W4_AX={xt:'x in 100 Stück',yt:'p in €/Stück'};
-const W4_BIG=Object.assign({xmin:0,xmax:9,ymin:10,ymax:40,ylab:5,brk:true,h:430},W4_AX);
-const W4_hat=(L,x)=>L.m*x+L.b;
-const W4_RES=L=>W4_D.map(([n,x,y])=>Math.round((y-W4_hat(L,x))*100)/100);
-const W4_SQ=L=>W4_RES(L).reduce((a,e)=>a+e*e,0);
-const W4_SEGS=L=>W4_D.map(([n,x,y])=>{const yh=W4_hat(L,x);return {x1:x,y1:y,x2:x,y2:yh,color:y>=yh?'#1b7a47':'#b42318',w:3.5}});
-const W4_FIG=(L,o)=>{o=o||{};return plotSVG(Object.assign({},W4_BIG,{h:o.h||360,points:W4_P,lines:[{m:L.m,b:L.b,color:L.color}],segs:o.segs===false?[]:W4_SEGS(L)},o.extra||{}))};
-const W4_BOTH=()=>plotSVG(Object.assign({},W4_BIG,{h:360,points:W4_P,lines:[{m:W4_MIA.m,b:W4_MIA.b,color:W4_MIA.color},{m:W4_JON.m,b:W4_JON.b,color:W4_JON.color,dash:1}],
-  texts:[{x:8.9,y:15.2,t:'Mia',color:W4_MIA.color,anchor:'end'},{x:8.9,y:22.6,t:'Jonas',color:W4_JON.color,anchor:'end'}]}));
-/* Residuenbild: Residuen e über x, Nulllinie */
-const W4_RESFIG=(res,o)=>{o=o||{};return plotSVG({xmin:0,xmax:9,ymin:-4,ymax:4,ylab:2,h:o.h||260,xt:'x',yt:'e',lines:[{m:0,b:0,color:'#16233a',w:2}],
-  segs:res.map((e,i)=>({x1:i+1,y1:0,x2:i+1,y2:e,color:e>=0?'#1b7a47':'#b42318',w:4})),points:res.map((e,i)=>({x:i+1,y:e,r:6,color:e>=0?'#1b7a47':'#b42318'}))})};
-const W4_RES_MIA=W4_RES(W4_MIA), W4_RES_JON=W4_RES(W4_JON);
-const W4_RES_BOGEN=[2,1,-1,-2,-2,-1,1,2];          // Lagerkosten (gekrümmte Daten)
-const W4_RES_LIEF=[-2,-1,1,2,2,1,-1,-2];           // Lieferzeiten (Gegner 2)
-/* Kühltasche (Partneraufgabe) */
-const W4_K=[[2,43],[3,42],[4,38],[5,36],[6,31],[7,30]];
-const W4_NORD={m:-3,b:50}, W4_SUED={m:-2,b:45};
-const W4_KTAB=()=>`<div style="overflow-x:auto"><table class="tb" style="min-width:300px"><tr><td><b>x</b> [100 Stück]</td>${W4_K.map(d=>`<td class="n">${d[0]}</td>`).join('')}</tr><tr><td><b>p</b> [€/Stück]</td>${W4_K.map(d=>`<td class="n">${d[1]}</td>`).join('')}</tr></table></div>`;
+/* ---------- Daten (konstruiert): Powerbank PB-5, x = Monat seit Verkaufsstart, y = Durchschnittspreis in €/Stück ---------- */
+const PWB=[['A','Januar',1,29],['B','Februar',2,25],['C','März',3,23],['D','April',4,23],['E','Mai',5,20]];
+const PWB8=PWB.concat([['F','Juni',6,20],['G','Juli',7,19],['H','August',8,20]]);
+const MIA={m:-2,b:31},JON={m:-1,b:27},REG={m:-2,b:30},REG8={m:-1.25,b:28},LARS={m:3,b:8},REGK={m:2,b:10};
+const yh=(L,x)=>L.m*x+L.b;
+const resid=(L,d)=>d[3]-yh(L,d[2]);
+const qs=(L,data)=>(data||PWB).reduce((s,d)=>s+resid(L,d)**2,0);
+const sume=(L,data)=>(data||PWB).reduce((s,d)=>s+resid(L,d),0);
+const C_MIA='#c2410c',C_JON='#17607a',C_REG='#5b3fc4';
+const AX5={xt:'x: Monat',yt:'y in €/Stück'};
+const BIG5=Object.assign({xmin:0,xmax:6,ymin:15,ymax:34,ylab:5,brk:true,h:420},AX5);
+const PTS5=PWB.map(d=>({x:d[2],y:d[3],label:d[0]}));
+const SEGS=L=>PWB.filter(d=>Math.abs(resid(L,d))>1e-9).map(d=>({x1:d[2],y1:d[3],x2:d[2],y2:yh(L,d[2]),color:'#b42318',w:4}));
+const LINEFIG=(L,col,extra)=>plotSVG(Object.assign({},BIG5,{h:340,points:PTS5,lines:[{m:L.m,b:L.b,color:col||C_REG}]},extra||{}));
+const ZWEI=()=>plotSVG(Object.assign({},BIG5,{h:360,points:PTS5,lines:[{m:MIA.m,b:MIA.b,color:C_MIA},{m:JON.m,b:JON.b,color:C_JON}],
+  texts:[{x:5.25,y:18.2,t:'Mia',color:C_MIA},{x:5.15,y:22.7,t:'Jonas',color:C_JON}]}));
+const LINES_TXT=()=>`Mia: ${K('\\hat y=-2x+31')}, Jonas: ${K('\\hat y=-x+27')}`;
+function tabPB(rows,hl){return `<div style="overflow-x:auto"><table class="tb" style="min-width:300px"><tr><th>Punkt</th>${rows.map((d,i)=>`<th class="n" ${i===hl?'style="background:#fff1ea;color:#8f2f08"':''}>${d[0]}</th>`).join('')}</tr>
+ <tr><td>Monat x</td>${rows.map(d=>`<td class="n">${d[2]}</td>`).join('')}</tr>
+ <tr><td>Preis y <small>(€/Stück)</small></td>${rows.map(d=>`<td class="n">${d[3]}</td>`).join('')}</tr></table></div>`}
+function resTab(name,L){return `<table class="tb"><tr><th>${name}</th>${PWB.map(d=>`<th class="n">${d[0]}</th>`).join('')}</tr><tr><td>${K('e')}</td>${PWB.map(d=>`<td class="n">${fmt(resid(L,d),0)}</td>`).join('')}</tr></table>`}
+const RES8=PWB8.map(d=>[d[0],d[2],resid(REG8,d)]);
+function tabRes8(hl){return `<div style="overflow-x:auto"><table class="tb" style="min-width:320px"><tr><th>Monat x</th>${RES8.map((r,i)=>`<th class="n" ${i===hl?'style="background:#fff1ea;color:#8f2f08"':''}>${r[1]}</th>`).join('')}</tr>
+ <tr><td>Residuum</td>${RES8.map((r,i)=>`<td class="n" ${i===hl?'style="background:#fff1ea;font-weight:800"':''}>${fmt(r[2],2)}</td>`).join('')}</tr></table></div>`}
+const RESPLOT_O={xmin:0,xmax:9,ymin:-3,ymax:3,ylab:1,ygrid:.5,h:420,xt:'x: Monat',yt:'Residuum e'};
+const ZERO={m:0,b:0,color:'#16233a',w:2};
+const FORM1=()=>KD('e=y-\\hat y')+`<p class="tip">ŷ (sprich „y Dach“) ist der Wert auf der Geraden, y der echte Preis.</p>`;
+const FORM2=()=>KD('\\text{Quadratsumme}=e_1^2+e_2^2+\\dots+e_n^2');
+const GEN=()=>`<p class="tip" style="margin:6px 0 0">Unternehmen, Personen, Produkte und Daten sind für den Unterricht erfunden.</p>`;
 
-function W4_tab(hl){return `<div style="overflow-x:auto"><table class="tb" style="min-width:330px"><tr><th>Angebot</th>${W4_D.map((d,i)=>`<th class="n" ${i===hl?'style="background:#fff1ea;color:#8f2f08"':''}>${d[0]}</th>`).join('')}</tr>
- <tr><td>x [100 Stück]</td>${W4_D.map(d=>`<td class="n">${d[1]}</td>`).join('')}</tr><tr><td>p [€/Stück]</td>${W4_D.map(d=>`<td class="n">${d[2]}</td>`).join('')}</tr></table></div>`}
-function W4_restab(rows){return `<div style="overflow-x:auto"><table class="tb" style="min-width:330px"><tr><th>Angebot</th>${W4_D.map(d=>`<th class="n">${d[0]}</th>`).join('')}</tr>
- ${rows.map(([lab,res])=>`<tr><td>${lab}</td>${res.map(e=>`<td class="n">${e===null?'?':fmt(e,e%1?1:0)}</td>`).join('')}</tr>`).join('')}</table></div>`}
-const W4_FORM=()=>KD('\\hat y=m\\cdot x+b')+KD('e=y-\\hat y');
+/* Partneraufgabe: Kühlbox KB-2, x = Werbebudget pro Woche in 1000 €, y = Bestellungen in 100 Stück */
+const KB=[['P',1,13],['Q',2,13],['R',3,15],['S',4,19]].map(([n,x,y])=>[n,'',x,y]);
+const kbTab=()=>`<table class="tb"><tr><th>Werbebudget x <small>(1000 €)</small></th>${KB.map(d=>`<td class="n">${d[2]}</td>`).join('')}</tr><tr><th>Bestellungen y <small>(100 Stück)</small></th>${KB.map(d=>`<td class="n">${d[3]}</td>`).join('')}</tr></table>`;
+const KBFIG=()=>plotSVG({xmin:0,xmax:5,ymin:8,ymax:22,ylab:2,ygrid:1,brk:true,h:380,xt:'x in 1000 €',yt:'y in 100 Stück',points:KB.map(d=>({x:d[2],y:d[3]})),lines:[{m:LARS.m,b:LARS.b,color:C_MIA}],texts:[{x:3.9,y:21.2,t:'Lars',color:C_MIA}]});
 
-function W4_COMIC(){const pan=(n,e,t)=>`<div style="border:2px solid #16233a;border-radius:10px;padding:8px 10px;background:#fff"><div style="font-weight:800;color:#c2410c">Bild ${n}</div><div style="font-size:28px;line-height:1.3">${e}</div><div>${t}</div></div>`;
- return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px">
-  ${pan(1,'👩‍🦰📏 🧑📏','Im Vertriebsbüro legen Mia und Jonas jeweils eine Gerade durch die Punkte des Markttests.')}
-  ${pan(2,'👩‍🦰💬 🧑💬','Mia: „Meine passt besser!“ Jonas: „Nein, meine!“')}
-  ${pan(3,'👩‍💼❓','Frau Janssen kommt herein: „Wie entscheiden wir das, ohne zu streiten?“')}
-  ${pan(4,'🧑👉 📈 👩‍🦰🤨','Jonas zeigt weit rechts neben die Daten: „Und hier lesen wir den Preis für den Großauftrag mit 2000 Stück im nächsten Jahr ab.“ Mia schaut skeptisch.')}</div>
-  <div class="fig">${W4_BOTH()}</div>
-  <p class="tip" style="margin:4px 0 0">Mia: ${K('p(x)=-2x+34')} (lila), Jonas: ${K('p(x)=-x+29{,}5')} (orange, gestrichelt). x = Bestellmenge in 100 Stück, p = Stückpreis in €/Stück. Firma, Personen und Daten sind für den Unterricht erfunden.</p>`}
+const GL={
+  modellwert:['Modellwert ŷ','Der Wert, den die Gerade für ein x liefert. Er ist eine Schätzung, kein gemessener Preis.','Mias Gerade sagt für März 25 €/Stück, gemessen wurden 23 €/Stück.',{art:'der',pl:'die Modellwerte'}],
+  residuum:['Residuum e','Echter Wert minus Modellwert: <b>e = y − ŷ</b>. Positiv heißt: Der Punkt liegt über der Geraden, negativ: darunter.','Echter Preis 25 €, Gerade 27 €: e = −2 €.',{art:'das',pl:'die Residuen'}],
+  quadratsumme:['Quadratsumme','Alle Residuen quadrieren und addieren. Je kleiner die Quadratsumme, desto besser passt die Gerade.','Residuen 1, −1 und 2 ergeben 1 + 1 + 4 = 6.',{art:'die',pl:'die Quadratsummen'}],
+  regression:['Regressionsgerade','Die Gerade mit der kleinsten Quadratsumme. Keine andere Gerade liegt für diese Daten insgesamt weniger daneben.','Eine Tabellenkalkulation berechnet sie auf Knopfdruck.',{art:'die',pl:'die Regressionsgeraden'}],
+  muster:['Residuenmuster','Eine regelmäßige Folge der Vorzeichen der Residuen, z. B. erst positiv, dann negativ, dann wieder positiv. Dann passt eine Gerade schlecht.',null,{art:'das',pl:'die Residuenmuster'}],
+  bereich:['Beobachtungsbereich','Der x-Bereich, in dem es echte Daten gibt. Hier sind das zuerst die Monate 1 bis 5, später 1 bis 8.',null,{art:'der',pl:'die Beobachtungsbereiche'}],
+  interpolation:['Interpolation','Schätzen <b>innerhalb</b> des Beobachtungsbereichs. Links und rechts gibt es echte Daten, die die Schätzung stützen.','Den Preis für Mitte Juni aus den Monaten 1 bis 8 schätzen.',{art:'die',pl:'die Interpolationen'}],
+  extrapolation:['Extrapolation','Schätzen <b>außerhalb</b> des Beobachtungsbereichs. Dort gibt es keine Daten, deshalb ist die Schätzung unsicher.','Aus fünf Monaten den Preis im nächsten Jahr vorhersagen.',{art:'die',pl:'die Extrapolationen'}]
+};
+function DATA(){return `<h4 style="margin:4px 0">Powerbank PB-5: Durchschnittspreis je Monat</h4>${tabPB(levelOpen(4)?PWB8:PWB)}
+ <p class="tip">x = Monat seit Verkaufsstart (1 = Januar), y = durchschnittlicher Verkaufspreis in €/Stück.</p>
+ <p>${LINES_TXT()}</p>
+ ${levelOpen(1)?`<h4 style="margin:12px 0 4px">Residuum</h4>${FORM1()}`:''}
+ ${levelOpen(2)?`<h4 style="margin:12px 0 4px">Quadratsumme</h4>${FORM2()}<p>Gerade mit der kleinsten Quadratsumme (Monate 1–5): ${K('\\hat y=-2x+30')}</p>`:''}
+ ${levelOpen(4)?`<h4 style="margin:12px 0 4px">Monate 1–8</h4><p>Gerade aus der Tabellenkalkulation: ${K('\\hat y=-1{,}25x+28')}</p>`:''}`}
 
-function DATA(){return `<h4 style="margin:4px 0">Markttest Transportbox (aus Woche 3)</h4>${W4_tab()}
- <p class="tip">x = Bestellmenge in 100 Stück, p = akzeptierter Stückpreis in €/Stück. Getestet: 100 bis 800 Stück.</p>
- <p>Mia: ${K('p(x)=-2x+34')}<br>Jonas: ${K('p(x)=-x+29{,}5')}</p>
- ${levelOpen(1)?`<h4 style="margin:12px 0 4px">Formeln</h4>${W4_FORM()}`:''}
- ${levelOpen(4)?`<h4 style="margin:12px 0 4px">Kühltasche (Partneraufgabe)</h4>${W4_KTAB()}`:''}
- <details class="given"><summary>💬 Comic nochmal ansehen</summary><div class="gb">${W4_COMIC()}</div></details>`}
+/* ---------- Comic für den Einstieg ---------- */
+function COMIC(){const P=(n,e,t)=>`<div style="border:2px solid #16233a;border-radius:10px;padding:8px;background:#fff"><div style="font-weight:800;color:#17607a">Bild ${n}</div><div style="font-size:28px;line-height:1.2">${e}</div><div>${t}</div></div>`;
+ return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:6px 0">
+ ${P(1,'👩‍💼📈🧑‍💼','Im Vertriebsbüro zeichnen Mia und Jonas je eine Gerade durch dieselben Punkte: den Durchschnittspreis der Powerbank PB-5 in den ersten fünf Monaten.')}
+ ${P(2,'😤 ⚡ 😠','Mia: „Meine passt besser!“<br>Jonas: „Nein, meine!“')}
+ ${P(3,'🚪👩‍💼','Frau Janssen, die Chefin, kommt herein: „Wie entscheiden wir das, ohne zu streiten?“')}
+ ${P(4,'👉📅🤨','Jonas zeigt auf eine Stelle weit rechts außerhalb der Daten: „Und hier sagen wir dann den Preis für nächstes Jahr voraus.“ Mia schaut skeptisch.')}</div>
+ <div class="fig">${ZWEI()}</div>`}
 
-const W4_BOSS1={name:'Herr Kaminski',role:'Controlling',ava:'🧐'};
-const W4_BOSS2={name:'Herr Brandt',role:'Vertriebsleitung',ava:'🤨'};
-
-/* ---------- Simulation: Gerade ziehen, Residuen und Quadratsumme live ---------- */
-function W4_simFit(c,api){
-  const XL=0.5,XR=8.5;let L=29,R=21;   // Start: Jonas' Gerade
-  const pl=makePlot(c,W4_BIG);const ro=document.createElement('div');ro.className='readout';c.appendChild(ro);
-  const line=()=>{const m=(R-L)/(XR-XL);return {m,b:L-m*XL}};
-  const stats=()=>{const g=line();let s=0,q=0;W4_D.forEach(([n,x,y])=>{const e=y-(g.m*x+g.b);s+=e;q+=e*e});return {s:Math.abs(s)<1e-9?0:s,q}};
-  const draw=()=>{const g=line(),st=stats();pl.draw({points:W4_P,lines:[{m:g.m,b:g.b,color:'#5b3fc4'}],segs:W4_SEGS(g),handles:[{x:XL,y:L},{x:XR,y:R}]});
-    ro.innerHTML=`<span>Summe der Residuen: <b>${fmt(st.s,2)}</b></span><span>Quadratsumme: <b>${fmt(st.q,2)}</b></span>`};
-  const cl=ctlRow({label:'Linker Griff (bei x = 0,5)',min:10,max:40,step:.25,val:L,fmtV:v=>fmt(v,2)+' €/Stück',onChange:v=>{L=v;draw()}});
-  const cr=ctlRow({label:'Rechter Griff (bei x = 8,5)',min:10,max:40,step:.25,val:R,fmtV:v=>fmt(v,2)+' €/Stück',onChange:v=>{R=v;draw()}});
-  c.appendChild(cl);c.appendChild(cr);
-  let drag=null;
-  pl.el.addEventListener('pointerdown',e=>{if(ctx.solved)return;const q=pl.toData(e);drag=Math.abs(q.x-XL)<Math.abs(q.x-XR)?'l':'r';try{pl.el.setPointerCapture(e.pointerId)}catch(_){}mv(e)});
-  const mv=e=>{if(!drag)return;const q=pl.toData(e);const v=Math.round(Math.min(40,Math.max(10,q.y))*4)/4;(drag==='l'?cl:cr).set(v)};
-  pl.el.addEventListener('pointermove',mv);pl.el.addEventListener('pointerup',()=>drag=null);pl.el.addEventListener('pointercancel',()=>drag=null);
-  const b=addCheckBtn(c,'Quadratsumme prüfen ✔');const say=statusFb(c);const q2=document.createElement('div');c.appendChild(q2);
-  let done=false;
-  const fin=()=>{if(done)return;done=true;const st=stats();
-    say('ok',`✅ <b>Geschafft!</b> Quadratsumme ${fmt(st.q,2)}. Mit einer Tabellenkalkulation erhält man die Regressionsgerade ${K('\\hat y\\approx -2{,}07x+34{,}32')} mit der Quadratsumme 5,79. Kleiner geht es mit keiner Geraden. Mias Gerade (Quadratsumme 6) liegt sehr nah daran.`);
-    mcqW(q2,{q:'Was hast du beim Ziehen beobachtet?',o:[
-      {t:'Die Quadratsumme wird nur klein, wenn die Gerade nah an allen Punkten liegt.',ok:1,fb:'Genau. Jeder große Abstand treibt die Quadratsumme stark nach oben.'},
-      {t:'Die Quadratsumme wird klein, sobald die Gerade genau durch zwei Punkte geht.',fb:'Durch zwei Punkte zu gehen hilft nicht, wenn die anderen weit weg liegen.'},
-      {t:'Die Summe der Residuen zeigt genauso gut, welche der Geraden besser passt.',fb:'Bei Jonas’ Startgerade war die Summe 0, obwohl sie schlecht passt.'},
-      {t:'Eine Gerade durch den Ursprung hat immer die kleinste Quadratsumme.',fb:'Der Ursprung spielt keine Rolle. Es zählen die Abstände zu den Punkten.'}]},api.solved,api.wrong)};
-  b.onclick=()=>{if(ctx.solved||done)return;const g=line(),st=stats();
-    if(st.q<=6+1e-9){fin();return}
-    let msg='';
-    if(g.m>-1.7)msg='Deine Gerade ist zu flach: Links liegen die Punkte darüber (grün), rechts darunter (rot). Mach sie steiler.';
-    else if(g.m<-2.4)msg='Deine Gerade ist zu steil: Links liegen die Punkte darunter, rechts darüber. Mach sie flacher.';
-    else if(st.s>0)msg='Die Richtung passt, aber die meisten Punkte liegen über der Geraden. Schieb sie etwas nach oben.';
-    else msg='Die Richtung passt, aber die meisten Punkte liegen unter der Geraden. Schieb sie etwas nach unten.';
-    api.wrong();say('bad',`❌ Quadratsumme ${fmt(st.q,2)}, das ist noch mehr als 6. ${msg}`);shake(b)};
+/* ---------- Simulationen ---------- */
+// Level 1: Abstände senkrecht zur Geraden von Mia antippen (Graph → Tabelle)
+function simResid(c,api){
+  const ZI=[1,2,4];let k=0,fin=false;const done=[];
+  const task=document.createElement('div');task.className='task';c.appendChild(task);
+  const pl=makePlot(c,Object.assign({},BIG5,{h:470}));const tb=document.createElement('div');c.appendChild(tb);
+  const say=statusFb(c);const q2=document.createElement('div');c.appendChild(q2);
+  const draw=()=>{pl.draw({points:PTS5,lines:[{m:MIA.m,b:MIA.b,color:C_MIA}],segs:done.map(i=>({x1:PWB[i][2],y1:PWB[i][3],x2:PWB[i][2],y2:yh(MIA,PWB[i][2]),color:'#b42318',w:4})),
+      marks:done.map(i=>({x:PWB[i][2],y:yh(MIA,PWB[i][2]),color:C_MIA,label:'',dx:0,dy:0}))});
+    task.innerHTML=k<3?`<b>Nächster Punkt:</b> ${PWB[ZI[k]][0]} (${PWB[ZI[k]][1]}). Tippe die Stelle auf Mias Gerade an, die <b>senkrecht</b> über oder unter dem Punkt liegt.`:'<b>Fertig!</b> Alle Abstände sind eingezeichnet.';
+    tb.innerHTML=`<table class="tb"><tr><th>Punkt</th><th class="n">x</th><th class="n">y</th><th class="n">ŷ (Gerade)</th><th class="n">e = y − ŷ</th></tr>${PWB.map((d,i)=>(on=>`<tr><td>${d[0]}</td><td class="n">${d[2]}</td><td class="n">${d[3]}</td><td class="n">${on?fmt(yh(MIA,d[2]),0):'?'}</td><td class="n">${on?fmt(resid(MIA,d),0):'?'}</td></tr>`)(done.includes(i)||Math.abs(resid(MIA,d))<1e-9)).join('')}</table>`};
+  const finish=()=>{if(fin)return;fin=true;say('ok','✅ Alle Abstände sitzen. Die Tabelle ist vollständig.');
+    mcqW(q2,{q:'Bei Mias Gerade sind alle Abstände 0 oder negativ. Was bedeutet das?',o:[
+      {t:'Die Gerade liegt insgesamt etwas zu hoch.',ok:1,fb:'Genau. Negativ heißt: Der Punkt liegt unter der Geraden. Kein Punkt liegt darüber, also sitzt die Gerade zu hoch.'},
+      {t:'Die Gerade liegt insgesamt etwas zu tief.',fb:'Umgekehrt: Liegen die Punkte unter der Geraden, ist die Gerade zu hoch.'},
+      {t:'Die Preise sind dort negativ geworden.',fb:'Die Preise sind alle positiv. Das Vorzeichen sagt nur, ob der Punkt über oder unter der Geraden liegt.'},
+      {t:'Die Gerade ist überall zu steil gezeichnet.',fb:'Zu steil hieße: links Punkte darunter, rechts darüber. Hier liegen alle Punkte darunter oder auf ihr.'}]},api.solved,api.wrong)};
+  pl.el.addEventListener('pointerdown',e=>{if(ctx.solved||k>=3)return;const q=pl.toData(e),d=PWB[ZI[k]],x=d[2],y=d[3],yy=yh(MIA,x);
+    if(Math.abs(q.x-x)<=0.35&&Math.abs(q.y-yy)<=1){done.push(ZI[k]);k++;draw();say('ok',`✅ Richtig: Bei ${d[0]} liefert die Gerade ${K('\\hat y='+yy)}, der echte Preis ist ${y}. Abstand ${K('e='+y+'-'+yy+'='+fmt(y-yy,0))}.`);if(k===3)finish()}
+    else if(Math.abs(q.x-x)<=0.35&&Math.abs(q.y-y)<=1){api.wrong();say('bad',`❌ Das ist der Punkt ${d[0]} selbst. Gesucht ist die Stelle <b>auf der Geraden</b> direkt darüber oder darunter.`)}
+    else if(Math.abs(q.y-yh(MIA,q.x))<=1){api.wrong();say('bad',`❌ Du hast die Gerade getroffen, aber nicht senkrecht über oder unter ${d[0]}. Gemessen wird senkrecht, also beim selben x = ${x}.`)}
+    else{api.wrong();say('bad',`❌ Tippe auf die orange Gerade, genau bei x = ${x}.`)}});
   draw();
-  api.setAuto(()=>{cl.set(33);cr.set(17);b.click()});
+  api.setAuto(()=>{while(k<3){done.push(ZI[k]);k++}draw();finish()});
+}
+// Level 2: Regler für m und b, Quadratsumme live, Ziel: kleinste Quadratsumme finden
+function simQS(c,api){
+  let m=JON.m,b=JON.b,best=Infinity,hit=false;
+  const pl=makePlot(c,Object.assign({},BIG5,{h:440}));const ro=document.createElement('div');ro.className='readout';c.appendChild(ro);
+  let say=()=>{};const q2=document.createElement('div');
+  const draw=()=>{const L={m,b},s=qs(L),se=sume(L);best=Math.min(best,s);
+    pl.draw({points:PTS5,lines:[{m,b,color:C_REG}],segs:SEGS(L)});
+    ro.innerHTML=`<span>Summe der Abstände: <b>${fmt(se,2)}</b></span><span>Quadratsumme: <b>${fmt(s,2)}</b></span><span>bisher kleinste: <b>${fmt(best,2)}</b></span>`;
+    if(!hit&&s<=4+1e-9){hit=true;say('ok',`✅ Quadratsumme 4. Kleiner geht es mit diesen Daten nicht! Diese Gerade ${K('\\hat y=-2x+30')} heißt ${T('regression')}.`);c.appendChild(q2);
+      mcqW(q2,{q:'Was gilt für diese Gerade?',o:[
+        {t:'Keine Gerade hat eine kleinere Quadratsumme.',ok:1,fb:'Genau. Das ist die Definition der Regressionsgeraden. Sie trifft übrigens nur einen einzigen Punkt (E).'},
+        {t:'Sie geht durch möglichst viele der fünf Punkte.',fb:'Sie trifft nur Punkt E. Treffer zählen nicht, es zählt die Quadratsumme.'},
+        {t:'Alle ihre Abstände zu den Punkten sind null.',fb:'Dann müssten alle Punkte genau auf einer Geraden liegen. Hier bleiben Abstände 1, −1, −1, 1 und 0.'},
+        {t:'Sie verbindet den ersten und letzten Punkt.',fb:'A(1|29) und E(5|20) würden eine andere Gerade ergeben. Die Regressionsgerade nutzt alle Punkte.'}]},api.solved,api.wrong)}};
+  const cm=ctlRow({label:'Steigung m',min:-3,max:-1,step:.25,val:m,fmtV:v=>fmt(v,2),onChange:v=>{m=v;draw()}});
+  const cb=ctlRow({label:'Achsenabschnitt b',min:26,max:34,step:.5,val:b,fmtV:v=>fmt(v,1)+' €/Stück',onChange:v=>{b=v;draw()}});
+  c.appendChild(cm);c.appendChild(cb);say=statusFb(c);
+  draw();
+  api.setAuto(()=>{cm.set(-2);cb.set(30)});
+}
+// Level 3: Residuen der 8-Monats-Geraden als Residuenplot eintragen (Tabelle → Graph)
+function simResPlot(c,api){
+  let k=0,fin=false;const placed=[];
+  const task=document.createElement('div');task.className='task';c.appendChild(task);
+  const tb=document.createElement('div');c.appendChild(tb);
+  const pl=makePlot(c,RESPLOT_O);const say=statusFb(c);const q2=document.createElement('div');c.appendChild(q2);
+  const upd=()=>{task.innerHTML=k<8?`<b>Nächster Monat:</b> x = ${RES8[k][1]}, Residuum ${K('e='+fmt(RES8[k][2],2))}. Tippe die passende Stelle im Diagramm an.`:'<b>Fertig!</b> Alle acht Residuen sind eingetragen.';
+    tb.innerHTML=tabRes8(k<8?k:-1);pl.draw({lines:[ZERO],points:placed})};
+  const finish=()=>{if(fin)return;fin=true;
+    mcqW(q2,{q:`Was zeigt das ${T('muster')}?`,o:[
+      {t:'Erst positiv, dann negativ, dann positiv: Die Gerade passt schlecht.',ok:1,fb:'Genau. Die Punkte liegen auf einem Bogen. Die Preise fallen erst schnell und bleiben dann fast gleich. Eine Gerade kann das nicht abbilden.'},
+      {t:'Die Summe ist null, also beschreibt die Gerade die Preise gut.',fb:'Die Summe der Residuen ist bei dieser Geraden immer null. Entscheidend ist hier das Muster der Vorzeichen.'},
+      {t:'Die Residuen sind klein, also ist das Muster ganz egal.',fb:'Auch kleine Residuen mit klarem Bogen zeigen: Eine Gerade beschreibt den Verlauf systematisch falsch.'},
+      {t:'Die Residuen liegen zufällig verteilt, die Gerade passt.',fb:'Zufällig wäre ein Durcheinander ohne Ordnung. Hier stehen die positiven Werte am Rand und die negativen in der Mitte.'}]},api.solved,api.wrong)};
+  pl.el.addEventListener('pointerdown',e=>{if(ctx.solved||k>=8)return;const q=pl.toData(e),[n,x,r]=RES8[k];
+    if(Math.abs(q.x-x)<=0.4&&Math.abs(q.y-r)<=0.4){placed.push({x,y:r,color:r>0?'#17607a':'#c2410c'});k++;upd();
+      if(k===8){say('ok','✅ Alle acht Residuen sitzen. Schau dir die Form an!');finish()}else say('ok',`✅ Monat ${x} sitzt.`)}
+    else{api.wrong();say('bad',`❌ Du hast ungefähr ${K(`(${fmt(Math.round(q.x*2)/2,1)}\\mid ${fmt(Math.round(q.y*4)/4,2)})`)} getroffen. Gesucht ist x = ${x} und e = ${fmt(r,2)}: ${r>0?'über':r<0?'unter':'auf'} der Nulllinie.`)}});
+  upd();
+  api.setAuto(()=>{while(k<8){const [n,x,r]=RES8[k];placed.push({x,y:r,color:r>0?'#17607a':'#c2410c'});k++}upd();say('ok','✅ Alle acht Residuen sitzen.');finish()});
 }
 
 /* ---------- Abschlussdokument ---------- */
-function W4_doc(){return `<div class="doc"><div class="stamp">FS-04</div><h4>Fact Sheet FS-04: Welche Gerade passt besser?</h4>
-<div class="fig">${W4_FIG(W4_MIA,{h:300})}</div><dl>
-<dt>Skizze</dt><dd>Residuen von Mias Gerade: grün oberhalb (positiv), rot unterhalb (negativ).</dd>
-<dt>Regel</dt><dd>Wir vergleichen Geraden mit der Quadratsumme der Residuen. Die kleinere Quadratsumme passt besser. Die Summe der Residuen taugt nicht, weil sich positive und negative Werte aufheben. Mia 6, Jonas 54.</dd>
-<dt>Residuum</dt><dd>Angebot C(3|27): ${K('e=27-28=-1')} €/Stück. C liegt 1 €/Stück unter Mias Gerade.</dd>
-<dt>Muster</dt><dd>Mias Residuen wechseln ohne Muster. Eine Gerade passt zu den Daten.</dd>
-<dt>Warnung</dt><dd>Nur für 100 bis 800 Stück gültig. 2000 Stück sind Extrapolation: Die Gerade liefert dort −6 €/Stück.</dd>
+function factDoc(){return `<div class="doc"><div class="stamp">FS-04</div><h4>Fact Sheet FS-04: Welche Gerade passt besser?</h4>
+<div class="fig">${LINEFIG(REG,C_REG,{h:280,segs:SEGS(REG)})}</div><dl>
+<dt>Skizze</dt><dd>Die roten Striche sind die Residuen: senkrechte Abstände der Punkte zur Geraden.</dd>
+<dt>Regel</dt><dd>Wir vergleichen Geraden über die Quadratsumme der Residuen. Die kleinere Quadratsumme gewinnt. Die Summe der Residuen allein reicht nicht, weil sich plus und minus aufheben.</dd>
+<dt>Vergleich</dt><dd>Mia: 9, Jonas: 14. Mias Gerade passt besser. Die Regressionsgerade ${K('\\hat y=-2x+30')} hat die kleinste Quadratsumme 4.</dd>
+<dt>Ein Residuum</dt><dd>Mias Gerade, Februar: ${K('e=25-27=-2')} €/Stück. Der Punkt liegt 2 € unter der Geraden.</dd>
+<dt>Muster</dt><dd>Mit acht Monaten zeigen die Residuen einen Bogen (+, −, +). Eine Gerade passt dann schlecht.</dd>
+<dt>Warnung</dt><dd>${esc(state.sim.warn||'—')}</dd>
 <dt>Erstellt von</dt><dd>${nm()} · Analyse-Team · ${new Date().toLocaleDateString('de-DE')}</dd></dl></div>`}
-function W4_docText(){return ['Fact Sheet FS-04: Welche Gerade passt besser?','',
-'Regel: Wir vergleichen Geraden mit der Quadratsumme der Residuen. Die kleinere Quadratsumme passt besser. Die Summe der Residuen taugt nicht, weil sich positive und negative Werte aufheben (Mia 6, Jonas 54).',
-'Residuum: Angebot C(3|27): e = 27 − 28 = −1 €/Stück. C liegt 1 €/Stück unter Mias Gerade.',
-'Muster: Mias Residuen wechseln ohne Muster. Eine Gerade passt zu den Daten.',
-'Warnung: Nur für 100 bis 800 Stück gültig. 2000 Stück sind Extrapolation, die Gerade liefert dort −6 €/Stück.',
-'Erstellt von: '+(state.name||CONFIG.defaultName)].join('\n')}
+function factText(){return ['Fact Sheet FS-04: Welche Gerade passt besser?','',
+'Skizze: Residuen sind die senkrechten Abstände der Punkte zur Geraden.',
+'Regel: Wir vergleichen Geraden über die Quadratsumme der Residuen. Die kleinere Quadratsumme gewinnt.',
+'Vergleich: Mia 9, Jonas 14. Mias Gerade passt besser. Die Regressionsgerade y = −2x + 30 hat die kleinste Quadratsumme 4.',
+'Ein Residuum: Mias Gerade, Februar: e = 25 − 27 = −2 €/Stück.',
+'Muster: Mit acht Monaten zeigen die Residuen einen Bogen (+, −, +). Eine Gerade passt dann schlecht.',
+'Warnung: '+(state.sim.warn||'—'),'Erstellt von: '+(state.name||CONFIG.defaultName)].join('\n')}
 
-/* ---------- Aufwärmen ---------- */
+/* ---------- Aufwärmen: Vorwochen ---------- */
 const AUFWAERMEN=[
- {woche:3,q:`Setze ${K('x=3')} in ${K('p(x)=-2x+34')} ein. Was kommt heraus?`,o:[
-   {t:K('28'),ok:1,fb:'Genau: −2 · 3 + 34 = −6 + 34 = 28.'},{t:K('40'),fb:'Vorzeichen: −2 · 3 ist −6, nicht +6.'},
-   {t:K('31'),fb:'x wird mit −2 multipliziert, nicht einfach abgezogen.'},{t:K('26'),fb:'Das wäre der Wert bei x = 4.'}]},
- {woche:2,q:'Zeiten 8, 9, 9, 10, 14 Minuten, Mittelwert 10. Die Abweichungen vom Mittelwert sind −2, −1, −1, 0, 4. Ihre Summe ist …',o:[
-   {t:'0',ok:1,fb:'Genau: Beim Mittelwert heben sich die Abweichungen nach oben und unten auf.'},{t:'8',fb:'Das ist die Summe ohne Vorzeichen. Mit Vorzeichen heben sie sich auf.'},
-   {t:'22',fb:'Das ist die Summe der Quadrate. Gefragt ist die einfache Summe.'},{t:'4',fb:'Die negativen Abweichungen fehlen noch.'}]},
- {woche:1,q:'Ein Wert liegt auffällig weit weg von allen anderen. Was tust du?',o:[
-   {t:'Ich untersuche und dokumentiere ihn.',ok:1,fb:'Richtig: Ausreißer werden geprüft und dokumentiert, nicht einfach gelöscht.'},
-   {t:'Ich lösche ihn sofort, weil er stört.',fb:'Ausreißer werden nicht ungeprüft gelöscht. Vielleicht ist der Wert echt.'},
-   {t:'Ich ersetze ihn durch den Mittelwert.',fb:'Damit verfälschst du die Daten.'},
-   {t:'Ich übergehe ihn ohne Hinweis.',fb:'Ein Ausreißer gehört in die Dokumentation.'}]}
+ {woche:1,q:'In einer Preisliste steht ein Wert, der viel höher ist als alle anderen. Was tust du zuerst?',o:[
+   {t:'Den Wert prüfen und den Fund festhalten',ok:1,fb:'Genau: Auffällige Werte werden untersucht und dokumentiert, nicht ungeprüft gelöscht.'},
+   {t:'Den Wert sofort löschen, weil er stört',fb:'Ein Ausreißer kann echt sein. Erst prüfen, dann entscheiden und dokumentieren.'},
+   {t:'Den Wert durch den Mittelwert ersetzen',fb:'So verschwindet eine echte Information ohne Prüfung.'},
+   {t:'Den Wert doppelt zählen, weil er auffällt',fb:'Jede Beobachtung zählt genau einmal.'}]},
+ {woche:2,q:`Mittelwert von 20, 23 und 29 €/Stück?`,o:[
+   {t:'24 €/Stück',ok:1,fb:'Richtig: (20 + 23 + 29) : 3 = 72 : 3 = 24.'},
+   {t:'23 €/Stück',fb:'23 ist der Median, der mittlere Wert der sortierten Liste.'},
+   {t:'9 €/Stück',fb:'9 ist die Spannweite: 29 − 20.'},
+   {t:'72 €/Stück',fb:'72 ist die Summe. Sie muss noch durch 3 geteilt werden.'}]},
+ {woche:3,q:`Steigung der Geraden durch ${K('(2\\mid 28)')} und ${K('(6\\mid 20)')}?`,o:[
+   {t:K('m=-2'),ok:1,fb:'Genau: (20 − 28) : (6 − 2) = −8 : 4 = −2.'},
+   {t:K('m=2'),fb:'Vorzeichen: Der y-Wert sinkt von 28 auf 20, also ist m negativ.'},
+   {t:K('m=-0{,}5'),fb:'Kehrwert: m = Δy : Δx, nicht Δx : Δy.'},
+   {t:K('m=-8'),fb:'Δx = 4 fehlt noch im Nenner.'}]}
 ];
 
-/* ---------- Rückwärtsplanung: Mini-Skizzen ---------- */
-const W4_RP=[[1,8.6],[2,8.1],[3,6.9],[4,6.6],[5,5.4],[6,5.1],[7,3.8],[8,3.4]],W4_RG={m:-.75,b:9.5};
-const W4_RSEG=()=>W4_RP.map(([x,y])=>`<line x1="${16+x*9.6}" y1="${80-y*7.2}" x2="${16+x*9.6}" y2="${80-(W4_RG.m*x+W4_RG.b)*7.2}" stroke="#c2410c" stroke-width="2.5"/>`).join('');
-const W4_PRODUKT=()=>SKIZZE.blatt(`<text x="36" y="16" font-size="7" font-weight="700" fill="#132033" stroke="none">Fact Sheet</text>
-  <path d="M38 50V22M38 50h46" stroke-width="1.5"/>${W4_RP.map(([x,y])=>`<circle cx="${38+x*5}" cy="${50-y*3}" r="1.8" fill="#1f6feb" stroke="none"/>`).join('')}
-  ${W4_RP.map(([x,y])=>`<line x1="${38+x*5}" y1="${50-y*3}" x2="${38+x*5}" y2="${50-(W4_RG.m*x+W4_RG.b)*3}" stroke="#c2410c" stroke-width="1.2"/>`).join('')}
-  <line x1="38" y1="${50-W4_RG.b*3}" x2="84" y2="${50-(W4_RG.m*9.2+W4_RG.b)*3}" stroke="#5b3fc4" stroke-width="1.8"/>
-  <text x="36" y="61" font-size="6" fill="#132033" stroke="none">Regel: …   e = …</text><text x="36" y="70" font-size="6" fill="#b42318" stroke="none">⚠ Warnung: …</text>`,{zeilen:1,aria:'Fact Sheet mit Diagramm, Regel, berechnetem Abstand und Warnung'});
-const W4_RMUSTER=()=>SKIZZE(`<path d="M10 45h100" stroke-width="2"/>${[[20,-14],[32,-8],[44,6],[56,14],[68,14],[80,6],[92,-8],[104,-14]].map(([x,d])=>`<line x1="${x}" y1="45" x2="${x}" y2="${45+d}" stroke="${d<0?'#1b7a47':'#b42318'}" stroke-width="5"/>`).join('')}`,{aria:'Abstände erst oben, dann unten, dann wieder oben'});
-const W4_RBEREICH=()=>SKIZZE.plot({lines:[W4_RG],inner:`<rect x="${16+1*9.6}" y="6" width="${7*9.6}" height="74" fill="#f2b705" fill-opacity=".25" stroke="none"/><path d="M${16+9.6*9.6} 80V20" stroke="#b42318" stroke-width="2.5" stroke-dasharray="4 4"/>`});
+/* ---------- Rückwärtsplanung: Skizzen und Bild des fertigen Fact Sheets ---------- */
+const RW_P=[[1.5,8.2],[3,6.1],[4.5,5.6],[6,5.0],[7.5,3.2]],RW_G={m:-.75,b:9.2};
+const RW_SEG=()=>RW_P.map(([x,y])=>{const X=16+x*9.6,Y1=80-y*7.2,Y2=80-(RW_G.m*x+RW_G.b)*7.2;return `<path d="M${X} ${Y1}V${Y2}" stroke="#b42318" stroke-width="3"/>`}).join('');
+const RW_MUSTER=()=>SKIZZE(`<path d="M10 45h104" stroke-width="2"/>${[[16,22],[30,40],[44,56],[58,62],[72,58],[86,48],[100,30]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="4.5" fill="#1f6feb" stroke="none"/>`).join('')}`,{aria:'Punkte über und unter einer Nulllinie im Bogen'});
+const RW_PRODUKT=()=>SKIZZE.blatt(`<text x="36" y="16" font-size="7" font-weight="700" fill="#132033" stroke="none">Fact Sheet</text>
+  <path d="M38 50V22M38 50h46" stroke-width="1.5"/>${[[1,7],[2.5,5.2],[4,5.8],[5.5,3.6],[7,3.4]].map(([x,y])=>`<circle cx="${38+x*5.5}" cy="${50-y*3.6}" r="1.8" fill="#1f6feb" stroke="none"/>`).join('')}
+  <line x1="38" y1="${50-7.5*3.6}" x2="84" y2="${50-2.2*3.6}" stroke="#5b3fc4" stroke-width="1.8"/>
+  <text x="36" y="60" font-size="5.5" fill="#132033" stroke="none">Regel: kleinste Summe</text><text x="36" y="67" font-size="5.5" fill="#132033" stroke="none">e = …   ⚠ Warnung</text>`,{zeilen:1,aria:'Fact Sheet mit Diagramm, Regel, Zahl und Warnung'});
 
-/* ---------- Experiment-Akte: Bild ---------- */
-const W4_AKTEFIG=()=>plotSVG({xmin:0,xmax:8,ymin:0,ymax:8,ylab:2,xlab:2,h:280,xt:'Zeit',yt:'Position',points:[[1,1.5],[2,1.9],[3,3.4],[4,3.6],[5,5.1],[6,5.4],[7,6.8]].map(([x,y])=>({x,y,r:5,color:'#17607a'})),
-  lines:[{m:.88,b:.45,color:'#c2410c',x0:0,x1:7.8}],texts:[{x:7.8,y:.5,t:'Skizze, keine Originaldaten',size:15,bold:false,color:'#4d5a6b',anchor:'end'}]});
-
-/* ---------- Glossar ---------- */
-const GL={
-  modellwert:['Modellwert','Der Wert, den die Gerade an einer Stelle x liefert, geschrieben <b>ŷ</b> („y Dach“). Er ist eine Schätzung, kein gemessener Wert.','Mias Gerade liefert bei 300 Stück 28 €/Stück. Beobachtet wurden 27 €/Stück.',{art:'der',pl:'die Modellwerte'}],
-  residuum:['Residuum','Der beobachtete Wert minus der Modellwert: <b>e = y − ŷ</b>. Liegt der Punkt über der Geraden, ist e positiv, darunter negativ.','Angebot C liegt 1 €/Stück unter Mias Gerade: e = −1 €/Stück.',{art:'das',pl:'die Residuen'}],
-  quadratsumme:['Quadratsumme','Man quadriert alle Residuen und addiert sie. Je kleiner die Quadratsumme, desto besser passt die Gerade zu den Punkten.','Mia 6, Jonas 54: Mias Gerade passt besser.',{art:'die',pl:'die Quadratsummen'}],
-  regressionsgerade:['Regressionsgerade','Die Gerade mit der kleinsten Quadratsumme. Man bestimmt sie meist mit einer Tabellenkalkulation oder dem Taschenrechner.','Für den Markttest: ŷ ≈ −2,07x + 34,32.',{art:'die',pl:'die Regressionsgeraden'}],
-  residuenmuster:['Residuenmuster','Die Folge der Vorzeichen der Residuen von links nach rechts. Wechseln sie ohne Muster, passt die Gerade. Bilden sie einen Bogen, passt eine Gerade schlecht.','+ + − − − − + + ist ein Bogen.',{art:'das',pl:'die Residuenmuster'}],
-  bereich:['Beobachtungsbereich','Der x-Bereich, in dem es echte Daten gibt. Beim Markttest sind das 100 bis 800 Stück.',null,{art:'der',pl:'die Beobachtungsbereiche'}],
-  interpolation:['Interpolation','Schätzen mit der Geraden <b>innerhalb</b> des Beobachtungsbereichs. Das ist vertretbar, bleibt aber eine Schätzung.','Preis für 450 Stück',{art:'die',pl:'die Interpolationen'}],
-  extrapolation:['Extrapolation','Schätzen mit der Geraden <b>außerhalb</b> des Beobachtungsbereichs, also oberhalb oder unterhalb. Dafür gibt es keine Daten, deshalb ist sie unsicher.','Preis für 2000 Stück oder für 50 Stück',{art:'die',pl:'die Extrapolationen'}]
-};
+/* ---------- Experiment-Akte (didaktisch reduziert, Angaben zur Prüfung in fakten) ---------- */
+const AKTE_LS={type:'akte',title:'Experiment-Akte: Der verlorene Kleinplanet',titel:'Ceres und die Methode der kleinsten Quadrate',zeit:'1801 bis 1809',wer:'Carl Friedrich Gauß und Adrien-Marie Legendre',
+  rows:[['Problem','Ceres wurde am 1. Januar 1801 entdeckt und nur wenige Wochen beobachtet. Dann verschwand sie hinter dem Glanz der Sonne.'],
+        ['Idee','Aus vielen leicht ungenauen Beobachtungen die Bahn wählen, bei der die Summe der quadrierten Abweichungen am kleinsten ist.'],
+        ['Ergebnis','Gauß berechnete die Bahn. Ende 1801 wurde Ceres an der vorhergesagten Stelle wiedergefunden.'],
+        ['Veröffentlichung','Legendre veröffentlichte die Methode 1805, Gauß seine Fassung 1809.']],
+  fakten:['Giuseppe Piazzi entdeckte Ceres am 1. Januar 1801 und konnte sie nur wenige Wochen beobachten.','Carl Friedrich Gauß berechnete 1801 aus diesen Beobachtungen die Bahn. Ende 1801 wurde Ceres wiedergefunden.','Adrien-Marie Legendre veröffentlichte die Methode der kleinsten Quadrate 1805.','Gauß veröffentlichte seine Fassung 1809 und gab an, sie schon seit 1795 zu nutzen.'],
+  q:'Was hat die Ceres-Rechnung mit unserer Regressionsgeraden gemeinsam?',o:[
+   {t:'Beide suchen das Modell mit der kleinsten Quadratsumme.',ok:1,fb:'Genau. Gauß hatte ungenaue Messungen einer Bahn, wir haben streuende Preise. Das Prinzip ist dasselbe.'},
+   {t:'Beide verbinden einfach den ersten und letzten Messwert.',fb:'Gerade nicht: Alle Beobachtungen fließen ein, nicht nur zwei.'},
+   {t:'Beide nutzen nur die eine genaueste Messung.',fb:'Die Methode nutzt alle Messungen und gleicht ihre Fehler aus.'},
+   {t:'Beide liefern eine Vorhersage ganz ohne Unsicherheit.',fb:'Auch Gauß hatte Messfehler. Die Methode macht das Beste daraus, aber keine Garantie.'}],
+  hints:['Lies die Zeile „Idee“ noch einmal.','Was haben wir in Level 2 mit den Reglern gesucht?','Die kleinste Summe der quadrierten Abweichungen.']};
 
 /* ---------- Etappen ---------- */
+const BOSS1={name:'Herr Kaminski',role:'Controlling',ava:'🧐'};
+const BOSS2={name:'Herr Brandt',role:'Vertriebsleitung',ava:'🤨'};
 const H1='Stunde 1 · 45 min',H2='Stunde 2 · 45 min';
 const LEVELS=[
 /* ===== 0 Einstieg ===== */
-{title:'Einstieg: Der Streit im Vertriebsbüro',tag:'Einstieg',sub:'Wer sind wir? Was ist das Ziel? Wie erreichen wir es?',badge:'🧭 Auftrag geklärt',num:'💬',hour:H1,short:'Einstieg',steps:[
- {type:'info',html:()=>`${W4_COMIC()}
-   <div class="task"><b>Dein Auftrag:</b> Schau dir den Comic an. Danach klärt ihr gemeinsam im Plenum: <b>Wer sind wir? Was ist das Ziel?</b> Überlegt auch, warum Mia bei Bild 4 skeptisch ist. Den Comic findest du jederzeit unter 📂.</div>`},
- {type:'vote',id:'m1',phase:'vor',title:'Abstimmung',q:'„Die Linie, bei der sich die Abstände nach oben und nach unten genau aufheben, passt am besten.“ Stimmt das?'},
- {type:'kette',title:'Frage 3: Wie erreichen wir das Ziel?',frage:'Was brauchen wir, um das Fact Sheet für das Vertriebsteam schreiben zu können?',
+{title:'Einstieg: Der Geraden-Streit',tag:'Einstieg',sub:'Wer sind wir? Was ist das Ziel? Wie erreichen wir es?',badge:'🧭 Auftrag geklärt',num:'💬',hour:H1,short:'Einstieg',steps:[
+ {type:'info',html:()=>`<div class="newmail"><span class="dot"></span><b>Comic</b>&nbsp;· Vertriebsbüro</div>${COMIC()}
+   <div class="task"><b>Dein Auftrag:</b> Lies den Comic. Überlege: Mit welcher Regel kann man zwei Geraden fair vergleichen? Und warum ist Mia bei Bild 4 skeptisch? Danach klärt ihr im Plenum: <b>Wer sind wir? Was ist das Ziel?</b> Dann plant ihr, <b>wie ihr es erreicht</b>.</div>${GEN()}`},
+ {type:'kette',title:'Frage 3: Wie erreichen wir das Ziel?',frage:'Was brauchen wir, um das Fact Sheet „Welche Gerade passt besser?“ schreiben zu können?',
   text:'Schau dir das fertige Fact Sheet an. Frag dich bei jedem Teil: <b>Woher kommt das?</b> Was müssen wir direkt davor tun? Hier gibt es noch kein Richtig oder Falsch. Ihr vergleicht eure Wege gleich im Plenum.',
-  ziel:'Das Fact Sheet für das Vertriebsteam schreiben',bild:()=>W4_PRODUKT(),
-  schritte:[{t:'Abstände der Punkte zur Linie messen',e:'📏',fig:()=>SKIZZE.plot({points:W4_RP,lines:[W4_RG],inner:W4_RSEG()}),fach:'Residuum'},
+  ziel:'Das Fact Sheet für das Vertriebsteam schreiben',bild:()=>RW_PRODUKT(),
+  schritte:[{t:'Die Abstände der Punkte zur Linie messen',e:'📏',fig:()=>SKIZZE.plot({points:RW_P,lines:[RW_G],inner:RW_SEG()}),fach:'Residuum und Modellwert ŷ'},
             {t:'Die Abstände quadrieren und zusammenzählen',e:'🧮',fig:()=>SKIZZE.tabelle(4,2),fach:'Quadratsumme und Regressionsgerade'},
-            {t:'Prüfen, ob die Abstände ein Muster zeigen',e:'🔍',fig:()=>W4_RMUSTER(),fach:'Residuenmuster'},
-            {t:'Klären, wo die Linie Preise schätzen darf',e:'⚠️',fig:()=>W4_RBEREICH(),fach:'Interpolation und Extrapolation'}],
-  extra:[{t:'Ein Firmenlogo für das Blatt entwerfen',e:'🎨',fig:()=>SKIZZE('<circle cx="60" cy="45" r="28"/><path d="M46 52l14-22 14 22z"/>')}],
-  warum:['Ohne die einzelnen Abstände gibt es nichts zu vergleichen.','Erst die Summe liefert eine Zahl, mit der man zwei Linien fair vergleicht.','Eine kleine Summe hilft nicht, wenn die Linie grundsätzlich nicht zu den Daten passt.','Die Warnung im Fact Sheet braucht die Grenze der Daten.'],
-  hints:['Schau auf das Bild des Fact Sheets. Was steht darin, und woher kommt es?','Die Warnung braucht die Grenze der Daten. Die Regel braucht eine Zahl für jede Linie.','Ganz am Anfang stehen die Abstände jedes Punkts zur Linie.']},
- {type:'info',html:()=>person(`<p>Danke, ${nm()}! Mia und Jonas warten auf euer Urteil. Hier ist euer Fahrplan. Unterwegs prüfen zwei Kollegen eure Ergebnisse. Überzeugt sie!</p>`)+
+            {t:'Prüfen, ob die Abstände ein Muster bilden',e:'🔍',fig:()=>RW_MUSTER(),fach:'Residuenmuster'},
+            {t:'Klären, wo die Linie Preise schätzen darf',e:'⚠️',fig:()=>SKIZZE.plot({points:RW_P.slice(0,4),lines:[RW_G],mark:[9.5,RW_G.m*9.5+RW_G.b]}),fach:'Interpolation und Extrapolation'}],
+  extra:[{t:'Per Abstimmung die schönere Linie wählen',e:'🗳️',fig:()=>SKIZZE('<rect x="34" y="40" width="52" height="40" rx="4"/><path d="M46 40V22h28v18M52 30h16"/>')}],
+  warum:['Ohne die einzelnen Abstände gibt es nichts zu vergleichen.','Erst eine Summe liefert eine Zahl, mit der man zwei Linien fair vergleicht.','Auch die beste Linie kann schlecht passen. Das zeigt erst das Muster der Abstände.','Die Warnung im Fact Sheet braucht die Grenze der Daten.'],
+  hints:['Schau auf das Bild des Fact Sheets. Was steht darin, und woher kommt es?','Die Regel „kleinste Summe“ braucht vorher die einzelnen Abstände.','Ganz am Anfang misst man, wie weit jeder Punkt von der Linie entfernt ist.']},
+ {type:'info',html:()=>person(`<p>Danke, ${nm()}! Hier ist euer Fahrplan. Unterwegs prüfen zwei Kollegen eure Ergebnisse. Überzeugt sie!</p>`)+
    `<div class="mission" style="margin-top:6px"><h3>🧭 Unser Auftrag</h3><dl><dt>Wer?</dt><dd>${CONFIG.board.wer}</dd><dt>Ziel?</dt><dd>${CONFIG.board.ziel}</dd><dt>Wie?</dt><dd>${CONFIG.board.wie}</dd></dl></div>
-   <div class="task"><b>Stunde 1:</b> Level 1 Abstände und faire Regel → ⚔️ Kaminskis Prüfung → 🏰 Flurfunk<br><b>Stunde 2:</b> Level 2 Muster und Grenzen → 🤝 Kühltasche → ⚔️ Brandts Großauftrag → 🏁 Fact Sheet → 🎯 Quiz</div>
-   <div class="merke"><b>🎖 Dein Rang:</b> Du startest als <b>Junior-Analyst</b>. Jeder überzeugte Gegner bringt dich eine Stufe höher: Analyst → Senior-Analyst → Leitender Analyst.</div>`}
+   <div class="task"><b>Stunde 1:</b> Level 1 Abstände messen → Level 2 fair vergleichen → ⚔️ Controlling-Check → 🏰 Klassen-Gegner → Level 3 Muster und Grenzen<br><b>Stunde 2:</b> 🤝 Partneraufgabe → ⚔️ Prognose-Prüfung → 🏁 Fact Sheet → 🎯 Quiz</div>
+   <div class="merke"><b>🎖 Dein Rang:</b> Du startest als <b>Praktikant</b>. Jeder besiegte Gegner bringt dich eine Stufe höher: Junior-Analyst → Analyst → Senior-Analyst.</div>`}
 ]},
-/* ===== 1 Level 1 ===== */
-{title:'Level 1: Abstände und faire Regel',blatt:'1',tag:'Lernabschnitt 1',sub:'Residuen, Quadratsumme, Regressionsgerade',badge:'📏 Abstandsmesser',num:1,hour:H1,short:'Residuen',
- ichkann:['Ich kann ausrechnen, wie weit ein Punkt über oder unter einer Linie liegt.','Ich kann erklären, warum man die Abstände quadriert, bevor man sie addiert.','Ich kann zwei Linien mit einer fairen Regel vergleichen.'],
- halt:{frage:'Mia: „Wir addieren einfach die Abstände ohne Vorzeichen.“ Was spricht dafür, was dagegen?',
-   impulse:['Ein Punkt liegt 4 von der Geraden weg, ein anderer 1. Wie stark zählen sie mit und ohne Quadrieren?','Welche Gerade gewinnt mit Mias Regel: Mia (6) oder Jonas (18)?','Warum reicht die Summe mit Vorzeichen nicht?'],
-   starters:['Ich finde Mias Idee','Quadrieren ist besser, weil','Beide Regeln'],
-   bonus:{type:'mcq',title:'Bonus: Großer Abstand',q:'Ein Punkt hat das Residuum 4, ein anderer das Residuum 1. Wie viel mehr zählt der erste in der Quadratsumme?',o:[
-     {t:'16-mal so viel',ok:1,fb:'Genau: 4² = 16 und 1² = 1. Große Abstände zählen beim Quadrieren viel stärker.'},{t:'4-mal so viel',fb:'Das wäre ohne Quadrieren. Rechne 4² und 1².'},
-     {t:'gleich viel',fb:'Die Abstände sind verschieden groß, also zählen sie auch verschieden.'},{t:'8-mal so viel',fb:'4² ist 16, nicht 8.'}],
-     hints:['Quadriere beide Residuen.','4² = 16, 1² = 1.','16 : 1 = ?']}},
- knobel:{type:'calc',title:'Knobel-Aufgabe: Mia schiebt ihre Gerade',text:`Mia verschiebt ihre Gerade um 1 nach oben: ${K('p(x)=-2x+35')}. ${OP('Berechne')} die Summe der Residuen und die Quadratsumme.`,
-   data:()=>W4_tab(),
-   rows:[{pre:'Summe der Residuen:',ans:-8,tol:.01,u:'€/Stück',traps:[[8,'Vorzeichen: Alle Punkte liegen jetzt eher unter der Geraden, die Residuen werden kleiner.'],[0,'Die Summe ist nur bei Geraden durch die Mitte der Punkte gleich 0.']]},
-         {pre:'Quadratsumme:',ans:14,tol:.01,u:'',traps:[[6,'6 war die Quadratsumme vor dem Verschieben.'],[8,'Das ist die Summe ohne Vorzeichen. Quadriere jedes Residuum.']]}],
-   after:'Residuen −1, 0, −2, 0, −2, 0, −2, −1: Summe −8, Quadratsumme 14. Verschieben macht die Gerade schlechter.',
-   hints:['Neue Modellwerte: jeweils 1 mehr als bei Mia.','Jedes Residuum wird um 1 kleiner: 0 wird −1, 1 wird 0, −1 wird −2.','Quadrate: 1, 0, 4, 0, 4, 0, 4, 1.']},
+/* ===== 1 Level 1: Residuen ===== */
+{title:'Level 1: Abstände zur Geraden',blatt:'1',tag:'Lernabschnitt 1',sub:'Residuen messen und berechnen',badge:'📏 Abstandsmesser',num:1,hour:H1,short:'Residuen',
+ ichkann:['Ich kann an einem Diagramm ablesen, wie weit ein Punkt über oder unter einer Linie liegt.','Ich kann diesen Abstand mit Vorzeichen ausrechnen.'],
  steps:[
- {type:'info',html:()=>person(`<p>Hallo ${nm()}! Um den Streit fair zu entscheiden, messen wir zuerst, wie weit jeder Punkt neben der Geraden liegt. Die Gerade liefert an jeder Stelle x einen ${T('modellwert')} ${K('\\hat y')} (sprich „y Dach“). Der beobachtete Wert y weicht davon ab. Diese senkrechte Abweichung heißt ${T('residuum')}:</p>${KD('e=y-\\hat y')}`)+
-   `<div class="fig">${W4_FIG(W4_MIA)}</div><div class="merke"><b>Merke:</b> Punkt <b>über</b> der Geraden: e positiv (grün). Punkt <b>unter</b> der Geraden: e negativ (rot). Die Einheit ist dieselbe wie bei p, hier €/Stück.</div>
-   <div class="task"><b>Ziel dieses Levels:</b> Du berechnest Residuen und vergleichst zwei Geraden mit einer fairen Regel.</div>`},
- {type:'calc',title:'Das Residuum von C',text:`${OP('Berechne')} für Mias Gerade ${K('p(x)=-2x+34')} den Modellwert bei Angebot C und das Residuum von C.`,
-  einfach:{text:`Mias Gerade: ${K('p(x)=-2x+34')}. Angebot C hat x = 3 und p = 27. ${OP('Berechne')} erst den Wert der Geraden bei x = 3. Dann rechne: beobachtet minus Gerade.`},
-  profi:{text:`${OP('Berechne')} für ${K('\\hat p(x)=-2x+34')} den Modellwert ${K('\\hat y_C')} und das Residuum ${K('e_C=y_C-\\hat y_C')}.`},
-  data:()=>W4_tab(2),pre:()=>`<div class="fig">${W4_FIG(W4_MIA,{segs:false,h:320,extra:{rings:[{x:3,y:27}]}})}</div>`,
-  rows:[{pre:K('\\hat y=-2\\cdot 3+34='),ans:28,tol:.01,u:'€/Stück',traps:[[40,'Vorzeichen: −2 · 3 = −6, also 34 − 6.'],[27,'27 ist der beobachtete Wert y. Gesucht ist der Wert auf der Geraden.']]},
-        {pre:K('e=y-\\hat y='),ans:-1,tol:.01,u:'€/Stück',traps:[[1,'Reihenfolge: e = y − ŷ = 27 − 28. C liegt unter der Geraden, also ist e negativ.'],[27,'Du hast nur y eingetragen. Ziehe noch den Modellwert ab.']]}],
-  after:'C liegt 1 €/Stück unter Mias Gerade: e = −1 €/Stück.',
-  wb:{w:['modellwert','residuum'],s:['Der Punkt liegt … unter der Geraden, also ist e …']},
-  hints:['Setze x = 3 in die Gleichung ein.','Residuum = beobachtet minus Modellwert.','27 − 28 = ?'],
-  twin:{type:'calc',title:'Zwilling: Das Residuum von B bei Jonas',text:`${OP('Berechne')} für Jonas’ Gerade ${K('p(x)=-x+29{,}5')} den Modellwert bei B(2|31) und das Residuum von B.`,
-   rows:[{pre:K('\\hat y='),ans:27.5,tol:.01,u:'€/Stück',traps:[[31.5,'Vorzeichen: −1 · 2 = −2, also 29,5 − 2.']]},
-         {pre:K('e='),ans:3.5,tol:.01,u:'€/Stück',traps:[[-3.5,'Reihenfolge: e = y − ŷ = 31 − 27,5.']]}],
-   after:'B liegt 3,5 €/Stück über Jonas’ Gerade.'}},
- {type:'calc',wechsel:'Graph → Tabelle',title:'Residuen ablesen',text:`Im Diagramm siehst du Jonas’ Gerade mit allen Residuen. ${OP('Lies ab')}, welche Residuen die Angebote A, D und G haben, und halte sie in der Tabelle fest.`,
-  profi:{text:`${OP('Lies ab')}: Residuen ${K('e_A')}, ${K('e_D')} und ${K('e_G')} bezüglich ${K('\\hat p(x)=-x+29{,}5')} (grün positiv, rot negativ).`},
-  pre:()=>`<div class="fig">${W4_FIG(W4_JON)}</div>`,
-  rows:[{pre:K('e_A='),ans:3.5,tol:.3,u:'€/Stück',traps:[[-3.5,'A liegt über der Geraden (grün), also ist e positiv.'],[32,'32 ist der Preis von A. Gesucht ist der Abstand zur Geraden.']]},
-        {pre:K('e_D='),ans:1.5,tol:.3,u:'€/Stück',traps:[[-1.5,'D liegt über der Geraden (grün), also ist e positiv.'],[25.5,'25,5 ist der Modellwert. Gesucht ist der Abstand.']]},
-        {pre:K('e_G='),ans:-3.5,tol:.3,u:'€/Stück',traps:[[3.5,'G liegt unter der Geraden (rot), also ist e negativ.'],[19,'19 ist der Preis von G. Gesucht ist der Abstand.']]}],
-  after:'Jonas: e_A = 3,5, e_D = 1,5, e_G = −3,5 €/Stück. Links liegen die Punkte über seiner Geraden, rechts darunter.',
-  wb:{w:['residuum','modellwert'],s:['Der Punkt liegt über der Geraden, also …']},
-  hints:['Zähle bei jedem Punkt die Kästchen vom Punkt bis zur Geraden. Ein Kästchen ist 1 €/Stück.','Grün heißt: Punkt oberhalb, e positiv. Rot heißt: unterhalb, e negativ.','A: Gerade bei 28,5, Punkt bei 32.'],
-  twin:{type:'calc',title:'Zwilling: Residuen bei Mia',text:`${OP('Lies ab')}, welche Residuen die Angebote B, C und F bei Mias Gerade haben.`,pre:()=>`<div class="fig">${W4_FIG(W4_MIA)}</div>`,
-   rows:[{pre:K('e_B='),ans:1,tol:.3,u:'€/Stück',traps:[[-1,'B liegt über der Geraden.']]},{pre:K('e_C='),ans:-1,tol:.3,u:'€/Stück',traps:[[1,'C liegt unter der Geraden.']]},{pre:K('e_F='),ans:1,tol:.3,u:'€/Stück',traps:[[-1,'F liegt über der Geraden.']]}],
-   after:'B +1, C −1, F +1 €/Stück.'}},
- {type:'calc',title:'Die faire Regel',text:`Unter 📂 stehen alle Residuen von Mia und Jonas. ${OP('Berechne')} für Jonas die Summe der Residuen und die ${T('quadratsumme')}: Jedes Residuum quadrieren, dann alle addieren. ${OP('Berechne')} dann die Quadratsumme von Mia.`,
-  einfach:{text:`Unter 📂 stehen alle Abstände (Residuen). ${OP('Berechne')} für Jonas zuerst die Summe der Residuen. Dann quadriere jedes Residuum und addiere. Das ist die ${T('quadratsumme')}. Danach dasselbe für Mia.`},
-  dataTitle:'📂 Residuen von Mia und Jonas',data:()=>W4_restab([['Mia',W4_RES_MIA],['Jonas',W4_RES_JON]]),
-  rows:[{pre:'Jonas: '+K('\\sum e='),ans:0,tol:.01,u:'€/Stück',traps:[[18,'Das ist die Summe ohne Vorzeichen. Mit Vorzeichen heben sich die Residuen auf.'],[54,'Das ist schon die Quadratsumme. Hier ist die einfache Summe gefragt.']]},
-        {pre:'Jonas: '+K('\\sum e^2='),ans:54,tol:.01,u:'',traps:[[18,'Du hast nur die Beträge addiert. Quadriere jedes Residuum: 3,5² = 12,25.'],[0,'Ohne Quadrieren heben sich die Vorzeichen auf. Quadriere zuerst.'],[36,'Rechne 3,5² = 12,25, nicht 3,5 · 2.']]},
-        {pre:'Mia: '+K('\\sum e^2='),ans:6,tol:.01,u:'',traps:[[0,'Das ist die Summe mit Vorzeichen. Quadriere zuerst.'],[8,'Zähle nach: Sechs Residuen sind 1 oder −1, zwei sind 0.']]}],
-  after:'Beide Summen der Residuen sind 0: Mia und Jonas sind damit nicht zu unterscheiden. Die Quadratsumme trennt sie: Mia 6, Jonas 54. Mias Gerade passt besser. Quadrieren verhindert, dass sich + und − aufheben, und große Abstände zählen stärker.',
-  wb:{w:['residuum','quadratsumme'],s:['Die Gerade passt besser, weil ihre Quadratsumme …','Die Summe der Residuen ist …, weil …']},
-  hints:['Addiere die Residuen von Jonas mit Vorzeichen.','Quadrate bei Jonas: 12,25 / 12,25 / 0,25 / 2,25 / 2,25 / 0,25 / 12,25 / 12,25.','Bei Mia ist jedes Quadrat 0 oder 1.'],
-  twin:{type:'calc',title:'Zwilling: Vier Residuen',text:`Eine Gerade hat bei vier Punkten die Residuen 2, −1, −2 und 1. ${OP('Berechne')} die Summe der Residuen und die Quadratsumme.`,
-   rows:[{pre:K('\\sum e='),ans:0,tol:.01,u:'',traps:[[6,'Das ist die Summe ohne Vorzeichen.']]},{pre:K('\\sum e^2='),ans:10,tol:.01,u:'',traps:[[6,'Quadriere: 4 + 1 + 4 + 1.'],[0,'Quadriere zuerst, dann addieren.']]}],
-   after:'Summe 0, Quadratsumme 10.'}},
- {type:'sim',title:'Die beste Gerade finden',text:`${OP('Probiere')}: Zieh die lila Griffe (oder nutze die Tasten). Unter dem Diagramm siehst du live die Summe der Residuen und die Quadratsumme. Ziel: Quadratsumme höchstens 6. Die Gerade mit der kleinsten Quadratsumme überhaupt heißt ${T('regressionsgerade')}.`,
-  run:W4_simFit,solution:'Gerade mit Quadratsumme höchstens 6, z. B. Mias Gerade p(x) = −2x + 34 (Griffe bei 33 und 17). Regressionsgerade ŷ ≈ −2,07x + 34,32 mit Quadratsumme 5,79.',
-  wb:{w:['quadratsumme','regressionsgerade','residuum'],s:['Die Quadratsumme wird kleiner, wenn …']},
-  hints:['Die Startgerade ist Jonas’ Gerade. Sie ist zu flach.','Mach die Gerade steiler, bis die grünen und roten Striche überall kurz sind.','Probiere den linken Griff bei 33 und den rechten bei 17.']},
- {type:'akte',title:'Aus der Geschichte',titel:'Der Streit um die beste Gerade',zeit:'1805 bis 1809',wer:'Adrien-Marie Legendre (Paris) und Carl Friedrich Gauß (Göttingen)',
-  rows:[['Frage','Wie legt man eine Linie durch Beobachtungen, die nicht genau auf einer Linie liegen, zum Beispiel Positionen von Himmelskörpern?'],
-        ['Idee','Die Summe der quadrierten Abweichungen soll so klein wie möglich sein. Heute heißt das „Methode der kleinsten Quadrate“.'],
-        ['1805','Legendre veröffentlicht die Methode im Anhang einer Schrift über die Bahnen von Kometen.'],
-        ['1809','Gauß veröffentlicht sie ebenfalls und schreibt, er nutze sie schon seit 1795. Daraus entsteht ein Streit, wer zuerst da war.'],
-        ['Ceres','Giuseppe Piazzi entdeckt am 1. Januar 1801 den Zwergplaneten Ceres und verliert ihn danach aus dem Blick. Gauß berechnet 1801 die Bahn. Ende 1801 wird Ceres wiedergefunden.']],
-  fig:W4_AKTEFIG,quelle:'Diagramm als Skizze',
-  fakten:['Adrien-Marie Legendre veröffentlicht die Methode der kleinsten Quadrate 1805 (Anhang einer Schrift zur Bahnbestimmung von Kometen)','Carl Friedrich Gauß veröffentlicht sie 1809 und gibt an, sie seit 1795 zu benutzen (Prioritätsstreit)','Giuseppe Piazzi entdeckt Ceres am 1. Januar 1801','Gauß berechnet 1801 die Bahn von Ceres, Ceres wird Ende 1801 wiedergefunden','Ceres gilt heute als Zwergplanet'],
-  q:'Was haben Legendre und Gauß mit dem Streit von Mia und Jonas gemeinsam?',o:[
-   {t:'Beide Male braucht man eine faire Regel, welche Linie am besten passt.',ok:1,fb:'Genau. Die Methode der kleinsten Quadrate ist unsere Regel: die kleinste Quadratsumme.'},
-   {t:'Beide Male gewinnt die Linie, die durch die meisten Messpunkte geht.',fb:'Darum ging es nicht. Es zählen die Abstände zu allen Punkten.'},
-   {t:'Beide Male hebt sich die Summe der Abweichungen am Ende einfach auf.',fb:'Genau deshalb quadriert man ja: damit sich nichts aufhebt.'},
-   {t:'Beide Male liefert die Linie auch weit außerhalb der Daten sichere Werte.',fb:'Eine Linie beschreibt vor allem den Bereich, in dem es Daten gibt.'}],
-  hints:['Lies die Zeile „Idee“.','Was haben Mia und Jonas gesucht?','Eine faire Regel, die für alle Linien gleich gilt.']}
+ {type:'info',html:()=>person(`<p>Hallo ${nm()}! Bevor wir entscheiden, wer recht hat, messen wir. Jede Gerade liefert für jeden Monat einen ${T('modellwert')}. Die Abweichung des echten Preises davon heißt ${T('residuum')}.</p>`)+
+   `<div class="merke"><b>Merke:</b>${FORM1()}<p style="margin:4px 0 0">Punkt <b>über</b> der Geraden: ${K('e>0')}. Punkt <b>unter</b> der Geraden: ${K('e<0')}. Gemessen wird <b>senkrecht</b>, also beim selben x.</p></div><div class="task"><b>Ziel dieses Levels:</b> Du misst und berechnest Residuen mit Vorzeichen.</div>`,
+   einfach:{html:()=>person(`<p>Hallo ${nm()}! Jede Gerade sagt für jeden Monat einen Preis voraus: den ${T('modellwert')}. Der echte Preis weicht davon ab. Diese Abweichung heißt ${T('residuum')}.</p>`)+
+   `<div class="merke"><b>Merke:</b>${FORM1()}<p style="margin:4px 0 0">Echter Preis größer: e ist positiv. Echter Preis kleiner: e ist negativ. Du misst immer senkrecht nach oben oder unten.</p></div>`}},
+ {type:'sim',wechsel:'Graph → Tabelle',title:'Residuen einzeichnen',text:`${OP('Zeichne')} die Residuen an Mias Gerade ${K('\\hat y=-2x+31')} ein: Tippe für B, C und E die Stelle auf der Geraden an, die senkrecht über dem Punkt liegt. Die Tabelle füllt sich.`,run:simResid,
+  solution:'B: ŷ = 27, e = −2. C: ŷ = 25, e = −2. E: ŷ = 21, e = −1. A und D liegen auf der Geraden. Mias Gerade liegt insgesamt zu hoch.',
+  wb:{w:['residuum','modellwert'],s:['Der Punkt liegt … der Geraden, also ist e …']},
+  hints:['Geh vom Punkt aus senkrecht nach oben, bis du die orange Gerade triffst.','Das x bleibt gleich. Nur der y-Wert ändert sich.','Bei B (x = 2) liegt die Gerade bei −2 · 2 + 31 = 27.']},
+ {type:'calc',title:'Residuen bei Jonas',text:`${OP('Berechne')} für Jonas’ Gerade ${K('\\hat y=-x+27')} den ${T('modellwert')} bei Punkt A und die ${T('residuum','Residuen')} von A und E.`,
+  pre:()=>`<div class="fig">${LINEFIG(JON,C_JON)}</div>`,data:()=>tabPB(PWB)+FORM1(),
+  rows:[{pre:K('\\hat y_A='),ans:26,tol:.01,u:'€/Stück',traps:[[28,'Vorzeichen: −1 · 1 + 27 = 26.'],[29,'29 ist der echte Preis y. Gesucht ist der Wert auf der Geraden.']]},
+        {pre:K('e_A='),ans:3,tol:.01,u:'€/Stück',traps:[[-3,'Reihenfolge: e = y − ŷ = 29 − 26, nicht 26 − 29.'],[26,'Das ist ŷ. Das Residuum ist die Differenz y − ŷ.']]},
+        {pre:K('e_E='),ans:-2,tol:.01,u:'€/Stück',traps:[[2,'Reihenfolge: e = 20 − 22. E liegt unter der Geraden, also ist e negativ.'],[22,'22 ist ŷ bei x = 5. Gesucht ist 20 − 22.'],[-7,'ŷ(5) = −5 + 27 = 22, nicht 27.']]}],
+  after:'A liegt 3 € über Jonas’ Gerade, E 2 € darunter.',
+  hints:['Setze x in die Gleichung der Geraden ein. Das ist ŷ.','Dann echter Preis minus ŷ.','A: ŷ = −1 + 27 = 26, also e = 29 − 26.'],
+  profi:{text:`${OP('Berechne')} ${K('\\hat y_A')} sowie die Residuen ${K('e_A')} und ${K('e_E')} für ${K('\\hat y=-x+27')}.`},
+  twin:{type:'calc',title:'Zwilling: eine dritte Gerade',text:`${OP('Berechne')} für die Gerade ${K('\\hat y=-2x+30')} den Wert ŷ bei A und die Residuen von A und E.`,
+   rows:[{pre:K('\\hat y_A='),ans:28,tol:.01,u:'€/Stück',traps:[[32,'Vorzeichen: −2 · 1 + 30 = 28.']]},
+         {pre:K('e_A='),ans:1,tol:.01,u:'€/Stück',traps:[[-1,'Reihenfolge: e = 29 − 28.']]},
+         {pre:K('e_E='),ans:0,tol:.01,u:'€/Stück',traps:[[20,'ŷ(5) = −10 + 30 = 20, also e = 20 − 20.']]}],
+   after:'A liegt 1 € über dieser Geraden, E genau auf ihr.'}}
 ]},
-/* ===== 2 Gegner 1 ===== */
-{title:'Gegner 1: Kaminskis Prüfung',tag:'Aufgabenblock 1',sub:'Residuen und Quadratsumme verteidigen',badge:'🛡️ Controller überzeugt',hour:H1,short:'Kaminski',rankUp:'Analyst',
- boss:{name:'Herr Kaminski',role:'Controlling: „Eine Regel ist nur gut, wenn sie bei jeder Geraden funktioniert!“',ava:'🧐',bar:'Skepsis',win:'Herr Kaminski ist überzeugt!'},
- klasse:{name:'Der Flurfunk',role:'Auf dem Flur kursieren Gerüchte über Geraden. Widerlegt sie gemeinsam!',ava:'📢',bar:'Gerüchte',win:'Der Flurfunk ist verstummt. Die Klasse hat gewonnen!',
+/* ===== 2 Level 2: Quadratsumme ===== */
+{title:'Level 2: Fair vergleichen',blatt:'1',tag:'Lernabschnitt 1',sub:'Quadratsumme und Regressionsgerade',badge:'🧮 Fairness-Profi',num:2,hour:H1,short:'Quadratsumme',
+ ichkann:['Ich kann begründen, warum man die Abstände nicht einfach zusammenzählt.','Ich kann zwei Linien mit einer Summe von Quadraten vergleichen.','Ich kann die Linie finden, die insgesamt am wenigsten danebenliegt.'],
+ halt:{frage:'Durch das Quadrieren zählt ein großer Abstand viel stärker als viele kleine. Ist das für den Vertrieb fair?',
+   impulse:['Was wird aus einem Abstand von 1 und was aus einem Abstand von 3?','Welche Fehler sind für den Vertrieb teurer: viele kleine oder ein großer?','Was macht man mit einem Ausreißer? Denkt an Woche 1.'],
+   starters:['Ich finde das fair, weil','Ich finde das unfair, weil','Bei einem Ausreißer'],
+   wb:{w:['residuum','quadratsumme'],s:['Ein großer Abstand zählt stärker, weil …']},
+   bonus:{type:'mcq',title:'Bonus: Kleine Abstände',q:'Was passiert beim Quadrieren mit einem Residuum von 0,5?',o:[
+     {t:'Es wird kleiner: 0,25.',ok:1,fb:'Genau. Abstände unter 1 werden beim Quadrieren noch kleiner, große werden viel größer.'},
+     {t:'Es wird größer: 1,0.',fb:'0,5 · 0,5 = 0,25, nicht 1.'},
+     {t:'Es bleibt gleich: 0,5.',fb:'Nur 0 und 1 bleiben beim Quadrieren gleich.'},
+     {t:'Es wird negativ: −0,25.',fb:'Ein Quadrat ist nie negativ.'}],
+     hints:['Rechne 0,5 · 0,5.','Ist das Ergebnis größer oder kleiner als 0,5?','0,25 < 0,5.']}},
+ steps:[
+ {type:'info',html:()=>person(`<p>Jonas jubelt: „Meine Abstände sind 3, 0, −1, 0 und −2. Zusammen ergibt das 0. Meine Gerade ist perfekt!“ Mia schüttelt den Kopf. Wer hat recht?</p>`)+`<div class="task"><b>Ziel dieses Levels:</b> Du findest eine faire Regel und die Gerade, die am besten passt.</div><div class="fig">${ZWEI()}</div>`},
+ {type:'mcq',title:'Summe null = perfekt?',q:`Jonas’ ${T('residuum','Residuen')} ergeben zusammen 0. Warum beweist das nicht, dass seine Gerade gut passt?`,o:[
+   {t:'Plus und minus heben sich auf, obwohl A 3 € danebenliegt.',ok:1,fb:'Genau. +3 und −2 und −1 gleichen sich aus. Die Summe verdeckt, wie weit die Punkte wirklich entfernt sind.'},
+   {t:'Die Summe ist null, weil Jonas sich verrechnet hat.',fb:'Rechne nach: 3 + 0 − 1 + 0 − 2 = 0. Die Rechnung stimmt, nur sagt die Summe wenig.'},
+   {t:'Eine Summe von null ist bei Geraden gar nicht möglich.',fb:'Doch: Jede Gerade durch den Schwerpunkt der Daten hat die Summe null, auch eine schlechte.'},
+   {t:'Nur Mias Gerade darf man mit Summen bewerten.',fb:'Die Regel muss für alle Geraden gleich gelten. Das Problem liegt bei der Summe selbst.'}],
+  wb:{w:['residuum'],s:['Die Summe ist null, weil …','Das ist nicht fair, weil …']},
+  einfach:{q:'Jonas’ Abstände sind 3, 0, −1, 0 und −2. Zusammen 0. Warum heißt das nicht, dass seine Gerade gut passt?'},
+  hints:['Schau auf die einzelnen Abstände, nicht auf die Summe.','Was passiert, wenn man +3 und −3 addiert?','Große Abstände können sich gegenseitig verstecken.']},
+ {type:'calc',title:'Die Quadratsumme',text:`${OP('Berechne')} die ${T('quadratsumme')} für Mias und Jonas’ Gerade: Quadriere jedes Residuum und addiere.`,
+  pre:()=>`${resTab('Mia',MIA)}${resTab('Jonas',JON)}${FORM2()}`,
+  rows:[{pre:'Mia: ',ans:9,tol:.01,u:'',w:90,traps:[[-5,'Das ist die Summe der Residuen. Erst quadrieren, dann addieren.'],[5,'Das ist die Summe der Beträge. Quadriere: 0 + 4 + 4 + 0 + 1.']]},
+        {pre:'Jonas: ',ans:14,tol:.01,u:'',w:90,traps:[[0,'Genau das ist die Falle: Ohne Quadrieren heben sich plus und minus auf.'],[6,'Das ist die Summe der Beträge. Quadriere: 9 + 0 + 1 + 0 + 4.'],[-14,'Ein Quadrat ist nie negativ: (−2)² = 4.']]}],
+  after:'Mia 9, Jonas 14: Mias Gerade passt besser, obwohl Jonas’ Summe null ist.',
+  wb:{w:['quadratsumme','residuum'],s:['Die Gerade von … passt besser, weil ihre Quadratsumme …']},
+  hints:['Quadrieren heißt: die Zahl mal sich selbst.','(−2)² = 4, auch Minus wird positiv.','Mia: 0 + 4 + 4 + 0 + 1.'],
+  profi:{text:`${OP('Berechne')} die Summe der quadrierten Residuen ${K('\\sum e_i^2')} für beide Geraden.`},
+  twin:{type:'calc',title:'Zwilling: Lars’ Gerade',text:`Lars probiert ${K('\\hat y=-x+28')}. Seine Residuen sind 2, −1, −2, −1 und −3. ${OP('Berechne')} die Quadratsumme.`,
+   rows:[{pre:'Lars: ',ans:19,tol:.01,u:'',w:90,traps:[[-5,'Das ist die Summe. Erst quadrieren.'],[9,'Das ist die Summe der Beträge.']]}],
+   after:'19: Lars’ Gerade passt schlechter als die von Mia und Jonas.'}},
+ {type:'sim',title:'Die beste Gerade finden',text:`${OP('Ermittle')} mit den Reglern die Gerade mit der kleinsten Quadratsumme. Starte bei Jonas’ Gerade und beobachte beide Zahlen.`,run:simQS,
+  solution:'Kleinste Quadratsumme 4 bei m = −2 und b = 30: Regressionsgerade ŷ = −2x + 30.',
+  einfach:{text:`${OP('Ermittle')} mit den Reglern die Gerade, bei der die Quadratsumme am kleinsten wird. Tipp: Erst die Steigung ändern, dann die Höhe.`},
+  hints:['Die Punkte fallen etwa 2 € pro Monat. Stell m in diese Richtung.','Halte m fest und verschiebe dann b, bis die Quadratsumme nicht mehr kleiner wird.','Probiere m = −2 und b zwischen 29 und 31.']},
+ AKTE_LS
+]},
+/* ===== 3 Gegner 1 ===== */
+{title:'Gegner 1: Der Controlling-Check',tag:'Aufgabenblock 1',sub:'Residuen und Quadratsumme verteidigen',badge:'🛡️ Controlling überzeugt',hour:H1,short:'Controlling',rankUp:'Junior-Analyst',
+ boss:{name:'Herr Kaminski',role:'Controlling: „Zahlen statt Bauchgefühl!“',ava:'🧐',bar:'Skepsis',win:'Herr Kaminski ist überzeugt!'},
+ klasse:{name:'Das Bauchgefühl',role:'Im Büro entscheiden manche lieber nach Gefühl als nach Zahlen. Zeigt gemeinsam, dass Zahlen fairer sind!',ava:'🎲',bar:'Bauchgefühl',win:'Das Bauchgefühl gibt auf. Die Klasse hat gewonnen!',
   runden:[
-   {type:'calc',title:'Gerücht 1: „Die Quadratsumme ist 0.“',text:`Eine Gerade hat bei drei Punkten die Residuen 1, −2 und 1. ${OP('Berechne')} die Quadratsumme.`,
-    pre:()=>W4_RESFIG([1,-2,1],{h:240}),
-    rows:[{pre:K('\\sum e^2='),ans:6,tol:.01,u:'',traps:[[0,'Das ist die Summe mit Vorzeichen. Erst quadrieren.'],[4,'Das ist die Summe ohne Vorzeichen. Erst quadrieren.'],[-2,'Quadrate sind nie negativ: (−2)² = 4.']]}],
-    after:'1 + 4 + 1 = 6. Das Gerücht stimmt nicht.',
-    hints:['Quadriere jedes Residuum.','(−2)² = 4.','1 + 4 + 1 = ?']},
-   {type:'mcq',title:'Gerücht 2: „Die größere Zahl gewinnt.“',q:'Gerade A hat die Quadratsumme 12, Gerade B die Quadratsumme 30. Welche passt besser zu den Daten?',o:[
-     {t:'Gerade A',ok:1,fb:'Genau: Kleinere Quadratsumme heißt kleinere Abstände.'},
-     {t:'Gerade B',fb:'Eine große Quadratsumme heißt: große Abstände. B passt schlechter.'},
-     {t:'beide gleich gut',fb:'12 und 30 unterscheiden sich deutlich.'},
-     {t:'Das kann man nicht sagen.',fb:'Doch: Die Quadratsumme ist genau dafür da.'}],
-    hints:['Was misst die Quadratsumme?','Kleine Abstände ergeben eine kleine Quadratsumme.','12 ist kleiner als 30.']}]},
+   {type:'calc',title:'Runde 1: „Punkt D liegt doch unter Kims Gerade.“',text:`Kims Gerade ist ${K('\\hat y=-3x+33')}. ${OP('Berechne')} das Residuum von ${K('D(4\\mid 23)')}.`,
+    pre:()=>LINEFIG({m:-3,b:33},C_JON),
+    rows:[{pre:K('e_D='),ans:2,tol:.01,u:'€/Stück',traps:[[-2,'Reihenfolge: e = y − ŷ = 23 − 21.'],[21,'21 ist ŷ. Gesucht ist die Differenz.']]}],
+    after:'ŷ = 21, e = 23 − 21 = 2: D liegt 2 € über Kims Gerade.',
+    hints:['Erst ŷ bei x = 4 berechnen.','ŷ = −3 · 4 + 33.','Dann 23 − ŷ.']},
+   {type:'mcq',title:'Runde 2: „Die beste Gerade trifft die meisten Punkte.“',pre:()=>LINEFIG(REG,C_REG),q:'Mias Gerade trifft zwei Punkte, die Gerade ŷ = −2x + 30 nur einen. Was stimmt?',o:[
+     {t:'Es zählt die Quadratsumme: 4 schlägt Mias 9.',ok:1,fb:'Genau. Treffer sind Zufall. Fair ist der Vergleich aller Abstände über die Quadratsumme.'},
+     {t:'Mias Gerade ist besser, weil sie zwei Punkte trifft.',fb:'Treffer sagen wenig. Mias Quadratsumme ist 9, die der anderen Geraden nur 4.'},
+     {t:'Beide sind gleich gut, weil beide fallen.',fb:'Die Richtung allein reicht nicht. Die Quadratsummen unterscheiden sich deutlich.'},
+     {t:'Keine passt, weil nicht alle Punkte getroffen werden.',fb:'Echte Daten streuen. Eine Gerade muss nicht alle Punkte treffen.'}],
+    hints:['Was war unsere faire Regel?','Vergleiche die Quadratsummen.','Mia 9, die andere Gerade 4.']}]},
  steps:[
- {type:'info',html:()=>person(`<p>Ihr wollt also mit Quadratsummen entscheiden? Gut. Ich prüfe, ob eure Regel bei jeder Geraden funktioniert. Überzeugt mich!</p>`,W4_BOSS1)+
-   `<div class="merke"><b>So funktioniert ein Gegner:</b> Wähle selbst, welche Aufgabe du zuerst angehst. Jede gelöste Aufgabe senkt seine Skepsis. Beim ersten Versuch gibt es bis zu 15 ⭐ pro Aufgabe, nach Fehlern weniger. Hilfen sind immer frei und kosten keine Sterne, auch der 🔁 Rückblick auf die passende Level-Aufgabe. Nach einem Fehlversuch kannst du ihn für 8 ⭐ zurückkaufen. Die Bonusaufgabe ist freiwillig.</div>`},
- {type:'calc',blatt:'G1',title:'Bens Gerade',text:`Kollege Ben schlägt ${K('p(x)=-2{,}5x+36')} vor. Die Residuen der anderen Angebote stehen unter 📂. ${OP('Berechne')} das Residuum von F(6|23) und die Quadratsumme von Bens Gerade.`,
-  pre:()=>`<div class="fig">${W4_FIG(W4_BEN,{segs:false,h:320})}</div>`,
-  dataTitle:'📂 Residuen von Bens Gerade',data:()=>W4_restab([['Ben',W4_RES(W4_BEN).map((e,i)=>i===5?null:e)]]),
-  rows:[{pre:K('e_F='),ans:2,tol:.01,u:'€/Stück',traps:[[-2,'Reihenfolge: e = y − ŷ = 23 − 21.'],[21,'21 ist der Modellwert. Gesucht ist das Residuum.']]},
-        {pre:K('\\sum e^2='),ans:14,tol:.01,u:'',traps:[[10,'Das Residuum von F fehlt noch: 2² = 4.'],[9,'Das ist die Summe ohne Vorzeichen. Quadriere jedes Residuum.'],[2,'Das ist die Summe mit Vorzeichen. Erst quadrieren.']]}],
-  after:'e_F = 2 €/Stück. Quadratsumme 14. Mias Gerade (6) passt besser als Bens (14).',
-  hints:['ŷ bei x = 6: −2,5 · 6 + 36.','Quadriere alle acht Residuen, auch e_F.','2,25 + 0 + 2,25 + 1 + 0,25 + 4 + 0,25 + 4 = ?'],recap:[1,3]},
- {type:'decide',title:'Kaminskis Behauptungen',text:'Kaminski hat vier Behauptungen. Stimmen sie?',actions:['👍 stimmt','👎 stimmt nicht'],cards:[
-   {title:'„Jonas’ Summe der Residuen ist 0. Also passt seine Gerade perfekt.“',ans:1,fb:['Auch Mias Summe ist 0. Die Summe mit Vorzeichen sagt nichts über die Güte, weil sich + und − aufheben.'],okfb:'Richtig: Die Summe 0 haben viele Geraden, auch schlechte.'},
-   {title:'„Von zwei Geraden passt die mit der kleineren Quadratsumme besser.“',ans:0,fb:[null,'Doch, genau das ist die faire Regel.'],okfb:'Genau. Das ist unsere Regel.'},
-   {title:'„Ein Punkt mit Residuum −3 liegt 3 €/Stück unter der Geraden.“',ans:0,fb:[null,'Doch: Negatives Residuum heißt unterhalb, der Betrag ist der Abstand.'],okfb:'Richtig: Minus heißt unterhalb.'},
-   {title:'„Die Regressionsgerade geht durch alle Punkte.“',ans:1,fb:['Die Regressionsgerade hat die kleinste Quadratsumme. Durch alle Punkte geht sie hier nicht, die Punkte liegen nicht auf einer Linie.'],okfb:'Richtig: Sie liegt so nah wie möglich, aber nicht durch alle Punkte.'}],
-  hints:['Denk an Mia und Jonas: Beide haben die Summe 0.','Was zeigt das Vorzeichen eines Residuums?','Zwei Behauptungen stimmen, zwei nicht.'],recap:[1,3]},
- {type:'mcq',title:'Was bedeutet das Residuum?',q:`Bei Angebot G(7|19) liefert Mias Gerade ${K('\\hat y=20')}. Das Residuum ist ${K('e=-1')} €/Stück. Was bedeutet das für EuroTrade?`,o:[
-   {t:'Kunden akzeptierten 1 €/Stück weniger als das Modell.',ok:1,fb:'Genau: e = y − ŷ = 19 − 20. Der echte Preis lag unter dem Modellwert.'},
-   {t:'Kunden akzeptierten 1 €/Stück mehr, als die Gerade angibt.',fb:'Minus heißt: Der beobachtete Preis liegt unter der Geraden.'},
-   {t:'Der Stückpreis sinkt je zusätzliche 100 Stück um genau 1 €.',fb:'Das wäre eine Steigung. Das Residuum gilt nur für Angebot G.'},
-   {t:'Bei Angebot G haben die Kunden insgesamt nur 1 € bezahlt.',fb:'e ist ein Abstand in €/Stück, kein Gesamtpreis.'}],
-  hints:['e = y − ŷ.','y = 19, ŷ = 20.','Negativ heißt: unter der Geraden.'],recap:[1,1]},
- {type:'vote',id:'m1',phase:'nach',title:'Abstimmung nachher',q:'„Die Linie, bei der sich die Abstände nach oben und nach unten genau aufheben, passt am besten.“ Stimmt das?',ok:1,
-  fix:'Das stimmt nicht. Bei Mia und bei Jonas heben sich die Residuen genau auf (Summe 0), trotzdem passt Jonas’ Gerade viel schlechter. Erst die Quadratsumme trennt die beiden: Mia 6, Jonas 54. Fair vergleicht man also mit der Quadratsumme.'},
- {type:'mcq',bonus:1,art:'gegenfrage',title:'Bonus: Cent statt Euro',q:'Was ändert sich, wenn man alle Preise in Cent statt in Euro angibt?',o:[
-   {t:'Alle Quadratsummen werden 10 000-mal so groß, die beste Gerade bleibt dieselbe.',ok:1,fb:'Genau: Residuen mal 100, Quadrate mal 10 000. Mia hätte 60 000, Jonas 540 000. Die Reihenfolge bleibt.'},
-   {t:'Alle Quadratsummen werden 100-mal so groß, die beste Gerade bleibt dieselbe.',fb:'Die Residuen werden 100-mal so groß. Beim Quadrieren wird daraus 100² = 10 000.'},
-   {t:'Die Quadratsummen bleiben gleich, weil sich an den Daten nichts ändert.',fb:'Die Zahlen ändern sich: 1 € sind 100 Cent.'},
-   {t:'Dann kann plötzlich Jonas’ Gerade besser passen als die Gerade von Mia.',fb:'Alle Quadratsummen ändern sich mit demselben Faktor. Die Reihenfolge bleibt.'}],
-  hints:['Ein Residuum von 1 € sind 100 Cent.','Was passiert mit 100 beim Quadrieren?','Ändert sich die Reihenfolge, wenn man alles mit derselben Zahl malnimmt?']}
-]},
-/* ===== 3 Level 2 ===== */
-{title:'Level 2: Muster und Grenzen',blatt:'2',tag:'Lernabschnitt 2',sub:'Residuenmuster, Interpolation, Extrapolation',badge:'🔍 Musterprüfer',num:2,hour:H2,short:'Muster',
- ichkann:['Ich kann an den Abständen erkennen, ob eine gerade Linie überhaupt passt.','Ich kann sagen, ob eine Schätzung innerhalb oder außerhalb der Daten liegt.','Ich kann begründen, warum Schätzungen weit außerhalb der Daten unsicher sind.'],
- halt:{frage:'Bis zu welcher Menge würdet ihr der Geraden noch trauen? Begründet eure Grenze.',
-   impulse:['Was liefert Mias Gerade bei 2000 Stück? Ist das sinnvoll?','Wären 900 Stück schon zu weit? Woran macht ihr das fest?','Was müsste EuroTrade tun, um auch für große Mengen sicher zu sein?'],
-   starters:['Wir würden bis','Eine Schätzung für 2000 Stück','EuroTrade sollte'],
-   bonus:{type:'mcq',title:'Bonus: Der Preis null',q:`Bei welcher Bestellmenge liefert Mias Gerade ${K('p(x)=-2x+34')} den Preis 0 €/Stück?`,o:[
-     {t:'1700 Stück',ok:1,fb:'Genau: 0 = −2x + 34, also x = 17, das sind 1700 Stück. Spätestens dort ist das Modell sinnlos.'},
-     {t:'3400 Stück',fb:'34 noch durch 2 teilen: x = 17.'},
-     {t:'17 Stück',fb:'x zählt in 100 Stück: x = 17 bedeutet 1700 Stück.'},
-     {t:'800 Stück',fb:'Bei 800 Stück liefert die Gerade 18 €/Stück.'}],
-     hints:['Setze p(x) = 0.','2x = 34.','x zählt in 100 Stück.']}},
- steps:[
- {type:'info',html:()=>person(`<p>Willkommen zurück, ${nm()}! Eine kleine Quadratsumme ist gut. Aber passt eine gerade Linie überhaupt zu den Daten? Das verrät das ${T('residuenmuster')}: Schau, ob die Residuen von links nach rechts zufällig wechseln oder ein Muster bilden.</p>`)+
-   `<div class="fig">${W4_RESFIG(W4_RES_MIA)}</div><p class="tip" style="margin:2px 0 8px">Residuen von Mias Gerade über x: grün oberhalb, rot unterhalb der Geraden.</p>
-   <div class="merke"><b>Merke:</b><br>Vorzeichen wechseln ohne Muster → die Gerade passt.<br>Erst alle positiv, dann alle negativ → die Gerade ist zu flach.<br>Erst positiv, dann negativ, dann wieder positiv (Bogen) → die Daten sind gekrümmt, eine Gerade passt schlecht.</div>
-   <div class="task"><b>Ziel dieses Lernabschnitts:</b> Du beurteilst, ob eine Gerade passt und wie weit man ihr trauen darf.</div>`},
- {type:'decide',wechsel:'Graph → Text',title:'Drei Residuenbilder',text:'Das Analyse-Team hat drei Residuenbilder erstellt. Beurteile jedes Bild.',actions:['✅ Gerade passt','⚠️ Gerade passt schlecht'],cards:[
-   {title:'Bild 1: Jonas’ Gerade',fig:W4_RESFIG(W4_RES_JON,{h:230}),ans:1,fb:['Links sind alle Residuen positiv, rechts alle negativ. Das ist ein Muster: Die Gerade ist zu flach.'],okfb:'Richtig: erst alle oberhalb, dann alle unterhalb. Jonas’ Gerade ist zu flach.'},
-   {title:'Bild 2: Mias Gerade',fig:W4_RESFIG(W4_RES_MIA,{h:230}),ans:0,fb:[null,'Die Vorzeichen wechseln ohne Muster, und die Residuen sind klein. Die Gerade passt.'],okfb:'Richtig: kein Muster, kleine Residuen.'},
-   {title:'Bild 3: Lagerkosten',fig:W4_RESFIG(W4_RES_BOGEN,{h:230}),ans:1,fb:['Erst positiv, dann negativ, dann wieder positiv: Das ist ein Bogen. Die Daten sind gekrümmt.'],okfb:'Richtig: Bogenmuster. Eine Gerade passt hier schlecht.'}],
-  wb:{w:['residuenmuster','residuum'],s:['Die Residuen sind erst …, dann …, also …']},
-  hints:['Lies jedes Bild von links nach rechts: grün oder rot?','Zufälliger Wechsel ist gut, lange Blöcke einer Farbe sind ein Muster.','Nur ein Bild zeigt kein Muster.']},
- {type:'calc',title:'Jonas’ Großauftrag',text:`Getestet wurden 100 bis 800 Stück. Das ist der ${T('bereich')} (gelb). Schätzen innerhalb dieses Bereichs heißt ${T('interpolation')}, Schätzen außerhalb (auch unter 100 Stück) heißt ${T('extrapolation')}. Jonas will den Preis für 2000 Stück an der Geraden ablesen. Er nimmt sogar Mias bessere Gerade ${K('p(x)=-2x+34')}. ${OP('Berechne')} den Modellwert.`,
-  pre:()=>`<div class="fig">${plotSVG(Object.assign({},W4_BIG,{h:320,range:[1,8],points:W4_P,lines:[{m:-2,b:34,color:'#5b3fc4'}]}))}</div>`,
-  einfach:{text:`Daten gibt es nur von 100 bis 800 Stück: der ${T('bereich')} (gelb). Schätzen darin heißt ${T('interpolation')}, Schätzen außerhalb heißt ${T('extrapolation')}. Jonas will den Preis für 2000 Stück wissen. Mias Gerade: ${K('p(x)=-2x+34')}. ${OP('Berechne')} erst x (x zählt in 100 Stück), dann p(x).`},
-  rows:[{pre:K('x='),ans:20,tol:.01,u:'',traps:[[2000,'x zählt in 100 Stück: 2000 : 100.'],[200,'Durch 100 teilen, nicht durch 10.']]},
-        {pre:K('p(20)='),ans:-6,tol:.01,u:'€/Stück',traps:[[6,'Vorzeichen: −40 + 34 = −6.'],[74,'Vorzeichen: −2 · 20 = −40, nicht +40.']]}],
-  after:'p(20) = −6 €/Stück: EuroTrade müsste Kunden Geld fürs Kaufen geben. Weit außerhalb des Beobachtungsbereichs gilt die Gerade nicht. Das ist der Grund für Mias Skepsis in Bild 4.',
-  wb:{w:['extrapolation','bereich','modellwert'],s:['Die Schätzung ist unsicher, weil …']},
-  hints:['2000 Stück sind x = 20.','Setze x = 20 in die Gleichung ein.','−2 · 20 + 34 = ?'],
-  twin:{type:'calc',title:'Zwilling: 2500 Stück',text:`${OP('Berechne')} den Modellwert von ${K('p(x)=-2x+34')} für 2500 Stück.`,
-   rows:[{pre:K('x='),ans:25,tol:.01,u:'',traps:[[2500,'x zählt in 100 Stück.']]},{pre:K('p(25)='),ans:-16,tol:.01,u:'€/Stück',traps:[[16,'Vorzeichen: −50 + 34 = −16.'],[84,'−2 · 25 = −50, nicht +50.']]}],
-   after:'−16 €/Stück: wieder ein sinnloser Preis. Extrapolation ist unsicher.'}}
-]},
-/* ===== 4 Partneraufgabe ===== */
-{title:'Partneraufgabe: Die Kühltasche',blatt:'2',tag:'Lernabschnitt 2 · zu zweit oder zu dritt',sub:'Zwei Vorschläge vergleichen, zwei Anfragen beantworten',badge:'🤝 Teamplayer',hour:H2,short:'Kühltasche',
- ichkann:['Ich kann im Team zwei Linien mit einer Regel vergleichen.','Ich kann im Team entscheiden, für welche Mengen wir einen Preis nennen.'],
- partner:{rollen:{A:{name:'Datenanalyse',text:'Du hast die Messwerte der Kühltasche.'},B:{name:'Kundenbetreuung',text:'Du hast die zwei Vorschläge und die Kundenanfragen.'},C:{name:'Qualitätssicherung',text:'Du hast die Prüfregel und die Preisregel.'}},
-   kontrolle:['Werden die Residuen mit y − ŷ berechnet?','Wird quadriert, bevor addiert wird?','Liegt die Menge im getesteten Bereich?']},
- steps:[
- {type:'info',html:()=>person(`<p>Neuer Auftrag aus Skandinavien: Für unsere <b>Kühltasche</b> gibt es zwei Vorschläge für eine Gerade, Nord und Süd. Welche passt besser? Und welche Kunden bekommen einen Preis? Die Messwerte hat die Datenanalyse, die Vorschläge und Anfragen die Kundenbetreuung, die Regeln die Qualitätssicherung. Das schafft ihr nur <b>gemeinsam</b>.</p>`)+
-   `<div class="merke"><b>So funktioniert die Partneraufgabe:</b> Erst löst jede Person ihren eigenen Teil. Dann zeigt dein Gerät einen <b>Teilcode</b>, den du deinem Team sagst. Mit den Codes aller im Team öffnet sich die gemeinsame Aufgabe (zu zweit übernimmt die Kundenbetreuung die Karte der Qualitätssicherung mit). Pro Aufgabe gibt es bis zu 10 ⭐, am Ende bis zu <b>15 ⭐ Teambonus</b> (−5 je Fehlversuch bei einem gemeinsamen Ergebnis).</div>`},
- {type:'team',title:'Nord oder Süd?',text:'Vergleicht die beiden Vorschläge mit der Prüfregel der Qualitätssicherung.',
-  A:{info:()=>`<p>Die Messwerte der Kühltasche (Markttest Skandinavien):</p>${W4_KTAB()}<p class="tip">x = Bestellmenge in 100 Stück, p = akzeptierter Stückpreis in €/Stück</p>`,
-     teil:{type:'calc',title:'Werte ablesen',text:`${OP('Lies ab')}, welche Preise bei 200 und bei 600 Stück akzeptiert wurden.`,
-       rows:[{pre:'200 Stück: '+K('p='),ans:43,tol:.01,u:'€/Stück',traps:[[42,'42 gehört zu 300 Stück (x = 3).']]},
-             {pre:'600 Stück: '+K('p='),ans:31,tol:.01,u:'€/Stück',traps:[[30,'30 gehört zu 700 Stück (x = 7).']]}]}},
-  B:{info:()=>`<p>Zwei Vorschläge aus dem Team:</p>${KD('\\text{Nord: }\\hat y=-3x+50')}${KD('\\text{Süd: }\\hat y=-2x+45')}<p class="tip">x in 100 Stück, ŷ in €/Stück. Die Messwerte kennt nur die Datenanalyse.</p>`,
-     teil:{type:'calc',title:'Ein Modellwert',text:`${OP('Berechne')} den Modellwert von Vorschlag Süd bei 400 Stück.`,
-       rows:[{pre:K('\\hat y(4)='),ans:37,tol:.01,u:'€/Stück',traps:[[53,'Vorzeichen: −2 · 4 = −8, also 45 − 8.'],[38,'38 ist der Messwert bei x = 4. Gesucht ist der Wert der Geraden.']]}]}},
-  C:{info:()=>`<div class="merke"><b>Prüfregel der Qualitätssicherung:</b> Vergleicht die Vorschläge an den <b>Prüfpunkten 200, 400 und 600 Stück</b>. Es gewinnt der Vorschlag mit der kleineren Quadratsumme an diesen drei Punkten.</div><p class="tip">Die Messwerte kennt nur die Datenanalyse, die Vorschläge nur die Kundenbetreuung.</p>`,
-     teil:{type:'mcq',title:'Warum Quadrate?',q:'Warum entscheidet die Quadratsumme und nicht die Summe der Residuen?',o:[
-       {t:'Weil sich positive und negative Residuen sonst aufheben.',ok:1,fb:'Genau: Bei der Summe kann eine schlechte Gerade 0 erreichen.'},
-       {t:'Weil die Quadratsumme immer die kleinere Zahl ist.',fb:'Das stimmt nicht immer. Es geht darum, dass sich nichts aufhebt.'},
-       {t:'Weil man mit Quadraten schneller rechnen kann.',fb:'Schneller ist es nicht. Der Grund ist das Aufheben der Vorzeichen.'},
-       {t:'Weil die Summe der Residuen immer 0 ist.',fb:'Nicht immer, aber sie kann auch bei schlechten Geraden 0 sein.'}]}},
-  gemeinsam:{type:'calc',title:'Quadratsummen an den Prüfpunkten',text:`${OP('Berechne')} gemeinsam für beide Vorschläge die Quadratsumme an den Prüfpunkten der Qualitätssicherung.`,
-    rows:[{pre:'Nord: '+K('\\sum e^2='),ans:2,tol:.01,u:'',traps:[[-2,'Das ist die Summe mit Vorzeichen. Erst quadrieren.'],[5,'Das ist die Quadratsumme aller sechs Angebote. Nehmt nur die drei Prüfpunkte.']]},
-          {pre:'Süd: '+K('\\sum e^2='),ans:9,tol:.01,u:'',traps:[[1,'Das ist die Summe mit Vorzeichen. Erst quadrieren.'],[5,'Das ist die Summe ohne Vorzeichen. Quadriert jedes Residuum.'],[20,'Das ist die Quadratsumme aller sechs Angebote. Nehmt nur die drei Prüfpunkte.']]}],
-    after:`Nord: Residuen −1, 0, −1, Quadratsumme 2. Süd: Residuen 2, 1, −2, Quadratsumme 9. Vorschlag Nord ${K('\\hat y=-3x+50')} passt besser.`,
-    einfach:{text:`${OP('Berechne')} gemeinsam die Quadratsumme für Nord und Süd. Die Datenanalyse nennt die Preise, die Kundenbetreuung die Geraden, die Qualitätssicherung die Prüfpunkte. Je Punkt: Residuum = Preis minus Wert der Geraden, dann quadrieren.`}},
-  hints:['Die Datenanalyse nennt die Preise bei 200, 400 und 600 Stück, die Kundenbetreuung die Gleichungen, die Qualitätssicherung die Prüfpunkte.','Nord bei x = 2, 4, 6: 44, 38, 32. Süd: 41, 37, 33.','Residuen = Messwert minus Modellwert, dann quadrieren und addieren.']},
- {type:'team',title:'Zwei Kundenanfragen',text:'Zwei Kunden wollen einen Preis für die Kühltasche. Entscheidet gemeinsam mit Vorschlag Nord, was ihr antwortet.',
-  A:{info:()=>`<p>Die Messwerte der Kühltasche:</p>${W4_KTAB()}<p class="tip">x = Bestellmenge in 100 Stück</p>`,
-     teil:{type:'calc',title:'Getesteter Bereich',text:`${OP('Lies ab')}, welche Bestellmengen getestet wurden.`,
-       rows:[{pre:'kleinste getestete Menge:',ans:200,tol:.5,u:'Stück',traps:[[2,'x zählt in 100 Stück: x = 2 bedeutet 200 Stück.']]},
-             {pre:'größte getestete Menge:',ans:700,tol:.5,u:'Stück',traps:[[7,'x zählt in 100 Stück: x = 7 bedeutet 700 Stück.']]}]}},
-  B:{info:()=>`<div class="mail"><div class="mh"><b>Kundenanfragen Kühltasche</b></div><div class="mb"><p><b>Kunde Bergen:</b> 550 Stück<br><b>Kunde Malmö:</b> 1500 Stück</p></div></div><p class="tip">Vorschlag Nord: ${K('\\hat y=-3x+50')}, x in 100 Stück.</p>`,
-     teil:{type:'calc',title:'Mengen umrechnen',text:`${OP('Berechne')} die x-Werte der beiden Anfragen.`,
-       rows:[{pre:'Bergen: '+K('x='),ans:5.5,tol:.01,u:'',traps:[[550,'x zählt in 100 Stück: 550 : 100.'],[55,'Durch 100 teilen, nicht durch 10.']]},
-             {pre:'Malmö: '+K('x='),ans:15,tol:.01,u:'',traps:[[1500,'x zählt in 100 Stück: 1500 : 100.'],[150,'Durch 100 teilen, nicht durch 10.']]}]}},
-  C:{info:()=>`<div class="merke"><b>Preisregel der Geschäftsleitung:</b> Einen Schätzpreis nennen wir nur für Mengen innerhalb der getesteten Mengen. Außerhalb davon gibt es keine Zusage, sondern erst ein Testangebot.</div><p class="tip">Die getesteten Mengen kennt nur die Datenanalyse, die Anfragen nur die Kundenbetreuung.</p>`,
-     teil:{type:'mcq',title:'Auch nach unten?',q:'Ein Kunde fragt nach 150 Stück. Getestet wurde ab 200 Stück. Was gilt nach der Preisregel?',o:[
-       {t:'Keine Zusage, auch das liegt außerhalb.',ok:1,fb:'Genau: Auch unterhalb der getesteten Mengen ist es eine Extrapolation.'},
-       {t:'Zusage, weil kleine Mengen immer sicher sind.',fb:'Für 150 Stück gibt es keine Daten. Auch nach unten ist es unsicher.'},
-       {t:'Zusage, weil 150 nahe an 200 liegt.',fb:'Die Regel sagt: nur innerhalb der getesteten Mengen.'},
-       {t:'Das entscheidet der Kunde selbst.',fb:'Die Regel richtet sich nach der Menge, nicht nach dem Kunden.'}]}},
-  gemeinsam:{type:'decide',title:'Was antwortet ihr?',text:`${OP('Beurteile')} für jede Anfrage, welche Antwort passt. Vorschlag Nord: ${K('\\hat y=-3x+50')}`,
-    actions:['33,50 €/Stück als Schätzwert nennen','5,00 €/Stück als Schätzwert nennen','Keine Zusage: Extrapolation, erst testen'],
-    cards:[{title:'Kunde Bergen · 550 Stück',ans:0,fb:['','ŷ(5,5) = 33,5. 5,00 € käme bei x = 15 heraus.','550 Stück liegen zwischen 200 und 700 Stück. Ein Schätzwert ist hier vertretbar.'],okfb:'ŷ(5,5) = −3 · 5,5 + 50 = 33,5: Interpolation, also ein vorsichtiger Schätzwert.'},
-           {title:'Kunde Malmö · 1500 Stück',ans:2,fb:['33,50 € gehört zu 550 Stück, nicht zu 1500 Stück.','Gerechnet stimmt ŷ(15) = 5. Aber 1500 Stück liegen weit außerhalb der Daten (bis 700 Stück).',''],okfb:'Richtig: 1500 Stück wurden nie getestet. Das wäre eine Extrapolation.'}]},
-  hints:['Die Datenanalyse kennt den getesteten Bereich, die Kundenbetreuung die x-Werte, die Qualitätssicherung die Preisregel.','Liegt x zwischen 2 und 7?','ŷ(5,5) = −3 · 5,5 + 50. x = 15 liegt außerhalb.']}
-]},
-/* ===== 5 Gegner 2 ===== */
-{title:'Gegner 2: Brandts Großauftrag',tag:'Aufgabenblock 2',sub:'Muster erkennen, Grenzen verteidigen',badge:'💼 Grenzen-Profi',hour:H2,short:'Brandt',rankUp:'Senior-Analyst',
- boss:{name:'Herr Brandt',role:'Vertriebsleitung: „Ich will einen Preis für 2000 Stück. Mit Garantie!“',ava:'🤨',bar:'Skepsis',win:'Herr Brandt ist überzeugt!'},steps:[
- {type:'info',html:()=>person(`<p>Ein Großkunde will 2000 Stück. Eure Gerade passt doch so gut! Warum soll ich damit keinen Preis zusagen? Und bevor ich euch glaube, prüfe ich, ob ihr Fehler findet.</p>`,W4_BOSS2)+
-   `<div class="merke"><b>So funktioniert der Gegner:</b> Wähle selbst, welche Aufgabe du zuerst angehst. Hilfen und der 🔁 Rückblick sind frei. Einen Fehlversuch kannst du für 8 ⭐ zurückkaufen. Die Bonusaufgabe ist freiwillig.</div>`},
- {type:'fehlersuche',blatt:'G2',title:'Lenas Rechnung',wer:'Lena',text:`Ein neues Testangebot I: 900 Stück zu 17 €/Stück. Lena berechnet das Residuum von I(9|17) bei Mias Gerade ${K('p(x)=-2x+34')}. ${OP('Finde')} den Fehler.`,
-  zeilen:[K('\\hat y=-2\\cdot 9+34=16'),K('e=\\hat y-y=16-17=-1'),'e ist negativ, also liegt I unter der Geraden.','Das Modell schätzt den Preis bei 900 Stück also zu hoch.'],
-  falsch:1,warum:'Das Residuum ist beobachtet minus Modellwert: e = y − ŷ = 17 − 16 = +1. I liegt 1 €/Stück über der Geraden, das Modell schätzt den Preis zu niedrig.',
-  fb:{0:'Diese Zeile stimmt: −18 + 34 = 16.',2:'Diese Zeile folgt aus der Zeile davor. Der Fehler steckt früher.',3:'Diese Zeile folgt aus den Zeilen davor. Der Fehler steckt früher.'},
+ {type:'info',html:()=>person(`<p>Ich habe eure Zwischenergebnisse gesehen. Bevor irgendetwas an den Vertrieb geht, prüfe ich es. Drei Aufgaben. Überzeugt mich!</p>`,BOSS1)+
+   `<div class="merke"><b>So funktioniert ein Gegner:</b> Jede gelöste Aufgabe senkt seine Skepsis. Du wählst selbst, womit du anfängst. Beim ersten Versuch gibt es bis zu 15 ⭐ pro Aufgabe, nach Fehlern weniger. Hilfen sind immer frei und kosten keine Sterne. Die 4. Hilfe 🔁 Rückblick zeigt die passende Level-Aufgabe. Einen Fehlversuch kannst du für 8 ⭐ zurückkaufen, eine Knobel-Aufgabe kostet 15 ⭐.</div>`},
+ {type:'calc',blatt:'G1',title:'Die Filiale Lüttich',text:`In Lüttich gilt für die Powerbank die Gerade ${K('\\hat y=-1{,}5x+32')}. ${OP('Berechne')} die Residuen der Punkte ${K('(2\\mid 30)')} und ${K('(6\\mid 21)')}. Die beiden anderen Monate haben die Residuen 0 und 1. ${OP('Berechne')} dann die Quadratsumme aller vier Residuen.`,
+  data:()=>`<p>Gerade ${K('\\hat y=-1{,}5x+32')}, Punkte ${K('(2\\mid 30)')} und ${K('(6\\mid 21)')}, weitere Residuen 0 und 1</p>${FORM1()}${FORM2()}`,
+  rows:[{pre:K('e_1='),ans:1,tol:.01,u:'€/Stück',traps:[[-1,'Reihenfolge: e = y − ŷ = 30 − 29.'],[29,'29 ist ŷ. Gesucht ist 30 − 29.'],[-5,'ŷ(2) = −3 + 32 = 29, nicht 35.']]},
+        {pre:K('e_2='),ans:-2,tol:.01,u:'€/Stück',traps:[[2,'Reihenfolge: e = 21 − 23.'],[23,'23 ist ŷ. Gesucht ist 21 − 23.']]},
+        {pre:'Quadratsumme:',ans:6,tol:.01,u:'',traps:[[0,'Das ist die Summe der Residuen. Erst quadrieren!'],[4,'Das ist die Summe der Beträge. Quadriere: 1 + 4 + 0 + 1.'],[5,'Das letzte Residuum 1 fehlt: 1 + 4 + 0 + 1.']]}],
+  after:'e₁ = 1, e₂ = −2, Quadratsumme 1 + 4 + 0 + 1 = 6. Die Summe der Residuen wäre 0 und würde nichts verraten.',
+  hints:['Erst ŷ bei x = 2 und x = 6 berechnen.','ŷ(2) = 29 und ŷ(6) = 23. Dann y − ŷ.','Quadratsumme: 1² + (−2)² + 0² + 1².'],recap:[1,2],
+  twin:{type:'calc',title:'Zwilling: andere Monate in Lüttich',text:`Gleiche Gerade ${K('\\hat y=-1{,}5x+32')}. ${OP('Berechne')} die Residuen von ${K('(2\\mid 31)')} und ${K('(6\\mid 22)')} und die Quadratsumme mit den weiteren Residuen 1 und −2.`,
+   rows:[{pre:K('e_1='),ans:2,tol:.01,u:'€/Stück',traps:[[-2,'Reihenfolge: 31 − 29.']]},{pre:K('e_2='),ans:-1,tol:.01,u:'€/Stück',traps:[[1,'Reihenfolge: 22 − 23.']]},
+         {pre:'Quadratsumme:',ans:10,tol:.01,u:'',traps:[[0,'Das ist die Summe. Erst quadrieren.'],[6,'Das ist die Summe der Beträge.']]}],
+   after:'4 + 1 + 1 + 4 = 10.'}},
+ {type:'fehlersuche',blatt:'G2',title:'Toms Residuum',wer:'Tom',text:`Tom berechnet für Mias Gerade ${K('\\hat y=-2x+31')} das Residuum von ${K('B(2\\mid 25)')}. ${OP('Finde')} die erste falsche Zeile.`,
+  zeilen:[K('\\hat y_B=-2\\cdot 2+31=27'),K('e_B=\\hat y_B-y_B=27-25=2'),'e ist positiv, also liegt B über der Geraden.'],
+  falsch:1,warum:'Das Residuum ist y − ŷ, nicht ŷ − y. Richtig: e = 25 − 27 = −2. B liegt also unter der Geraden. Zeile 3 folgt nur aus dem Fehler.',
+  fb:{0:'Zeile 1 stimmt: −4 + 31 = 27.'},
   korr:{q:'Wie lautet die richtige Rechnung?',o:[
-   {t:'e = 17 − 16 = +1, I liegt über der Geraden',ok:1,fb:'Genau: y − ŷ, und plus heißt oberhalb.'},
-   {t:'e = 16 − 17 = −1, I liegt über der Geraden',fb:'Die Reihenfolge ist falsch: Zuerst kommt der beobachtete Wert y.'},
-   {t:'e = 17 + 16 = 33, I liegt über der Geraden',fb:'Das Residuum ist eine Differenz, keine Summe.'},
-   {t:'e = 17 − 16 = +1, I liegt unter der Geraden',fb:'Positives Residuum heißt: Der Punkt liegt über der Geraden.'}]},
-  hints:['Prüfe jede Zeile einzeln.','Welche Reihenfolge gilt beim Residuum?','e = y − ŷ, nicht ŷ − y.'],recap:[1,1]},
- {type:'mcq',title:'Brandts Garantie',q:'Brandt: „Mias Gerade hat eine kleine Quadratsumme. Also können wir für 2000 Stück sicher einen Preis zusagen.“ Beurteile.',o:[
-   {t:'Nein: Die kleine Quadratsumme gilt nur für 100 bis 800 Stück.',ok:1,fb:'Genau. 2000 Stück sind Extrapolation, die Gerade liefert dort sogar −6 €/Stück.'},
-   {t:'Ja: Eine kleine Quadratsumme gilt für alle Bestellmengen.',fb:'Die Quadratsumme misst nur die Abstände zu den getesteten Punkten.'},
-   {t:'Ja: Bei 2000 Stück liefert die Gerade einen guten Preis.',fb:'Rechne nach: p(20) = −6 €/Stück. Das ist kein sinnvoller Preis.'},
-   {t:'Nein: Die Quadratsumme von 6 ist noch viel zu groß.',fb:'6 ist klein. Das Problem ist der Bereich.'}],
-  hints:['Wo gibt es Daten, wo nicht?','Liegt x = 20 im Beobachtungsbereich?','Was liefert die Gerade bei x = 20?'],recap:[3,2]},
- {type:'mcq',title:'Die Lieferzeiten',pre:()=>`<div class="fig">${W4_RESFIG(W4_RES_LIEF)}</div>`,q:'Die Logistik hat eine Gerade für Lieferzeiten bestimmt. Die Residuen sind −2, −1, 1, 2, 2, 1, −1, −2 Tage. Was schließt du?',o:[
-   {t:'Bogen-Muster: Eine Gerade passt schlecht, die Daten sind gekrümmt.',ok:1,fb:'Genau: erst negativ, dann positiv, dann wieder negativ. Das ist ein Bogen.'},
-   {t:'Die Summe der Residuen ist 0, also passt diese Gerade gut.',fb:'Die Summe ist hier 0, sagt aber nichts über die Güte. Das Muster zählt.'},
-   {t:'Die Residuen sind höchstens 2 Tage, also gibt es kein Problem.',fb:'Auch kleine Residuen mit klarem Muster zeigen: Eine Gerade passt nicht.'},
-   {t:'Negative Residuen heißen, dass die Daten falsch gemessen sind.',fb:'Negativ heißt nur: Der Punkt liegt unter der Geraden.'}],
-  hints:['Lies die Vorzeichen von links nach rechts.','Erst −, dann +, dann wieder −.','Ein Bogen heißt: Die Daten sind gekrümmt.'],recap:[3,1]},
- {type:'mcq',bonus:1,art:'transfer',title:'Bonus: Der Heizungsbetrieb',q:'Ein Heizungsbetrieb hat eine gut passende Gerade für den Gasverbrauch bei Außentemperaturen von −5 °C bis 15 °C. Darf er damit den Verbrauch bei 30 °C schätzen?',o:[
-   {t:'Nein, das ist Extrapolation und deshalb unsicher.',ok:1,fb:'Genau: 30 °C liegen weit außerhalb. Im Sommer heizt man gar nicht, die Gerade könnte sogar negativen Verbrauch liefern.'},
-   {t:'Ja, weil die Gerade im Bereich gut passt.',fb:'Gut passen heißt: im Bereich. Außerhalb gibt es keine Daten.'},
-   {t:'Ja, weil 30 °C nur doppelt so warm sind wie 15 °C.',fb:'Der Abstand zum Bereich ist groß, und „doppelt so warm“ ist bei °C keine sinnvolle Aussage.'},
-   {t:'Nein, weil man bei Wärme gar keine Gerade nutzen darf.',fb:'Geraden sind erlaubt. Das Problem ist nur der Bereich ohne Daten.'}],
-  hints:['Wo liegen die Daten?','Liegt 30 °C innerhalb oder außerhalb?','Außerhalb heißt Extrapolation.']}
+   {t:K('e_B=25-27=-2')+', B liegt unter der Geraden',ok:1,fb:'Genau: echter Wert minus Modellwert.'},
+   {t:K('e_B=27-25=2')+', B liegt über der Geraden',fb:'Das ist Toms Rechnung. Die Reihenfolge ist vertauscht.'},
+   {t:K('e_B=25+27=52')+', B liegt weit darüber',fb:'Das Residuum ist eine Differenz, keine Summe.'},
+   {t:K('e_B=(25-27)^2=4')+', B liegt darüber',fb:'Das ist das Quadrat. Das Residuum selbst ist −2.'}]},
+  hints:['Prüfe jede Zeile mit der Formel aus Level 1.','Wie war die Reihenfolge bei e?','e = y − ŷ: echter Wert zuerst.'],recap:[1,1]},
+ {type:'mcq',title:'Welche Gerade nehmen wir?',q:'Kaminski legt drei Geraden für die Filiale Gent vor. Welche nehmt ihr, und warum?',
+  pre:()=>`<table class="tb"><tr><th>Gerade</th><th class="n">Summe der Residuen</th><th class="n">Quadratsumme</th></tr><tr><td>P</td><td class="n">0</td><td class="n">12</td></tr><tr><td>Q</td><td class="n">−3</td><td class="n">7</td></tr><tr><td>R</td><td class="n">2</td><td class="n">10</td></tr></table>`,o:[
+   {t:'Gerade Q, weil ihre Quadratsumme am kleinsten ist.',ok:1,fb:'Genau. Die Quadratsumme ist der faire Maßstab. Q hat mit 7 die kleinste.'},
+   {t:'Gerade P, weil ihre Summe der Residuen null ist.',fb:'Das ist Jonas’ Falle: Eine Summe von null kann große Abstände verstecken. P hat die größte Quadratsumme.'},
+   {t:'Gerade R, weil ihre Summe positiv und klein ist.',fb:'Das Vorzeichen der Summe sagt nichts über die Güte. Vergleiche die Quadratsummen.'},
+   {t:'Alle drei, weil jede durch die Punktwolke geht.',fb:'Durch die Wolke gehen alle. Die Quadratsumme zeigt, welche am wenigsten danebenliegt.'}],
+  wb:{w:['quadratsumme','residuum'],s:['Wir nehmen …, weil …']},
+  hints:['Welche Spalte ist unser fairer Maßstab?','Die kleinere Quadratsumme gewinnt.','7 ist kleiner als 10 und 12.'],recap:[2,2]},
+ {type:'mcq',bonus:1,art:'gegenfrage',title:'Gegenfrage: Cent statt Euro',q:'Was ändert sich, wenn alle Preise in Cent statt in Euro angegeben werden?',o:[
+   {t:'Quadratsummen werden 10 000-mal so groß, die beste Gerade bleibt.',ok:1,fb:'Genau. Jedes Residuum wird 100-mal so groß, jedes Quadrat 10 000-mal. Die Reihenfolge der Geraden ändert sich nicht.'},
+   {t:'Alle Quadratsummen werden 100-mal so groß, eine andere Gerade gewinnt.',fb:'Die Quadrate wachsen mit 100 · 100. Und weil alle gleich wachsen, bleibt der Gewinner gleich.'},
+   {t:'Nichts ändert sich, weil Einheiten beim Quadrieren wegfallen.',fb:'Die Zahlen ändern sich sehr wohl: 2 € sind 200 Cent, quadriert 40 000 statt 4.'},
+   {t:'Die Residuen werden kleiner, weil Cent kleiner sind als Euro.',fb:'Umgekehrt: Der gleiche Abstand hat in Cent eine größere Zahl.'}],
+  hints:['2 € sind wie viele Cent?','Was passiert mit dem Quadrat von 200 statt 2?','Alle Geraden ändern sich gleich stark.']}
 ]},
-/* ===== 6 Finale ===== */
-{title:'Finale: Das Fact Sheet',tag:'Handlungsprodukt',sub:'Fact Sheet FS-04 für das Vertriebsteam',badge:'🏁 Fact-Sheet-Profi',hour:H2,short:'Fact Sheet',final:true,rankUp:'Leitender Analyst',
- boss:{name:'Das Vertriebsteam',role:'Frau Janssen, Mia, Jonas und Herr Brandt warten auf euer Fact Sheet',ava:'📄',bar:'Offene Fragen',win:'Euer Fact Sheet beendet den Streit!'},steps:[
- {type:'info',html:()=>person(`<p>Jetzt bauen wir aus euren Ergebnissen das <b>Fact Sheet FS-04</b>. Jeder fertige Abschnitt beantwortet eine offene Frage im Team.</p>`)},
- {type:'cloze',title:'Abschnitt 1: Die faire Regel',text:`${OP('Formuliere')} die Regel zum Vergleich, indem du die Lücken füllst.`,parts:[
-   ['<b>Regel:</b> Wir vergleichen Geraden mit der ',['Quadratsumme','Summe der Residuen','Zahl der Punkte auf der Geraden'],0,' der Residuen. '],
+/* ===== 4 Level 3: Muster und Grenzen ===== */
+{title:'Level 3: Muster und Grenzen',blatt:'2',tag:'Lernabschnitt 2',sub:'Residuenmuster, Interpolation, Extrapolation',badge:'🔍 Modellprüfer',num:3,hour:H1,short:'Muster',
+ ichkann:['Ich kann an den Abständen erkennen, ob eine gerade Linie gut zu den Daten passt.','Ich kann unterscheiden, ob ein Schätzwert innerhalb oder außerhalb der Daten liegt.','Ich kann begründen, warum Schätzungen weit außerhalb der Daten unsicher sind.'],
+ halt:{frage:'Jonas sagt: „Dann nehmen wir eben alle acht Monate und sagen damit den Preis für nächstes Jahr voraus.“ Was meint ihr?',
+   impulse:['Was zeigt das Muster in den Residuen über die acht Monate?','Was könnte im nächsten Jahr passieren, das die Daten nicht kennen?','Wann wäre eine Vorhersage vertretbar?'],
+   starters:['Ich halte das für riskant, weil','Eine Vorhersage wäre besser, wenn','Das Muster zeigt'],
+   wb:{w:['muster','extrapolation','bereich'],s:['Weil x außerhalb von … liegt, ist …']},
+   bonus:{type:'mcq',title:'Bonus: Mehr Daten',q:'Was würde eine Prognose für nächstes Jahr am ehesten verbessern?',o:[
+     {t:'Daten aus mehr Monaten und ein Modell, das zur Form passt',ok:1,fb:'Genau. Mehr Beobachtungen und ein Modell ohne Muster in den Residuen machen eine Prognose belastbarer. Sicher wird sie trotzdem nie.'},
+     {t:'Die Gerade mit mehr Nachkommastellen ganz genau ausrechnen',fb:'Mehr Stellen machen das Modell nicht passender. Das Muster bleibt.'},
+     {t:'Nur den letzten Monat nehmen, weil er am aktuellsten ist',fb:'Ein einzelner Wert sagt über einen Trend fast nichts.'},
+     {t:'Den Ausreißer im Januar einfach aus den Daten löschen',fb:'Januar ist kein Ausreißer, sondern Teil des Bogens. Ungeprüft löschen ist nie gut.'}],
+     hints:['Was fehlt uns für nächstes Jahr?','Denk an das Muster: Passt eine Gerade überhaupt?','Mehr Daten und ein passendes Modell.']}},
+ steps:[
+ {type:'info',html:()=>person(`<p>Drei Monate später: Die Preise für Juni, Juli und August sind da. Jonas hatte im Mai mit der Geraden ${K('\\hat y=-2x+30')} schon den Augustpreis vorhergesagt. Prüfen wir, wie gut das war.</p>`)+`<div style="margin-top:6px">${tabPB(PWB8)}</div><div class="task"><b>Ziel dieses Levels:</b> Du prüfst, ob eine Gerade gut passt und wo man ihr trauen darf.</div>`},
+ {type:'calc',title:'Jonas’ Prognose für August',text:`${OP('Berechne')} mit ${K('\\hat y=-2x+30')} (aus den Monaten 1 bis 5) die Prognose für August und das Residuum zum echten Augustpreis 20 €/Stück. August liegt außerhalb der Monate 1 bis 5. Eine solche Vorhersage heißt ${T('extrapolation')}.`,
+  data:()=>`<p>${K('\\hat y=-2x+30')}, August: x = 8, echter Preis 20 €/Stück</p>${FORM1()}`,
+  rows:[{pre:K('\\hat y(8)='),ans:14,tol:.01,u:'€/Stück',traps:[[46,'Vorzeichen: −2 · 8 = −16, also 30 − 16.'],[-16,'b vergessen: −2 · 8 + 30.'],[20,'20 ist der echte Preis. Gesucht ist die Prognose der Geraden.']]},
+        {pre:K('e='),ans:6,tol:.01,u:'€/Stück',traps:[[-6,'Reihenfolge: e = y − ŷ = 20 − 14.'],[14,'14 ist ŷ. Gesucht ist 20 − 14.']]}],
+  after:'Prognose 14 €/Stück, echt 20 €/Stück: 6 € daneben. Innerhalb der Monate 1 bis 5 lagen die Abstände bei höchstens 1 €.',
+  wb:{w:['extrapolation','residuum'],s:['Die Prognose lag … daneben, weil …']},
+  hints:['Setze x = 8 in die Gleichung ein.','−2 · 8 + 30 = ?','Dann e = 20 − ŷ.'],
+  einfach:{text:`${OP('Berechne')}: Welchen Preis sagt die Gerade ${K('\\hat y=-2x+30')} für August (x = 8) voraus? Wie weit liegt der echte Preis 20 €/Stück davon weg? Vorhersagen außerhalb der Daten heißen ${T('extrapolation')}.`},
+  twin:{type:'calc',title:'Zwilling: Prognose für Juli',text:`${OP('Berechne')} mit ${K('\\hat y=-2x+30')} die Prognose für Juli (x = 7) und das Residuum zum echten Julipreis 19 €/Stück.`,
+   rows:[{pre:K('\\hat y(7)='),ans:16,tol:.01,u:'€/Stück',traps:[[44,'Vorzeichen: 30 − 14.'],[-14,'b vergessen.']]},{pre:K('e='),ans:3,tol:.01,u:'€/Stück',traps:[[-3,'Reihenfolge: 19 − 16.']]}],
+   after:'Prognose 16 €/Stück, echt 19 €/Stück: 3 € daneben.'}},
+ {type:'sim',wechsel:'Tabelle → Graph',title:'Residuenplot zeichnen',text:`Die Tabellenkalkulation liefert für alle acht Monate die Gerade ${K('\\hat y=-1{,}25x+28')}. ${OP('Zeichne')} ihre Residuen aus der Tabelle als Punkte in das Diagramm. Die Nulllinie ist die Gerade selbst.`,run:simResPlot,
+  solution:'Alle acht Residuen eingetragen, von 2,25 bei Monat 1 über −1,75 bei Monat 5 bis 2 bei Monat 8. Muster: erst positiv, dann negativ, dann wieder positiv. Eine Gerade passt schlecht.',
+  wb:{w:['residuum','muster'],s:['Die Residuen sind erst …, dann …, dann …']},
+  profi:{text:`${OP('Zeichne')} den Residuenplot der Regressionsgeraden ${K('\\hat y=-1{,}25x+28')} für x = 1 bis 8 und beurteile die Anpassungsgüte des linearen Modells.`},
+  hints:['Geh auf der waagerechten Achse zum Monat. Dann hoch oder runter bis zum Residuum.','Positive Werte über die Nulllinie, negative darunter. Ein Kästchen ist 0,5.','Monat 1: e = 2,25, also etwas über der Linie bei 2.']},
+ {type:'decide',title:'Innen oder außen?',text:`Für die Gerade über alle acht Monate ist der ${T('bereich')} x = 1 bis 8. Eine Schätzung darin heißt ${T('interpolation')}, außerhalb ${T('extrapolation')}. ${OP('Ordne')} jede Anfrage zu.`,
+  actions:['Interpolation: vorsichtig schätzen','Extrapolation: keine sichere Zahl'],
+  cards:[{title:'Preis für Mitte Juni (x = 6,5)',ans:0,fb:['','6,5 liegt zwischen 1 und 8. Links und rechts gibt es Daten.'],okfb:'Richtig: innerhalb der Monate 1 bis 8.'},
+         {title:'Preis für Dezember (x = 12)',ans:1,fb:['12 liegt außerhalb von 1 bis 8. Dort gibt es keine Daten.',''],okfb:'Richtig: Dezember wurde nicht beobachtet.'},
+         {title:'Preis vor dem Verkaufsstart (x = 0)',ans:1,fb:['x = 0 liegt links außerhalb der Daten. Vor dem Start gab es keinen Verkauf.',''],okfb:'Richtig: Auch links außerhalb ist Extrapolation.'},
+         {title:'Preis für Mitte März (x = 3,5)',ans:0,fb:['','3,5 liegt zwischen 1 und 8. Das ist innerhalb.'],okfb:'Richtig: innerhalb der Daten.'}],
+  wb:{w:['interpolation','extrapolation','bereich'],s:['x = … liegt innerhalb von …, also …']},
+  einfach:{text:`Die Daten gehen von Monat 1 bis Monat 8: der ${T('bereich')}. Schätzen darin heißt ${T('interpolation')}. Schätzen außerhalb heißt ${T('extrapolation')}. ${OP('Ordne')} jede Anfrage zu.`},
+  hints:['Von wo bis wo gehen die Monate in der Tabelle?','Liegt das x zwischen 1 und 8?','Auch x = 0 liegt außerhalb.']}
+]},
+/* ===== 5 Partneraufgabe ===== */
+{title:'Partneraufgabe: Die Kühlbox-Kampagne',blatt:'2',tag:'Lernabschnitt 2 · zu zweit oder zu dritt',sub:'Geraden vergleichen und Prognosen prüfen',badge:'🤝 Teamplayer',hour:H2,short:'Kühlbox',
+ ichkann:['Ich kann im Team zwei Linien mit der Summe der Quadrate vergleichen.','Ich kann mit meinem Team entscheiden, für welche Anfragen wir eine Zahl nennen dürfen.'],
+ partner:{rollen:{A:{name:'Datenanalyse',text:'Du hast die Messwerte und das Diagramm.'},B:{name:'Kampagnenplanung',text:'Du hast die Gleichungen und die Anfragen.'},C:{name:'Qualitätssicherung',text:'Du hast die Regeln und die Kontrollstelle.'}},
+   kontrolle:['Stimmt die Reihenfolge y − ŷ?','Wird quadriert, bevor addiert wird?','Liegt die Anfrage im beobachteten Bereich?']},
+ steps:[
+ {type:'info',html:()=>person(`<p>Neuer Auftrag: Für die Kühlbox KB-2 haben wir vier Wochen lang verschieden viel Geld für Werbung ausgegeben. Lars hat eine Gerade gezeichnet, die Tabellenkalkulation eine andere. Welche passt besser, und welche Prognosen dürfen wir den Filialen geben? Das schafft ihr nur <b>gemeinsam</b>.</p>`)+
+   `<div class="merke"><b>So funktioniert die Partneraufgabe:</b> Erst löst jede Person ihren eigenen Teil. Dann zeigt dein Gerät einen <b>Teilcode</b>, den du deinem Team sagst. Mit den Codes aller im Team öffnet sich die gemeinsame Aufgabe (zu zweit übernimmt die Kampagnenplanung die Karte der Qualitätssicherung mit). Pro Aufgabe gibt es bis zu 10 ⭐, am Ende bis zu <b>15 ⭐ Teambonus</b> (−5 je Fehlversuch bei einem gemeinsamen Ergebnis).</div>`},
+ {type:'team',title:'Welche Gerade gewinnt?',text:'Vergleicht Lars’ Gerade mit der Geraden aus der Tabellenkalkulation.',
+  A:{info:()=>`<p>Die Messwerte der Kühlbox:</p>${kbTab()}<div class="fig">${KBFIG()}</div><p class="tip">Orange: die Gerade von Lars. Ihre Gleichung kennt nur die Kampagnenplanung.</p>`,
+     teil:{type:'calc',title:'Ein Abstand aus dem Diagramm',text:`${OP('Lies ab')}, wie weit der Punkt bei x = 1 über der orangen Geraden liegt.`,
+       rows:[{pre:'Abstand bei x = 1: ',ans:2,tol:.3,u:'(100 Stück)',traps:[[13,'13 ist der Messwert. Gesucht ist der Abstand zur Geraden.'],[11,'11 ist der Wert auf der Geraden. Gesucht ist die Differenz.']]}]}},
+  B:{info:()=>`<p>Deine Gleichungen (x in 1000 €, ŷ in 100 Stück):</p><p>Lars: ${K('\\hat y=3x+8')}<br>Tabellenkalkulation: ${K('\\hat y=2x+10')}, Quadratsumme <b>4</b></p>${KD('e=y-\\hat y')}<p class="tip">Die Messwerte kennt nur die Datenanalyse.</p>`,
+     teil:{type:'mcq',title:'Wie rechnet man?',q:'Wie berechnet man das Residuum eines Messpunkts?',o:[
+       {t:'Messwert minus Wert der Geraden',ok:1,fb:'Genau: e = y − ŷ.'},
+       {t:'Wert der Geraden minus Messwert',fb:'Umgekehrt: Vom echten Wert wird der Modellwert abgezogen.'},
+       {t:'Messwert plus Wert der Geraden',fb:'Das Residuum ist ein Abstand, also eine Differenz.'},
+       {t:'Messwert mal Wert der Geraden',fb:'Gesucht ist eine Differenz, kein Produkt.'}]}},
+  C:{info:()=>`<div class="merke"><b>Vergleichsregel:</b> Die Gerade mit der kleineren Quadratsumme gewinnt.<br><b>Kontrollstelle:</b> Prüft bei ${K('x=3')} (3000 € Werbung) das Residuum von Lars’ Gerade einzeln.</div><p class="tip">Messwerte und Gleichungen kennen die anderen.</p>`,
+     teil:{type:'mcq',title:'Warum quadrieren?',q:'Warum vergleicht ihr Quadratsummen und nicht einfach die Summe der Residuen?',o:[
+       {t:'Sonst heben sich positive und negative Abstände auf.',ok:1,fb:'Genau. Quadrate sind nie negativ, große Abstände zählen stärker.'},
+       {t:'Weil Quadrate immer kleiner sind als die Abstände.',fb:'Bei Abständen größer als 1 werden Quadrate größer.'},
+       {t:'Weil die Tabellenkalkulation keine Summen kann.',fb:'Sie kann beides. Es geht um einen fairen Maßstab.'},
+       {t:'Weil man so die Einheiten loswird.',fb:'Die Einheiten bleiben (im Quadrat). Der Grund ist das Aufheben von plus und minus.'}]}},
+  gemeinsam:{type:'calc',title:'Kontrolle und Quadratsumme',text:`${OP('Berechne')} gemeinsam das Residuum von Lars’ Gerade an der Kontrollstelle und die Quadratsumme von Lars’ Gerade.`,
+    rows:[{pre:'Kontrollstelle: '+K('e='),ans:-2,tol:.01,u:'(100 Stück)',traps:[[2,'Reihenfolge: e = 15 − 17.'],[17,'17 ist ŷ(3) = 3 · 3 + 8. Gesucht ist 15 − 17.'],[-4,'ŷ(3) = 17, nicht 19. Rechne 3 · 3 + 8.']]},
+          {pre:'Quadratsumme Lars:',ans:10,tol:.01,u:'',traps:[[-2,'Das ist die Summe der Residuen. Erst quadrieren.'],[6,'Das ist die Summe der Beträge.'],[4,'4 ist die Quadratsumme der Tabellenkalkulation. Gesucht ist die von Lars.']]}],
+    after:`Lars: Residuen 2, −1, −2, −1, Quadratsumme 10. Tabellenkalkulation: 4. Die Gerade ${K('\\hat y=2x+10')} passt besser.`,
+    wechsel:'Graph → Tabelle',
+    einfach:{text:`${OP('Berechne')} zusammen: Die Datenanalyse nennt die Messwerte, die Kampagnenplanung Lars’ Gleichung, die Qualitätssicherung die Kontrollstelle. Berechnet erst das Residuum bei x = 3, quadriert dann alle vier Residuen von Lars und addiert sie.`}},
+  hints:['Die Datenanalyse nennt die Messwerte, die Kampagnenplanung Lars’ Gleichung, die Qualitätssicherung die Kontrollstelle.','ŷ(3) = 3 · 3 + 8 = 17, Messwert 15.','Lars’ Residuen: 13 − 11, 13 − 14, 15 − 17, 19 − 20.']},
+ {type:'team',title:'Zwei Filialen fragen an',text:'Zwei Filialen wollen wissen, wie viele Bestellungen sie erwarten können. Entscheidet gemeinsam, was ihr antwortet.',
+  A:{info:()=>`<p>Die Messwerte der Kühlbox:</p>${kbTab()}<p class="tip">x = Werbebudget in 1000 €, y = Bestellungen in 100 Stück</p>`,
+     teil:{type:'calc',title:'Beobachteter Bereich',text:`${OP('Lies ab')}, welche Werbebudgets getestet wurden.`,
+       rows:[{pre:'kleinstes Budget:',ans:1000,tol:.5,u:'€',traps:[[1,'x zählt in 1000 €: x = 1 bedeutet 1000 €.']]},
+             {pre:'größtes Budget:',ans:4000,tol:.5,u:'€',traps:[[4,'x zählt in 1000 €: x = 4 bedeutet 4000 €.']]}]}},
+  B:{info:()=>`<div class="mail"><div class="mh"><b>Anfragen der Filialen</b></div><div class="mb"><p><b>Filiale Gent:</b> plant 2500 € Werbung pro Woche<br><b>Filiale Brügge:</b> plant 10 000 € Werbung pro Woche</p></div></div><p class="tip">Gerade aus der ersten Aufgabe: ${K('\\hat y=2x+10')}, x in 1000 €.</p>`,
+     teil:{type:'calc',title:'Budgets umrechnen',text:`${OP('Berechne')} die x-Werte der beiden Anfragen.`,
+       rows:[{pre:'Gent: '+K('x='),ans:2.5,tol:.01,u:'',traps:[[2500,'x zählt in 1000 €: 2500 : 1000.'],[25,'Durch 1000 teilen, nicht durch 100.']]},
+             {pre:'Brügge: '+K('x='),ans:10,tol:.01,u:'',traps:[[10000,'x zählt in 1000 €: 10 000 : 1000.'],[100,'Durch 1000 teilen, nicht durch 100.']]}]}},
+  C:{info:()=>`<div class="merke"><b>Prognoseregel:</b> Eine Zahl nennen wir nur für Budgets, die in den Tests vorkamen (vom kleinsten bis zum größten). Außerhalb davon keine Zahl, nur der Hinweis auf fehlende Daten.</div><p class="tip">Die getesteten Budgets kennt nur die Datenanalyse, die Anfragen nur die Kampagnenplanung.</p>`,
+     teil:{type:'mcq',title:'Was sagt die Regel?',q:'Eine Anfrage liegt weit über dem größten getesteten Budget. Was sagt die Prognoseregel?',o:[
+       {t:'Keine Zahl nennen, nur auf fehlende Daten hinweisen.',ok:1,fb:'Genau: Außerhalb der Daten ist jede Zahl eine unsichere Extrapolation.'},
+       {t:'Die Zahl nennen, aber doppelt so groß rechnen.',fb:'Die Regel verbietet eine Zahl außerhalb der Daten.'},
+       {t:'Die Zahl nennen, weil die Gerade ja überall gilt.',fb:'Die Gerade ist nur dort geprüft, wo es Messwerte gibt.'},
+       {t:'Den größten Messwert als Prognose nennen.',fb:'Auch das wäre eine Zahl außerhalb der Daten.'}]}},
+  gemeinsam:{type:'decide',title:'Was antwortet ihr?',text:`${OP('Beurteile')} für jede Filiale, welche Antwort passt. ${K('\\hat y=2x+10')}`,
+    actions:['15, also etwa 1500 Stück, als Schätzwert nennen','30, also etwa 3000 Stück, als Schätzwert nennen','Keine Zahl nennen: außerhalb der Daten'],
+    cards:[{title:'Filiale Gent · 2500 €',ans:0,fb:['','ŷ(2,5) = 15. Die 30 gehört zu x = 10.','2500 € liegen zwischen 1000 € und 4000 €. Eine vorsichtige Schätzung ist erlaubt.'],okfb:'ŷ(2,5) = 2 · 2,5 + 10 = 15: Interpolation, also etwa 1500 Stück als Schätzwert.'},
+           {title:'Filiale Brügge · 10 000 €',ans:2,fb:['15 gehört zu 2500 €, nicht zu 10 000 €.','Gerechnet stimmt ŷ(10) = 30. Aber 10 000 € liegen weit außerhalb der getesteten 1000 € bis 4000 €.',''],okfb:'Richtig: Extrapolation. Ob mehr Werbung immer gleich viel mehr bringt, zeigen die Daten nicht.'}]},
+  hints:['Die Datenanalyse kennt den getesteten Bereich, die Kampagnenplanung die x-Werte, die Qualitätssicherung die Regel.','Liegt x zwischen 1 und 4?','ŷ(2,5) = 2 · 2,5 + 10. x = 10 liegt außerhalb.']}
+]},
+/* ===== 6 Gegner 2 ===== */
+{title:'Gegner 2: Die Prognose-Prüfung',tag:'Aufgabenblock 2',sub:'Muster deuten, Grenzen kennen',badge:'💼 Prognose-Profi',hour:H2,short:'Prognose',rankUp:'Analyst',
+ boss:{name:'Herr Brandt',role:'Vertriebsleitung: „Ich brauche Zahlen für nächstes Jahr!“',ava:'🤨',bar:'Skepsis',win:'Herr Brandt ist überzeugt!'},steps:[
+ {type:'info',html:()=>person(`<p>Ihr habt also die beste Gerade. Gut. Ich plane schon das nächste Jahr und will Preise. Aber vorher teste ich, ob ihr wisst, wann eine Gerade lügt.</p>`,BOSS2)+
+   `<div class="merke"><b>Gegner 2:</b> Drei Aufgaben in beliebiger Reihenfolge. Bis zu 15 ⭐ pro Aufgabe, Hilfen sind frei, 🔁 Rückblick als 4. Hilfe. Daten und Formeln unter „📂 Gegebene Werte“.</div>`},
+ {type:'calc',title:'Der Preis für nächstes Jahr',text:`Brandt: „Jonas’ Gerade ${K('\\hat y=-2x+30')} aus den Monaten 1 bis 5 ist doch prima. Was kostet die Powerbank im Mai nächsten Jahres?“ ${OP('Berechne')} den x-Wert und die Prognose.`,
+  data:()=>`<p>${K('\\hat y=-2x+30')}, x = Monat seit Verkaufsstart (1 = Januar dieses Jahres)</p>`,
+  rows:[{pre:'Mai nächsten Jahres: '+K('x='),ans:17,tol:.01,u:'',traps:[[5,'x = 5 ist der Mai dieses Jahres. Zähle 12 Monate weiter.'],[12,'12 ist der Dezember dieses Jahres.'],[18,'Januar ist x = 1, also ist Mai nächsten Jahres 12 + 5 = 17.']]},
+        {pre:K('\\hat y(17)='),ans:-4,tol:.01,u:'€/Stück',traps:[[4,'Vorzeichen: −2 · 17 = −34, also 30 − 34.'],[64,'Vorzeichen: −2 · 17 + 30, nicht +34 + 30.'],[-34,'b vergessen: −34 + 30.']]}],
+  after:'−4 €/Stück: Ein negativer Preis ist unmöglich. So weit außerhalb der Daten ist die Gerade wertlos. Das ist die Gefahr der Extrapolation.',
+  hints:['Januar dieses Jahres ist x = 1. Zähle bis Mai nächsten Jahres.','x = 17. Setze ein: −2 · 17 + 30.','−34 + 30 = ?'],recap:[4,1],
+  twin:{type:'calc',title:'Zwilling: Dezember',text:`${OP('Berechne')} mit ${K('\\hat y=-2x+30')} den x-Wert und die Prognose für Dezember dieses Jahres.`,
+   rows:[{pre:K('x='),ans:12,tol:.01,u:'',traps:[[11,'Januar ist x = 1, also Dezember x = 12.']]},{pre:K('\\hat y(12)='),ans:6,tol:.01,u:'€/Stück',traps:[[54,'Vorzeichen: 30 − 24.'],[-24,'b vergessen.']]}],
+   after:'6 €/Stück: auch das ist eine unsichere Extrapolation.'}},
+ {type:'decide',title:'Drei Residuenplots',text:`Das Team hat für drei Produkte die Residuen der Regressionsgeraden gezeichnet. ${OP('Beurteile')} jeweils, ob eine Gerade passt.`,
+  actions:['Gerade passt','Gerade passt schlecht'],
+  cards:[{title:'Produkt 1',fig:plotSVG(Object.assign({},RESPLOT_O,{h:260,lines:[ZERO],points:[[1,.5],[2,-1],[3,.75],[4,-.25],[5,-.75],[6,1],[7,-.5],[8,.25]].map(([x,y])=>({x,y,r:6}))})),ans:0,fb:['','Die Residuen springen ohne Ordnung hin und her. Kein Bogen, kein Trend: Die Gerade passt.'],okfb:'Richtig: zufällig verteilt, kein Muster.'},
+         {title:'Produkt 2',fig:plotSVG(Object.assign({},RESPLOT_O,{h:260,lines:[ZERO],points:RES8.map(r=>({x:r[1],y:r[2],r:6}))})),ans:1,fb:['Erst positiv, dann negativ, dann positiv: Das ist ein Bogen. Eine Gerade bildet die Form nicht ab.',''],okfb:'Richtig: Bogen nach oben, die Gerade passt schlecht.'},
+         {title:'Produkt 3',fig:plotSVG(Object.assign({},RESPLOT_O,{h:260,lines:[ZERO],points:[[1,-2],[2,-.5],[3,1],[4,1.5],[5,1.5],[6,.5],[7,-.5],[8,-1.5]].map(([x,y])=>({x,y,r:6}))})),ans:1,fb:['Erst negativ, dann positiv, dann negativ: ein umgedrehter Bogen. Auch das ist ein Muster.',''],okfb:'Richtig: Bogen nach unten, die Gerade passt schlecht.'}],
+  wb:{w:['muster','residuum'],s:['Die Residuen sind erst …, dann …']},
+  hints:['Suche nach einer Ordnung in den Vorzeichen.','Zufällig heißt: plus und minus wechseln ohne Plan.','Ein Bogen (+, −, + oder −, +, −) ist ein Muster.'],recap:[4,2]},
+ {type:'mcq',title:'Beste Gerade = gute Prognose?',q:'Brandt: „Die Gerade über alle acht Monate hat die kleinste Quadratsumme. Also nehmen wir sie für die Preise im nächsten Jahr.“ Was antwortest du?',o:[
+   {t:'Beste Gerade ja, aber das Muster zeigt, dass sie schlecht passt, und nächstes Jahr liegt außerhalb.',ok:1,fb:'Genau. Kleinste Quadratsumme heißt nur: beste unter allen Geraden. Ob eine Gerade überhaupt passt, zeigt das Muster. Und für nächstes Jahr gibt es keine Daten.'},
+   {t:'Ja, die kleinste Quadratsumme garantiert, dass die Gerade auch für die Preise im nächsten Jahr stimmt.',fb:'Die Quadratsumme bewertet nur die beobachteten Monate. Über das nächste Jahr sagt sie nichts.'},
+   {t:'Nein, wir sollten lieber Jonas’ alte Gerade aus fünf Monaten nehmen, weil sie steiler ist und besser aussieht.',fb:'Die alte Gerade lag schon im August 6 € daneben und sagt für nächstes Jahr sogar einen negativen Preis.'},
+   {t:'Ja, weil acht Monate genug Daten sind, um jeden künftigen Preis sicher vorherzusagen.',fb:'Auch acht Monate decken das nächste Jahr nicht ab. Und das Muster zeigt, dass die Form nicht linear ist.'}],
+  wb:{w:['regression','muster','extrapolation'],s:['Das ist zwar …, aber …']},
+  hints:['Was bewertet die Quadratsumme, was das Muster?','Erinnere dich an den Residuenplot aus Level 3.','Nächstes Jahr liegt außerhalb der Monate 1 bis 8.'],recap:[4,2]},
+ {type:'mcq',bonus:1,art:'transfer',title:'Transfer: Das Eiscafé',text:'Ein Eiscafé hat an 20 Tagen bei 10 °C bis 25 °C die verkauften Kaltgetränke gezählt. Die Regressionsgerade passt gut, die Residuen zeigen kein Muster.',
+  q:'Die Wetter-App meldet morgen 38 °C. Was gilt für die Prognose aus der Geraden?',o:[
+   {t:'Sie ist Extrapolation und nur mit Warnung brauchbar.',ok:1,fb:'Genau. 38 °C liegen weit über 25 °C. Vielleicht gehen bei der Hitze weniger Gäste aus dem Haus. Die Daten wissen das nicht.'},
+   {t:'Sie ist Interpolation, weil die Gerade gut passt.',fb:'Ob Interpolation oder Extrapolation, entscheidet der Bereich der Daten, nicht die Güte.'},
+   {t:'Sie ist sicher, weil kein Muster zu sehen ist.',fb:'Kein Muster gilt nur innerhalb von 10 °C bis 25 °C.'},
+   {t:'Sie ist unmöglich, weil Geraden nur bis 25 gehen.',fb:'Rechnen kann man überall. Die Frage ist, ob man dem Ergebnis trauen darf.'}],
+  hints:['Wo liegen die beobachteten Temperaturen?','Liegt 38 °C innerhalb oder außerhalb?','Außerhalb heißt Extrapolation.']}
+]},
+/* ===== 7 Finale ===== */
+{title:'Finale: Das Fact Sheet',tag:'Handlungsprodukt',sub:'Fact Sheet FS-04 erstellen',badge:'🏁 Fact-Sheet-Profi',hour:H2,short:'Fact Sheet',final:true,rankUp:'Senior-Analyst',
+ boss:{name:'Das Vertriebsteam',role:'Frau Janssen, Mia, Jonas und das Team warten auf euer Fact Sheet',ava:'📄',bar:'Offene Fragen',win:'Euer Fact Sheet FS-04 beendet den Streit!'},steps:[
+ {type:'info',html:()=>person(`<p>Das Team wartet, ${nm()}! Jetzt baut ihr aus euren Ergebnissen das <b>Fact Sheet FS-04</b>. Skizze, Vergleich und Residuum sind schon eingetragen. Es fehlen die Regel und die Warnung.</p>`)},
+ {type:'cloze',title:'Abschnitt 1: Die Regel',text:`${OP('Formuliere')} die Regel zum Vergleich, indem du die Lücken füllst.`,parts:[
+   ['Wir vergleichen Geraden über die ',['Quadratsumme der Residuen','Summe der Residuen','Zahl der getroffenen Punkte'],0,'. '],
    ['Die Gerade mit der ',['kleineren','größeren'],0,' Quadratsumme passt besser. '],
-   ['Die Summe der Residuen taugt nicht, weil sich ',['positive und negative Werte aufheben','große Werte dabei verdoppeln','alle Werte positiv sind'],0,'. '],
-   ['<b>Ergebnis:</b> Mia ',['6','0','18'],0,', Jonas '],['',['54','0','18'],0,'. Mias Gerade passt besser.']],
-  hints:['Welche Zahl hat in Level 1 Mia und Jonas getrennt?','Kleine Abstände ergeben eine kleine Quadratsumme.','Mia 6, Jonas 54.']},
- {type:'cloze',title:'Abschnitt 2: Residuum und Warnung',text:`${OP('Gib')} ein berechnetes Residuum an und ${OP('formuliere')} die Warnung.`,parts:[
-   ['<b>Residuum:</b> Angebot C(3|27): ',[K('e=27-28=-1'),K('e=28-27=1'),K('e=27-0=27')],0,' €/Stück. '],
-   ['C liegt ',['unter','über','auf'],0,' Mias Gerade. '],
-   ['<b>Muster:</b> Mias Residuen wechseln ',['ohne Muster','im Bogen','erst nur positiv'],0,', die Gerade passt.<br>'],
-   ['<b>Warnung:</b> 2000 Stück liegen ',['außerhalb','innerhalb'],0,' des Beobachtungsbereichs (100 bis 800 Stück). '],
-   ['Die Gerade liefert dort ',['−6 €/Stück','21 €/Stück','6 €/Stück'],0,'. Das ist eine Extrapolation und nicht belastbar.']],
-  hints:['e = y − ŷ, mit ŷ(3) = 28.','Schau dir das Residuenbild von Mia in Level 2 an.','p(20) habt ihr für Jonas’ Großauftrag berechnet.']},
- {type:'selfcheck',title:'Dein Fact Sheet FS-04',text:'Hier ist dein fertiges Fact Sheet. Prüfe es mit der Checkliste.',doc:W4_doc,copy:W4_docText,checkTitle:'Endkontrolle',
-  items:['Skizze mit Residuen (grün oberhalb, rot unterhalb)','Regel: kleinere Quadratsumme passt besser','Begründung, warum die Summe der Residuen nicht reicht','ein berechnetes Residuum mit Einheit und Lage','Muster der Residuen beurteilt','Warnung zur Extrapolation mit Bereich 100 bis 800 Stück'],
-  okfb:'Alles drin! Tippe auf „Gegner besiegen“ und präsentiere dein Fact Sheet.',
-  hints:['Gehe das Dokument Zeile für Zeile durch.','Jeder Punkt der Checkliste entspricht einer Zeile im Fact Sheet.','Hake erst ab, wenn du die Zeile wirklich gefunden hast.']}
+   ['Mia 9, Jonas 14: Also passt ',['Mias','Jonas’'],0,' Gerade besser. '],
+   ['Die ',['Regressionsgerade','Gerade von Jonas','Gerade von Mia'],0,' hat mit 4 die kleinste Quadratsumme. '],
+   ['Zeigen die Residuen einen Bogen, passt eine Gerade ',['schlecht','besonders gut'],0,'.']],
+  okfb:'Die Regel steht. Sie ist jetzt Teil deines Fact Sheets.',
+  hints:['Was war unser fairer Maßstab?','Kleiner ist besser.','Mia 9 ist kleiner als Jonas 14.']},
+ {type:'write',title:'Abschnitt 2: Die Warnung',text:`${OP('Formuliere')} in einem eigenen Satz eine Warnung zur Extrapolation für das Vertriebsteam. Nutze ein Beispiel aus der Mission.`,save:'warn',min:30,
+  keys:['außerhalb','extrapol','unsicher','vorsicht','nicht','daten','bereich','monat','nächst','negativ','august','prognos'],
+  starters:['Schätzt nur innerhalb','Vorsicht bei Prognosen außerhalb','Die Prognose für August'],
+  wb:{w:['extrapolation','bereich','modellwert'],s:['Vorsicht: Außerhalb von … ist …','Die Prognose für … lag … daneben.']},
+  placeholder:'z. B.: Vorsicht: …',example:'Schätzt nur innerhalb der beobachteten Monate. Die Prognose für August lag schon 6 € daneben, und für Mai nächsten Jahres liefert die Gerade sogar einen negativen Preis.',
+  okfb:'Starke Warnung. Sie steht jetzt in deinem Fact Sheet.',missfb:'Eine Warnung nennt, dass Schätzungen außerhalb der Daten unsicher sind, am besten mit einem Beispiel (August, nächstes Jahr). Möchtest du deinen Satz ergänzen?',
+  hints:['Wo lag Jonas’ Prognose daneben?','Denk an August (6 € daneben) und an Mai nächsten Jahres (−4 €).','Satzanfang: „Vorsicht bei Prognosen außerhalb …“']},
+ {type:'selfcheck',title:'Dein Fact Sheet FS-04',text:'Hier ist dein fertiges Fact Sheet. Prüfe es mit der Checkliste.',doc:factDoc,copy:factText,checkTitle:'Endkontrolle',
+  items:['Skizze mit senkrechten Residuen','Regel: kleinste Quadratsumme gewinnt','Vergleich Mia 9, Jonas 14, Regressionsgerade 4','ein Residuum mit Vorzeichen berechnet','Hinweis auf das Muster in den Residuen','Warnung zur Extrapolation mit Beispiel'],
+  okfb:'Alles drin! Tippe auf „Gegner besiegen“ und stelle dein Fact Sheet vor.',
+  hints:['Gehe das Dokument Zeile für Zeile durch.','Jeder Punkt der Checkliste entspricht einer Zeile.','Hake erst ab, wenn du die Zeile wirklich gefunden hast.']}
 ]},
-/* ===== 7 Quiz ===== */
+/* ===== 8 Quiz ===== */
 {title:'Abschlussquiz',tag:'Quiz',sub:'Fachbegriffe im Kahoot-Stil',badge:'🎯 Begriffs-Profi',num:'🎯',hour:H2,steps:[]}
 ];
 const QUIZ=[
- {q:'Das Residuum eines Punkts ist …',o:[{t:K('e=y-\\hat y'),ok:1},{t:K('e=\\hat y-y')},{t:K('e=y+\\hat y')},{t:K('e=y\\cdot\\hat y')}],why:'Beobachteter Wert minus Modellwert.'},
- {q:'Ein Punkt liegt unter der Geraden. Sein Residuum ist …',o:[{t:'negativ',ok:1},{t:'positiv'},{t:'genau null'},{t:'immer −1'}],why:'Unterhalb heißt: y ist kleiner als ŷ, also ist e negativ.'},
- {q:'Warum quadriert man die Residuen?',o:[{t:'damit sich nichts aufhebt',ok:1},{t:'damit alles kleiner wird'},{t:'weil es schneller geht'},{t:'damit die Summe 0 wird'}],why:'Quadrate sind nie negativ. Große Abstände zählen stärker.'},
- {q:'Die Regressionsgerade hat …',o:[{t:'die kleinste Quadratsumme',ok:1},{t:'die meisten Punkte auf sich'},{t:'die Residuensumme 1'},{t:'immer die Steigung −1'}],why:'Sie ist die Gerade mit der kleinsten Summe der quadrierten Residuen.'},
- {q:'Gerade A: Quadratsumme 8. Gerade B: 20. Welche passt besser?',o:[{t:'Gerade A',ok:1},{t:'Gerade B'},{t:'beide gleich'},{t:'keine von beiden'}],why:'Die kleinere Quadratsumme passt besser.'},
- {q:'Residuen erst +, dann −, dann wieder + bedeuten …',o:[{t:'Gerade passt schlecht',ok:1},{t:'Gerade passt perfekt'},{t:'Daten sind falsch'},{t:'Summe ist zu groß'}],why:'Ein Bogenmuster zeigt gekrümmte Daten.'},
- {q:'Interpolation heißt schätzen …',o:[{t:'innerhalb der Daten',ok:1},{t:'außerhalb der Daten'},{t:'ganz ohne Gerade'},{t:'nur bei x = 0'}],why:'Inter: zwischen den beobachteten x-Werten.'},
- {q:'Extrapolation ist …',o:[{t:'unsicher',ok:1},{t:'immer genau'},{t:'eine Messung'},{t:'verboten'}],why:'Außerhalb des Beobachtungsbereichs gibt es keine Daten, die das Modell stützen.'},
- {transfer:1,q:'Ein Fitnessstudio hat Mitgliederzahlen von Januar bis Juni. Eine Schätzung für Dezember ist …',o:[{t:'eine Extrapolation',ok:1},{t:'eine Interpolation'},{t:'ein Messwert'},{t:'ein Residuum'}],why:'Dezember liegt außerhalb der beobachteten Monate.'},
- {transfer:1,q:'Ein Modell für Lieferzeiten hat bei einem Auftrag das Residuum −3 Tage. Das heißt …',o:[{t:'3 Tage schneller als erwartet',ok:1},{t:'3 Tage langsamer als erwartet'},{t:'die Lieferung kam nie an'},{t:'das Modell ist ganz falsch'}],why:'Negativ: Die echte Lieferzeit lag 3 Tage unter dem Modellwert.'}
+ {q:'Das Residuum ist …',o:[{t:K('e=y-\\hat y'),ok:1},{t:K('e=\\hat y-y')},{t:K('e=y+\\hat y')},{t:K('e=y\\cdot\\hat y')}],why:'Echter Wert minus Modellwert.'},
+ {q:'Ein positives Residuum heißt: Der Punkt liegt …',o:[{t:'über der Geraden',ok:1},{t:'unter der Geraden'},{t:'genau auf der Geraden'},{t:'links von der Geraden'}],why:'y ist größer als ŷ, also liegt der Punkt darüber.'},
+ {q:'Warum quadriert man die Residuen?',o:[{t:'damit sich nichts aufhebt',ok:1},{t:'damit die Zahlen kleiner werden'},{t:'damit die Gerade steigt'},{t:'damit Einheiten wegfallen'}],why:'Plus und minus heben sich sonst auf. Große Abstände zählen stärker.'},
+ {q:'Die Regressionsgerade hat …',o:[{t:'die kleinste Quadratsumme',ok:1},{t:'die meisten Punkttreffer'},{t:'nur positive Residuen e'},{t:'die steilste Steigung m'}],why:'Das ist ihre Definition: Methode der kleinsten Quadrate.'},
+ {q:'Residuen 2, −1 und −1 ergeben die Quadratsumme …',o:[{t:'6',ok:1},{t:'0'},{t:'4'},{t:'2'}],why:'4 + 1 + 1 = 6. Die Summe 0 sagt nichts.'},
+ {q:'Residuen erst +, dann −, dann wieder + bedeuten …',o:[{t:'eine Gerade passt schlecht',ok:1},{t:'eine Gerade passt perfekt'},{t:'die Daten sind falsch'},{t:'die Steigung ist null'}],why:'Ein Bogen im Residuenplot zeigt, dass die Form nicht linear ist.'},
+ {q:'Interpolation heißt: schätzen …',o:[{t:'innerhalb der Daten',ok:1},{t:'außerhalb der Daten'},{t:'ganz ohne Daten'},{t:'nur am Rand der Daten'}],why:'Innerhalb des Beobachtungsbereichs stützen echte Daten die Schätzung.'},
+ {q:'Daten für Monat 1 bis 8. Eine Prognose für Monat 20 ist …',o:[{t:'Extrapolation, unsicher',ok:1},{t:'Interpolation, sicher'},{t:'Interpolation, unsicher'},{t:'ein echter Messwert'}],why:'20 liegt weit außerhalb von 1 bis 8.'},
+ {transfer:1,q:'Kinder von 2 bis 10 Jahren wachsen etwa linear. Was gilt für eine Prognose der Körpergröße mit 40 Jahren?',o:[{t:'nicht belastbar',ok:1},{t:'genauso sicher'},{t:'besonders genau'},{t:'ein Messwert'}],why:'Erwachsene wachsen nicht weiter. Das zeigen die Daten von 2 bis 10 Jahren nicht.'},
+ {transfer:1,q:'Zwei Lieferzeit-Schätzer: A liegt 2, −2 und 0 Tage daneben, B 1, 1 und 1 Tag. Wer schätzt besser?',o:[{t:'B, Quadratsumme 3',ok:1},{t:'A, Summe 0'},{t:'beide gleich gut'},{t:'A, Quadratsumme 3'}],why:'A: 4 + 4 + 0 = 8, B: 1 + 1 + 1 = 3. B hat die kleinere Quadratsumme.'}
 ];
 /* ==== INHALT ENDE ==== */
 
-CONFIG.ueben=[{"level": 1, "aufgaben": "Aufgabe 1 a", "text": "Residuen berechnen und einzeichnen"}, {"level": 2, "aufgaben": "Aufgabe 1 b", "text": "Quadratsummen vergleichen, bessere Gerade wählen"}, {"level": 3, "aufgaben": "Aufgabe 1 c", "text": "Residuenmuster untersuchen"}, {"level": 5, "aufgaben": "Aufgabe 1 d–f", "text": "Steigung deuten, Interpolation und Extrapolation beurteilen"}];
+CONFIG.ueben=[{"level": 1, "aufgaben": "Aufgabe 1 a–b", "text": "Residuen berechnen und einzeichnen"}, {"level": 2, "aufgaben": "Aufgabe 1 c–d", "text": "Residuensumme und Quadratsumme vergleichen"}, {"level": 4, "aufgaben": "Aufgabe 1 e", "text": "Residuenmuster deuten"}, {"level": 6, "aufgaben": "Aufgabe 1 f", "text": "Extrapolation beurteilen"}];
 CONFIG.code="11BC-AWHV";
 start();
 </script>
